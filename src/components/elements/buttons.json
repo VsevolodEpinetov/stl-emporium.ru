@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_elements_buttons",
+  "info": {
+    "displayName": "buttons"
+  },
+  "options": {},
+  "attributes": {
+    "href": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "target": {
+      "type": "enumeration",
+      "enum": [
+        "_blank",
+        "_another"
+      ]
+    },
+    "isExternal": {
+      "type": "boolean"
+    }
+  }
+}

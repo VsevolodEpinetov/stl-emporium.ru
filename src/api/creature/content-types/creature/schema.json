@@ -1,0 +1,53 @@
+{
+  "kind": "collectionType",
+  "collectionName": "creatures",
+  "info": {
+    "singularName": "creature",
+    "pluralName": "creatures",
+    "displayName": "creature",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "mainPicture": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "race": {
+      "type": "string",
+      "default": "orc",
+      "required": true
+    },
+    "sex": {
+      "type": "string",
+      "required": true,
+      "default": "m",
+      "maxLength": 1,
+      "minLength": 1
+    },
+    "classes": {
+      "type": "json",
+      "required": true
+    },
+    "code": {
+      "type": "string",
+      "required": true
+    },
+    "price": {
+      "type": "integer",
+      "default": 100,
+      "required": true,
+      "min": 1
+    }
+  }
+}
