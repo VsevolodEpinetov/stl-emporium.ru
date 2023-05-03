@@ -7,7 +7,6 @@ import { CustomNavbar } from '@/components/CustomNavbar'
 import { MultiSelect, Navbar, Checkbox, SimpleGrid, Image, UnstyledButton, Group, ThemeIcon, Text, Divider, AppShell, Skeleton, Title, Pagination, Center, createStyles } from '@mantine/core'
 import { IconSword, IconShoppingCart } from '@tabler/icons-react'
 const FILTERS = require("../../data/filters.json")
-import { useSession, signIn, signOut } from "next-auth/react"
 
 const API_URL = 'https://api.stl-emporium.ru/api/creatures?populate=*&sort=createdAt:desc'
 
@@ -22,7 +21,6 @@ async function fetchDataFromURI(URI) {
 }
 
 export default function Home() {
-  const { data: session } = useSession()
   const [opened, setOpened] = useState(false);
   const [chosenCreatures, setChosenCreatures] = useLocalStorage({ key: 'chosen-creatures', defaultValue: [] });
   const [scroll, scrollTo] = useWindowScroll();
