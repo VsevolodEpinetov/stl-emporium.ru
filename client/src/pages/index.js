@@ -223,7 +223,7 @@ export default function Home() {
         header={<CustomHeader opened={opened} setOpened={setOpened} />}
       >
         <main>
-          <Title order={1} style={{marginBottom: '15px'}}>Найдено <Skeleton visible={loading} style={{display: 'inline'}}>{loading ? 22 : totalFound}</Skeleton> миниатюрок. Привет, кстати</Title>
+          <Title order={1} style={{marginBottom: '15px'}}>Найдено <Skeleton visible={loading} style={{display: 'inline'}}>{loading ? 22 : totalFound}</Skeleton> миниатюрок. Привет, кстати!</Title>
           <SimpleGrid
             cols={4}
             spacing="lg"
