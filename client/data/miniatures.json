@@ -1,0 +1,410 @@
+[
+  {
+    "name": "Лучник 2",
+    "path": "orcs/yso-archer-2.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Лучник",
+    "path": "orcs/yso-archer.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Чемпион 2",
+    "path": "orcs/yso-champion2.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "С флагом",
+    "path": "orcs/yso-command-group-2.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "С флагом",
+    "path": "orcs/yso-command-group-f-2.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Трубадур",
+    "path": "orcs/yso-command-group-f.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Барабанщик",
+    "path": "orcs/yso-command-group.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Лучница",
+    "path": "orcs/yso-female-archer-1.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Лучница 2",
+    "path": "orcs/yso-female-archer-2.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Королева",
+    "path": "orcs/yso-queen-1.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Лучница 3",
+    "path": "orcs/yso-female-archer-3.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Главарь",
+    "path": "orcs/yso-female-boss.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Чемпион",
+    "path": "orcs/yso-female-champion.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Шаман",
+    "path": "orcs/yso-female-shaman.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Воин",
+    "path": "orcs/yso-female-warrior-2.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Воин",
+    "path": "orcs/yso-female-warrior-3.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Воин",
+    "path": "orcs/yso-female-warrior-v3.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Воин",
+    "path": "orcs/yso-female-warrior.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Наездница на волке",
+    "path": "orcs/yso-female-wolfrider-2.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Наездница на волке",
+    "path": "orcs/yso-female-wolfrider-3.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Наездница на волке",
+    "path": "orcs/yso-female-wolfrider.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Королева",
+    "path": "orcs/yso-queen-1.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Королева на животном",
+    "path": "orcs/yso-queen-mounted.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Королева 2",
+    "path": "orcs/yso-queen-v2.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Шаман",
+    "path": "orcs/yso-shaman.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Варлорд 2",
+    "path": "orcs/yso-warlord-2.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Варлорд 3",
+    "path": "orcs/yso-warlord-3.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Варлорд",
+    "path": "orcs/yso-warlord.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Воин 2",
+    "path": "orcs/yso-warrior-2.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Воин",
+    "path": "orcs/yso-warrior.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Наездник на волке",
+    "path": "orcs/yso-wolfrider-2.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Наездник на волке",
+    "path": "orcs/yso-wolfrider.png",
+    "race": "orc",
+    "classes": ["fighter", "warrior"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Воин",
+    "path": "dragonborns/tf-2-warrior.png",
+    "race": "Dragonborn",
+    "classes": ["fighter", "warrior"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Варвар",
+    "path": "dwarves/tf-5-barbar.png",
+    "race": "dwarf",
+    "classes": ["fighter", "warrior", "barbar"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Варвар",
+    "path": "dwarves/tf-death-knight.png",
+    "race": "dwarf",
+    "classes": ["fighter", "warrior", "barbar", "deathknight"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Жрец",
+    "path": "dwarves/tf-priest.png",
+    "race": "dwarf",
+    "classes": ["priest"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Бард",
+    "path": "elves/tf-3-bard.png",
+    "race": "elf",
+    "classes": ["bard"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Монах",
+    "path": "elves/tf-4-monk.png",
+    "race": "elf",
+    "classes": ["monk"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Маг",
+    "path": "elves/tf-mage.png",
+    "race": "elf",
+    "classes": ["wizard", "sorcerer"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Волшебник",
+    "path": "gnomes/tf-2-wizard.png",
+    "race": "gnome",
+    "classes": ["warrior", "sorcerer"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Варвар",
+    "path": "half-orcs/tf-2-barbarian.png",
+    "race": "half-orc",
+    "classes": ["fighter", "warrior", "barbar"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Плут",
+    "path": "halflings/tf-3-rogue.png",
+    "race": "halfling",
+    "classes": ["rogue", "ranger"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Плут",
+    "path": "humans/tf-2-rogue.png",
+    "race": "human",
+    "classes": ["rogue"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Воин",
+    "path": "humans/tf-3-warrior.png",
+    "race": "human",
+    "classes": ["fighter", "warrior"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Чернокнижник",
+    "path": "humans/tf-4-warlock.png",
+    "race": "human",
+    "classes": ["warlock", "necromancer"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Волшебница",
+    "path": "humans/tf-5-wizard.png",
+    "race": "human",
+    "classes": ["wizard", "mage"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Паладин",
+    "path": "humans/tf-paladin-2.png",
+    "race": "human",
+    "classes": ["fighter", "warrior", "paladin"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Паладин",
+    "path": "humans/tf-paladin.png",
+    "race": "human",
+    "classes": ["fighter", "warrior", "paladin"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Чернокнижница",
+    "path": "tieflings/tf-4-warlock.png",
+    "race": "tiefling",
+    "classes": ["warlock", "wizard", "mage"],
+    "sex": "f",
+    "opacity": 100
+  },
+  {
+    "name": "Бард",
+    "path": "tieflings/tf-5-bard.png",
+    "race": "tiefling",
+    "classes": ["warlock", "wizard", "mage"],
+    "sex": "m",
+    "opacity": 100
+  },
+  {
+    "name": "Чернокнижница",
+    "path": "tieflings/tf-warlock.png",
+    "race": "tiefling",
+    "classes": ["warlock", "wizard", "mage"],
+    "sex": "f",
+    "opacity": 100
+  }
+]

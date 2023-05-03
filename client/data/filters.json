@@ -1,0 +1,114 @@
+{
+  "races": [
+    {
+      "value": "orc",
+      "label": "Орки"
+    },
+    {
+      "value": "dragonborn",
+      "label": "Драконнорожденные"
+    },
+    {
+      "value": "dwarf",
+      "label": "Дварфы"
+    },
+    {
+      "value": "elf",
+      "label": "Эльфы"
+    },
+    {
+      "value": "gnome",
+      "label": "Гномы"
+    },
+    {
+      "value": "half-orc",
+      "label": "Полуорки"
+    },
+    {
+      "value": "human",
+      "label": "Люди"
+    },
+    {
+      "value": "tiefling",
+      "label": "Тифлинги"
+    },
+    {
+      "value": "half-giant",
+      "label": "Полугиганты"
+    },
+    {
+      "value": "goliath",
+      "label": "Голиафы"
+    }
+  ],
+  "classes": [
+    {
+      "value": "warrior",
+      "label": "Воин"
+    },
+    {
+      "value": "druid",
+      "label": "Друид"
+    },
+    {
+      "value": "fighter",
+      "label": "Боец"
+    },
+    {
+      "value": "berserker",
+      "label": "Берсерк"
+    },
+    {
+      "value": "barbarian",
+      "label": "Варвар"
+    },
+    {
+      "value": "necromancer",
+      "label": "Некромант"
+    },
+    {
+      "value": "vampire",
+      "label": "Вампир"
+    },
+    {
+      "value": "paladin",
+      "label": "Паладин"
+    },
+    {
+      "value": "warlock",
+      "label": "Чародей"
+    },
+    {
+      "value": "bard",
+      "label": "Бард"
+    },
+    {
+      "value": "wizard",
+      "label": "Волшебник"
+    },
+    {
+      "value": "mage",
+      "label": "Маг"
+    },
+    {
+      "value": "rogue",
+      "label": "Плут"
+    },
+    {
+      "value": "ranger",
+      "label": "Следопыт"
+    },
+    {
+      "value": "artificer",
+      "label": "Изобретатель"
+    },
+    {
+      "value": "priest",
+      "label": "Жрец"
+    },
+    {
+      "value": "monk",
+      "label": "Монах"
+    }
+  ]
+}
