@@ -13,7 +13,7 @@ module.exports = ({ env }) => [
   {
     name: 'strapi::cors',
     config: {
-      origin: ['http://localhost', 'http://localhost', "https://stl-emporium.ru", "https://api.stl-emporium.ru"],
+      origin: ['http://localhost:3000', 'https://localhost:3000', "https://stl-emporium.ru", "https://api.stl-emporium.ru"],
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
       headers: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
       keepHeaderOnError: true,

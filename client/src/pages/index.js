@@ -42,7 +42,8 @@ export default function Home() {
 
   useEffect(async () => {
     fetchDataFromURI(`${API_URL}&pagination[pageSize]=20`).then(data => {
-      let minis = data.miniatures.map(cr => {
+      console.log(data)
+      let minis = data?.miniatures.map(cr => {
         return {
           ...cr,
           opacity: 100
