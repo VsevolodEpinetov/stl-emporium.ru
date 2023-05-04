@@ -4,8 +4,7 @@ import { useState, useEffect } from 'react'
 import { CreatureCard } from '@/components/CreatureCard'
 import { CustomHeader } from '@/components/CustomHeader'
 import { CustomNavbar } from '@/components/CustomNavbar'
-import { MultiSelect, Navbar, Checkbox, SimpleGrid, Image, UnstyledButton, Group, ThemeIcon, Text, Divider, AppShell, Skeleton, Title, Pagination, Center, createStyles } from '@mantine/core'
-import { IconSword, IconShoppingCart } from '@tabler/icons-react'
+import { SimpleGrid, Image, Group, AppShell, Skeleton, Title, Pagination, Center } from '@mantine/core'
 const FILTERS = require("../../data/filters.json")
 
 const API_URL = 'https://api.stl-emporium.ru/api/creatures?populate=*&sort=createdAt:desc'
