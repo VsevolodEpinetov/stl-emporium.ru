@@ -1,5 +1,5 @@
 //import { Card, Col, Row, Button, Text } from "@nextui-org/react";
-import { Card, Text, Group, Center, createStyles, Modal, Image } from '@mantine/core';
+import { Card, Text, Group, Center, createStyles, Modal, Image, Badge } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Button, ActionIcon } from '@mantine/core';
 import { useEffect, useRef, useState } from "react";
@@ -100,11 +100,25 @@ function getStringForClassesAndRaces(creature) {
   return str;
 }
 
-export const CreatureCard = ({ creatureData, isInCart, addACreatureToACart, removeACreatureFromACart }) => {
+function currentAmount (creatureCode, mode) {
+  let counter = 0;
+  if (mode === 'stl') {
+    chosenHeroesMinis.forEach(chm => {
+      if (chm === creatureCode) counter++;
+    })
+  } else {
+    chosenHeroesMinis.forEach(chm => {
+      if (chm === creatureCode) counter++;
+    })
+  }
+}
+
+export const CreatureCard = ({ creatureData, chosenHeroesSTLs, chosenHeroesMinis, addACreatureToACart, removeACreatureFromACart, mode }) => {
   const { classes, theme } = useStyles();
   const [opened, handlers] = useDisclosure(false);
   const [displayMode, setDisplayMode] = useState();
   const [actualOpacity, setActualOpacity] = useState(100);
+  const [currentAmount, setCurrentAmount] = useState(0)
   const cardElement = useRef(null);
 
   useEffect(() => {
@@ -116,6 +130,22 @@ export const CreatureCard = ({ creatureData, isInCart, addACreatureToACart, remo
       setDisplayMode('none')
     }
   }, [])
+
+  useEffect(() => {
+    let counter = 0;
+    if (mode === 'stl') {
+      console.log(chosenHeroesMinis)
+      chosenHeroesSTLs.forEach(chs => {
+        if (chs === creatureData.attributes.code) counter++;
+      })
+    } else {
+      chosenHeroesMinis.forEach(chm => {
+        if (chm === creatureData.attributes.code) counter++;
+      })
+    }
+    console.log(`new currentAmount: ${counter}`)
+    setCurrentAmount(counter);
+  }, [mode, chosenHeroesMinis, chosenHeroesSTLs])
 
   useEffect(() => {
     if (creatureData.opacity == 100) {
@@ -146,10 +176,19 @@ export const CreatureCard = ({ creatureData, isInCart, addACreatureToACart, remo
       <div className={classes.overlay} />
 
       <div className={classes.content}>
+        {
+          mode === 'stl' 
+          ?
+            <Badge size="lg" style={{ position: 'absolute', top: '0', right: '0' }}>STL</Badge>
+          : 
+            <Badge size="lg" color='green' style={{ position: 'absolute', top: '0', right: '0' }}>Фигурка</Badge>
+        }
         <div>
-          <Text size="lg" className={classes.title} weight={500}>
-            {creatureData.attributes.name}
-          </Text>
+          <Group position="apart" spacing="xs">
+            <Text size="lg" className={classes.title} weight={500}>
+              {mode === 'stl' ? creatureData.attributes.price : creatureData.attributes.price * 3}₽
+            </Text>
+          </Group>
 
           <Group position="apart" spacing="xs">
             <Text size="sm" className={classes.author} style={{ maxWidth: '70%' }}>
@@ -158,18 +197,18 @@ export const CreatureCard = ({ creatureData, isInCart, addACreatureToACart, remo
 
             <Group>
               <Center>
-                {isInCart == 0
+                {currentAmount == 0
                   ?
-                  <ActionIcon size="lg" variant="light" onClick={() => addACreatureToACart(creatureData)}>
+                  <ActionIcon size="lg" variant="light" onClick={() => addACreatureToACart(creatureData, mode)}>
                     <IconPlus size={26} />
                   </ActionIcon>
                   :
                   <Group>
-                    <ActionIcon size="lg" color={'red'} variant="outline" onClick={() => removeACreatureFromACart(creatureData)}>
+                    <ActionIcon size="lg" color={'red'} variant="outline" onClick={() => removeACreatureFromACart(creatureData, mode)}>
                       <IconMinus size={26} />
                     </ActionIcon>
-                    <ActionIcon size="lg" color={'green'} variant="outline" onClick={() => addACreatureToACart(creatureData)}>
-                      {isInCart}
+                    <ActionIcon size="lg" color={'green'} variant="outline" onClick={() => addACreatureToACart(creatureData, mode)}>
+                      {currentAmount}
                     </ActionIcon>
                   </Group>
                 }
@@ -181,13 +220,13 @@ export const CreatureCard = ({ creatureData, isInCart, addACreatureToACart, remo
       </div>
 
       <Modal opened={opened} onClose={() => handlers.close()} title={creatureData.attributes.name} centered>
-        <Image mx="auto" radius="md" src={`https://api.epinetov.com${creatureData.attributes.mainPicture.data.attributes.url}`} alt={`Превьюшка миньки ${creatureData.attributes.name}`} style={{ marginBottom: '15px'}}/>
+        <Image mx="auto" radius="md" src={`https://api.epinetov.com${creatureData.attributes.mainPicture.data.attributes.url}`} alt={`Превьюшка миньки ${creatureData.attributes.name}`} style={{ marginBottom: '15px' }} />
         <Center>
           {
-            isInCart == 0 ?
-            <Button onClick={() => addACreatureToACart(creatureData)}>Добавить в корзину</Button>
-            :
-            <Button onClick={() => removeACreatureFromACart(creatureData)} color="red">Удалить из корзины</Button>
+            currentAmount == 0 ?
+              <Button onClick={() => addACreatureToACart(creatureData)}>Добавить в корзину</Button>
+              :
+              <Button onClick={() => removeACreatureFromACart(creatureData)} color="red">Удалить из корзины</Button>
           }
         </Center>
       </Modal>

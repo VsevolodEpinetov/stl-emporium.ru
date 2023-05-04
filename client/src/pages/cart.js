@@ -10,7 +10,8 @@ import CreatureImageWithModal from '@/components/CreatureImageWithModal';
 
 export default function CartPage () {
   const [opened, setOpened] = useState(false);
-  const [chosenCreatures, setChosenCreatures] = useLocalStorage({ key: 'chosen-creatures', defaultValue: [] });
+  const [chosenHeroesSTLs, setChosenHeroesSTLs] = useLocalStorage({ key: 'chosen-fantasy-heroes-stls', defaultValue: [] });
+  const [chosenHeroesMinis, setChosenHeroesMinis] = useLocalStorage({ key: 'chosen-fantasy-heroes-physical', defaultValue: [] });
   const [cart, setCart] = useState([]);
   const [modalOpened, handlersModal] = useDisclosure(false);
   const clipboard = useClipboard({ timeout: 500 });

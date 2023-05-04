@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Group, Divider, Text, UnstyledButton, ThemeIcon, Image, MultiSelect, Checkbox, Button, MediaQuery, ActionIcon, createStyles, Title, ScrollArea, Center } from "@mantine/core"
+import { Navbar, Group, Divider, Text, UnstyledButton, ThemeIcon, Image, MultiSelect, Checkbox, Button, MediaQuery, ActionIcon, createStyles, Title, ScrollArea, Center, SegmentedControl } from "@mantine/core"
 import { IconSword, IconShoppingCart, IconRotateClockwise, IconQuestionMark, IconCircle } from '@tabler/icons-react'
 
 //#region  MenuLink
@@ -45,7 +45,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 
-export const CustomNavbar = ({ opened, setOpened, cartSize = 0, heroFilters = false, filters, currentRoute = '/', getSelectedHeroes, setLoading, loading, nullFilters }) => {
+export const CustomNavbar = ({ opened, setOpened, cartSize = 0, heroFilters = false, filters, currentRoute = '/', getSelectedHeroes, setLoading, loading, nullFilters, mode, setMode }) => {
   const { classes } = useStyles();
 
   return (
@@ -56,7 +56,7 @@ export const CustomNavbar = ({ opened, setOpened, cartSize = 0, heroFilters = fa
         </Center>
       </Navbar.Section>
       <Divider />
-      <Navbar.Section grow mt="md" component={ScrollArea} type="auto">
+      <Navbar.Section grow mt="md" component={ScrollArea}>
 
 
         <Group spacing="xs" style={{ margin: '15px 0' }}>
@@ -69,6 +69,8 @@ export const CustomNavbar = ({ opened, setOpened, cartSize = 0, heroFilters = fa
         {
           heroFilters && (
             <>
+              <Divider />
+              <SegmentedControl color="violet" data={[{ label: 'STL', value: 'stl' }, { label: 'Фигурки', value: 'physical' }]} value={mode} onChange={setMode} fullWidth style={{ marginTop: '15px', marginBottom: '15px' }} />
               <Divider />
               <Title order={3} style={{ marginTop: '15px' }}>Фильтры</Title>
               <MultiSelect
