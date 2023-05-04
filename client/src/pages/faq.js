@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { useState } from 'react'
-import { Accordion, AppShell, Title, Anchor } from '@mantine/core'
+import { Accordion, AppShell, Title, Anchor, Text } from '@mantine/core'
 import { CustomHeader } from '@/components/CustomHeader'
 import { CustomNavbar } from '@/components/CustomNavbar'
 
