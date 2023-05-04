@@ -1,13 +1,11 @@
 import Head from 'next/head'
-import { useLocalStorage, useDisclosure, useClipboard } from '@mantine/hooks';
-import { useState, useEffect } from 'react'
-import { Accordion, Image, UnstyledButton, Group, ThemeIcon, Text, Divider, Table, ActionIcon, Header, MediaQuery, Burger, AppShell, Title, Button, Modal, Code, CopyButton, List, ScrollArea, Anchor } from '@mantine/core'
-import { IconSword, IconShoppingCart, IconTrash } from '@tabler/icons-react'
+import { useState } from 'react'
+import { Accordion, AppShell, Title, Anchor } from '@mantine/core'
 import { CustomHeader } from '@/components/CustomHeader'
 import { CustomNavbar } from '@/components/CustomNavbar'
 
 
-export default function FAQPage() {
+export default function FAQPage () {
   const [opened, setOpened] = useState(false);
 
   return (
