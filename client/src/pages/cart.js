@@ -6,6 +6,7 @@ import { IconTrash } from '@tabler/icons-react'
 import { CustomHeader } from '@/components/CustomHeader'
 import { CustomNavbar } from '@/components/CustomNavbar'
 import CreatureImageWithModal from '@/components/CreatureImageWithModal';
+import ItemRow from '@/components/ItemRow';
 
 const API_URL = 'https://api.stl-emporium.ru/api/creatures?populate=*'
 
@@ -17,6 +18,9 @@ export default function CartPage () {
   const [cartSTLs, setCartSTLs] = useState([]);
   const [cartMinis, setCartMinis] = useState([]);
   const [modalOpened, handlersModal] = useDisclosure(false);
+  const [priceForItems, setPriceForItems] = useState(0);
+  const [discount, setDiscount] = useState(0);
+  const [total, setTotal] = useState(0);
   const clipboard = useClipboard({ timeout: 500 });
 
   async function fetchDataFromURI(URI) {
@@ -29,23 +33,23 @@ export default function CartPage () {
   useEffect(() => {
     let newCartMinis = [];
     let dictionaryMinis = {};
-    console.log('me ran!')
     if (chosenHeroesMinis) {
       chosenHeroesMinis.forEach(heroID => {
         if (typeof dictionaryMinis[heroID] == 'undefined') {
           dictionaryMinis[heroID] = newCartMinis.length;
-          fetchDataFromURI(`${API_URL}&filters[code][$eq]=${heroID}`).then((data) => {
-            newCartMinis.push({
-              info: data[0].attributes,
-              count: 1,
-              type: 'physical'
-            })
-            setCartMinis(newCartMinis);
+          newCartMinis.push({
+            code: heroID,
+            count: 1,
+            type: 'physical'
           })
+          setCartMinis(newCartMinis);
+        } else {
+          newCartMinis[dictionaryMinis[heroID]].count = newCartMinis[dictionaryMinis[heroID]].count + 1;
+          setCartSTLs(newCartMinis);
         }
       })
     }
-  }, [])
+  }, [chosenHeroesMinis])
 
   useEffect(() => {
     let newCartSTLs = [];
@@ -54,14 +58,12 @@ export default function CartPage () {
       chosenHeroesSTLs.forEach(heroID => {
         if (typeof dictionarySTLs[heroID] == 'undefined') {
           dictionarySTLs[heroID] = newCartSTLs.length;
-          fetchDataFromURI(`${API_URL}&filters[code][$eq]=${heroID}`).then((data) => {
-            newCartSTLs.push({
-              info: data[0].attributes,
-              count: 1,
-              type: 'stl'
-            })
-            setCartSTLs(newCartSTLs);
+          newCartSTLs.push({
+            code: heroID,
+            count: 1,
+            type: 'stl'
           })
+          setCartSTLs(newCartSTLs)
         } else {
           newCartSTLs[dictionarySTLs[heroID]].count = newCartSTLs[dictionarySTLs[heroID]].count + 1;
           setCartSTLs(newCartSTLs);
@@ -71,33 +73,25 @@ export default function CartPage () {
   }, [chosenHeroesSTLs])
 
   useEffect(() => {
-    console.log('me ran too!')
-    let newCartMinis = [];
-    let dictionaryMinis = {};
-    if (chosenHeroesMinis) {
-      chosenHeroesMinis.forEach(heroID => {
-        if (typeof dictionaryMinis[heroID] == 'undefined') {
-          dictionaryMinis[heroID] = newCartMinis.length;
-          fetchDataFromURI(`${API_URL}&filters[code][$eq]=${heroID}`).then((data) => {
-            newCartMinis.push({
-              info: data[0].attributes,
-              count: 1,
-              type: 'physical'
-            })
-            setCartMinis(newCartMinis);
-          })
-        } else {
-          newCartMinis[dictionaryMinis[heroID]].count = newCartMinis[dictionaryMinis[heroID]].count + 1;
-          setCartMinis(newCartMinis);
-        }
-      })
-    }
-  }, [chosenHeroesMinis])
-
-  useEffect(() => {
     let newCart = cartSTLs.concat(cartMinis);
     setCart(newCart)
   }, [cartSTLs, cartMinis])
+  useEffect(() => {
+    let newCart = cartSTLs.concat(cartMinis);
+    setCart(newCart)
+  }, [])
+
+  function getAllIndexes(arr, val) {
+    var indexes = [], i = -1;
+    while ((i = arr.indexOf(val, i+1)) != -1){
+        indexes.push(i);
+    }
+    return indexes;
+}
+
+  function addItemPrice (itemCode, itemPrice) {
+    
+  }
 
   const getTotal = () => {
     let total = 0;
@@ -134,6 +128,9 @@ export default function CartPage () {
       >
         <main>
           <Title order={1}>Твоя корзина</Title>
+          <Button onClick={() => {console.log(cart)}}>cart</Button>
+          <Button onClick={() => {console.log(cartSTLs)}}>cartSTLs</Button>
+          <Button onClick={() => {console.log(cartMinis)}}>cartMinis</Button>
           <Grid>
             <Grid.Col span={8}>
               <Paper shadow="xs" p="md">
@@ -155,18 +152,8 @@ export default function CartPage () {
                             </tr>
                           </thead>
                           <tbody>
-                            {cart && cart.map(creature => (
-                              <tr key={creature.id}>
-                                <td>
-                                  <CreatureImageWithModal imageSource={`https://api.stl-emporium.ru${creature.info?.mainPicture.data.attributes.url}`} miniName={creature.info?.name}/>
-                                </td>
-                                <td>{creature.type}</td>
-                                <td><Code>{creature.info?.code}</Code></td>
-                                <td>{creature.count}</td>
-                                <td>{creature.info?.price}</td>
-                                <td>{creature.info?.price * creature.count}</td>
-                                <td><ActionIcon size="lg" onClick={() => removeAllInstances(creature)}><IconTrash size="1.625rem" /></ActionIcon></td>
-                              </tr>
+                            {cart && cart.map((creature, id) => (
+                              <ItemRow itemCartInfo={creature} key={`item-row-${creature.code}-${id}`} priceForItems={priceForItems} setPriceForItems={setPriceForItems}/>
                             ))}
                           </tbody>
                         </Table>
@@ -193,16 +180,16 @@ export default function CartPage () {
                 </Group>
                 <Group position="apart" style={{ margin: '25px 10px 0' }}>
                   <Text size='md'>Миниатюры ({cart.length})</Text>
-                  <Text size='md'>{getTotal()}₽ </Text>
+                  <Text size='md'>{priceForItems}₽ </Text>
                 </Group>
                 <Group position="apart" style={{ margin: '5px 10px 15px' }}>
                   <Text size='md'>Скидка</Text>
-                  <Text size='md'>-0₽</Text>
+                  <Text size='md'>-{discount}₽</Text>
                 </Group>
                 <Divider />
                 <Group position="apart" style={{ margin: '15px 10px' }}>
                   <Title order={3}>Общая стоимость</Title>
-                  <Title order={3}>{getTotal()}₽</Title>
+                  <Title order={3}>{total}₽</Title>
                 </Group>
 
               </Paper>

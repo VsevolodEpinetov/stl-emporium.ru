@@ -24,6 +24,7 @@ export default function Home() {
 
   const [chosenHeroesSTLs, setChosenHeroesSTLs] = useLocalStorage({ key: 'chosen-fantasy-heroes-stls', defaultValue: [] });
   const [chosenHeroesMinis, setChosenHeroesMinis] = useLocalStorage({ key: 'chosen-fantasy-heroes-physical', defaultValue: [] });
+  const [shoppingCart, setShoppingCart] = useLocalStorage({key: 'shopping-cart', defaultValue: []})
 
   const [scroll, scrollTo] = useWindowScroll();
 
@@ -154,6 +155,22 @@ export default function Home() {
         ...chosenHeroesMinis,
         creature.attributes.code
       ])
+    }
+  }
+
+  function addToACart (item) {
+    const itemObject = {
+      code: item.attributes.code,
+      attributes: item.attributes,
+      mode: mode
+    }
+
+    if (mode === stl) {
+      for (let i = 0; i < cart.length; i++) {
+        if (cart[i].code === item.attributes.code) {
+          
+        }
+      }
     }
   }
 
