@@ -244,7 +244,6 @@ export default function Home() {
         header={<CustomHeader opened={opened} setOpened={setOpened} />}
       >
         <main>
-          <Button size='xs' onClick={() => {setChosenHeroesMinis([]); setChosenHeroesSTLs([])}}>clear</Button>
           <Title order={1} style={{marginBottom: '15px'}}>Найдено <Skeleton visible={loading} style={{display: 'inline'}}>{loading ? 22 : totalFound}</Skeleton> миниатюрок</Title>
           <SimpleGrid
             cols={4}
