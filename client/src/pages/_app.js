@@ -14,7 +14,6 @@ import {
   Image
 } from '@mantine/core';
 import Head from 'next/head';
-import { SessionProvider } from "next-auth/react"
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
   const theme = useMantineTheme();
@@ -30,15 +29,13 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#1A1B1E" />
       </Head>
-      <SessionProvider session={session}>
-        <MantineProvider
-          theme={{ colorScheme: 'dark' }}
-          withGlobalStyles
-          withNormalizeCSS
-        >
-          <Component {...pageProps} />
-        </MantineProvider>
-      </SessionProvider>
+      <MantineProvider
+        theme={{ colorScheme: 'dark' }}
+        withGlobalStyles
+        withNormalizeCSS
+      >
+        <Component {...pageProps} />
+      </MantineProvider>
     </>
   )
 }

@@ -100,20 +100,7 @@ function getStringForClassesAndRaces(creature) {
   return str;
 }
 
-function currentAmount (creatureCode, mode) {
-  let counter = 0;
-  if (mode === 'stl') {
-    chosenHeroesMinis.forEach(chm => {
-      if (chm === creatureCode) counter++;
-    })
-  } else {
-    chosenHeroesMinis.forEach(chm => {
-      if (chm === creatureCode) counter++;
-    })
-  }
-}
-
-export const CreatureCard = ({ creatureData, chosenHeroesSTLs, chosenHeroesMinis, addACreatureToACart, removeACreatureFromACart, mode }) => {
+export const CreatureCard = ({ item, addToACart, removeItem, mode, amountInCart }) => {
   const { classes, theme } = useStyles();
   const [opened, handlers] = useDisclosure(false);
   const [displayMode, setDisplayMode] = useState();
@@ -122,7 +109,7 @@ export const CreatureCard = ({ creatureData, chosenHeroesSTLs, chosenHeroesMinis
   const cardElement = useRef(null);
 
   useEffect(() => {
-    if (creatureData.opacity == 100) {
+    if (item.opacity == 100) {
       setActualOpacity(100);
       setDisplayMode('block')
     } else {
@@ -132,23 +119,7 @@ export const CreatureCard = ({ creatureData, chosenHeroesSTLs, chosenHeroesMinis
   }, [])
 
   useEffect(() => {
-    let counter = 0;
-    if (mode === 'stl') {
-      console.log(chosenHeroesMinis)
-      chosenHeroesSTLs.forEach(chs => {
-        if (chs === creatureData.attributes.code) counter++;
-      })
-    } else {
-      chosenHeroesMinis.forEach(chm => {
-        if (chm === creatureData.attributes.code) counter++;
-      })
-    }
-    console.log(`new currentAmount: ${counter}`)
-    setCurrentAmount(counter);
-  }, [mode, chosenHeroesMinis, chosenHeroesSTLs])
-
-  useEffect(() => {
-    if (creatureData.opacity == 100) {
+    if (item.opacity == 100) {
       setDisplayMode('block')
       setTimeout(function () {
         setActualOpacity(100)
@@ -159,7 +130,7 @@ export const CreatureCard = ({ creatureData, chosenHeroesSTLs, chosenHeroesMinis
         setDisplayMode('none')
       }, 150)
     }
-  }, [creatureData.opacity])
+  }, [item.opacity])
 
   return (
     <Card
@@ -172,7 +143,7 @@ export const CreatureCard = ({ creatureData, chosenHeroesSTLs, chosenHeroesMinis
       ref={cardElement}
       onClick={(e) => { if (e.target.tagName == 'DIV') handlers.open(); }}
     >
-      <div className={classes.image} style={{ backgroundImage: `url(https://api.epinetov.com${creatureData.attributes.mainPicture.data.attributes.url})`, backgroundPosition: 'center' }} />
+      <div className={classes.image} style={{ backgroundImage: `url(https://api.epinetov.com${item.attributes.mainPicture.data.attributes.url})`, backgroundPosition: 'center' }} />
       <div className={classes.overlay} />
 
       <div className={classes.content}>
@@ -186,29 +157,29 @@ export const CreatureCard = ({ creatureData, chosenHeroesSTLs, chosenHeroesMinis
         <div>
           <Group position="apart" spacing="xs">
             <Text size="lg" className={classes.title} weight={500}>
-              {mode === 'stl' ? creatureData.attributes.price : creatureData.attributes.price * 3}₽
+              {mode === 'stl' ? item.attributes.price : item.attributes.price * 3}₽
             </Text>
           </Group>
 
           <Group position="apart" spacing="xs">
             <Text size="sm" className={classes.author} style={{ maxWidth: '70%' }}>
-              {getStringForClassesAndRaces(creatureData.attributes)}
+              {getStringForClassesAndRaces(item.attributes)}
             </Text>
 
             <Group>
               <Center>
-                {currentAmount == 0
+                {amountInCart == 0
                   ?
-                  <ActionIcon size="lg" variant="light" onClick={() => addACreatureToACart(creatureData, mode)}>
+                  <ActionIcon size="lg" variant="light" onClick={() => addToACart(item.attributes.code, mode)}>
                     <IconPlus size={26} />
                   </ActionIcon>
                   :
                   <Group>
-                    <ActionIcon size="lg" color={'red'} variant="outline" onClick={() => removeACreatureFromACart(creatureData, mode)}>
+                    <ActionIcon size="lg" color={'red'} variant="outline" onClick={() => removeItem(item.attributes.code, mode)}>
                       <IconMinus size={26} />
                     </ActionIcon>
-                    <ActionIcon size="lg" color={'green'} variant="outline" onClick={() => addACreatureToACart(creatureData, mode)}>
-                      {currentAmount}
+                    <ActionIcon size="lg" color={'green'} variant="outline" onClick={() => addToACart(item.attributes.code, mode)}>
+                      {amountInCart}
                     </ActionIcon>
                   </Group>
                 }
@@ -219,14 +190,14 @@ export const CreatureCard = ({ creatureData, chosenHeroesSTLs, chosenHeroesMinis
         </div>
       </div>
 
-      <Modal opened={opened} onClose={() => handlers.close()} title={creatureData.attributes.name} centered>
-        <Image mx="auto" radius="md" src={`https://api.epinetov.com${creatureData.attributes.mainPicture.data.attributes.url}`} alt={`Превьюшка миньки ${creatureData.attributes.name}`} style={{ marginBottom: '15px' }} />
+      <Modal opened={opened} onClose={() => handlers.close()} title={item.attributes.name} centered>
+        <Image mx="auto" radius="md" src={`https://api.epinetov.com${item.attributes.mainPicture.data.attributes.url}`} alt={`Превьюшка миньки ${item.attributes.name}`} style={{ marginBottom: '15px' }} />
         <Center>
           {
             currentAmount == 0 ?
-              <Button onClick={() => addACreatureToACart(creatureData)}>Добавить в корзину</Button>
+              <Button onClick={() => addToACart(item)}>Добавить в корзину</Button>
               :
-              <Button onClick={() => removeACreatureFromACart(creatureData)} color="red">Удалить из корзины</Button>
+              <Button onClick={() => removeACreatureFromACart(item)} color="red">Удалить из корзины</Button>
           }
         </Center>
       </Modal>

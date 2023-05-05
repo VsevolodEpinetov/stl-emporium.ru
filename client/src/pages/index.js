@@ -12,7 +12,7 @@ const API_URL = 'https://api.stl-emporium.ru/api/creatures?populate=*&sort=creat
 async function fetchDataFromURI(URI) {
   const rawData = await fetch(URI)
   const data = await rawData.json();
-
+  
   return {
     miniatures: data?.data,
     meta: data?.meta
@@ -46,12 +46,7 @@ export default function Home() {
 
   useEffect(async () => {
     fetchDataFromURI(`${API_URL}&pagination[pageSize]=20`).then(data => {
-      let minis = data?.miniatures.map(cr => {
-        return {
-          ...cr,
-          opacity: 100
-        }
-      })
+      const minis = data?.miniatures;
       setMiniatures(minis);
       setTotalFound(data.meta.pagination.total);
       setTotalPages(data.meta.pagination.pageCount);
@@ -135,40 +130,77 @@ export default function Home() {
     setLoading.close();
   }, [miniatures])
 
-  function addACreatureToACart(creature, modeOfItem) {
-    if (modeOfItem === 'stl') {
-      let found = false;
-      for (let i = 0; i < chosenHeroesSTLs.length; i++) {
-        if (chosenHeroesSTLs[i] === creature.attributes.code) {
-          found = true;
-          break;
-        }
+  function addToACart (itemCode) {
+    const itemObject = {
+      code: itemCode,
+      type: mode,
+      amount: 1
+    }
+
+    let index = -1;
+    for (let i = 0; i < shoppingCart.length; i++) {
+      if (shoppingCart[i].code === itemCode && shoppingCart[i].type === mode) {
+        index = i
       }
-      if (!found) {
-        setChosenHeroesSTLs([
-          ...chosenHeroesSTLs,
-          creature.attributes.code
-        ])
+    }
+
+    if (index > -1) {
+      if (mode === 'stl') { return; }
+      else {
+        let newAmount = shoppingCart[index].amount + 1;
+        setShoppingCart(shoppingCart.map((item, id) => {
+          if (id !== index) {
+            // This isn't the item we care about - keep it as-is
+            return item
+          }
+      
+          // Otherwise, this is the one we want - return an updated value
+          return {
+            ...item,
+            amount: newAmount
+          }
+        }))
       }
     } else {
-      setChosenHeroesMinis([
-        ...chosenHeroesMinis,
-        creature.attributes.code
+      setShoppingCart([
+        ...shoppingCart,
+        itemObject
       ])
     }
   }
 
-  function addToACart (item) {
-    const itemObject = {
-      code: item.attributes.code,
-      attributes: item.attributes,
-      mode: mode
+  function getAmountInCart (itemCode) {
+    let index = -1;
+    for (let i = 0; i < shoppingCart.length; i++) {
+      if (shoppingCart[i].code === itemCode && shoppingCart[i].type === mode) {
+        index = i;
+        break;
+      }
     }
+    if (index > -1) { return shoppingCart[index].amount; } 
+    else { return 0; }
+  }
 
-    if (mode === stl) {
-      for (let i = 0; i < cart.length; i++) {
-        if (cart[i].code === item.attributes.code) {
-          
+  function removeItem (itemCode) {
+    for (let i = 0; i < shoppingCart.length; i++) {
+      if (shoppingCart[i].code === itemCode && shoppingCart[i].type === mode) {
+        if (shoppingCart[i].amount > 1) {
+          console.log('amount > 1')
+          let newAmount = shoppingCart[i].amount - 1;
+          setShoppingCart(shoppingCart.map((item, id) => {
+            if (id !== i) {
+              // This isn't the item we care about - keep it as-is
+              return item
+            }
+        
+            // Otherwise, this is the one we want - return an updated value
+            return {
+              ...item,
+              amount: newAmount
+            }
+          }))
+        } else {
+          setShoppingCart([...shoppingCart.slice(0, i), ...shoppingCart.slice(i + 1)])
         }
       }
     }
@@ -215,20 +247,6 @@ export default function Home() {
     })
   }
 
-  function getAllInstancesOfCreatureInACart(creature, modeOfItem) {
-    let counter = 0;
-
-    if (modeOfItem === 'stl') {
-      for (let i = 0; i < chosenHeroesSTLs.length; i++) {
-        if (creature.attributes.code === chosenHeroesSTLs[i]) counter++;
-      }
-    } else {
-      for (let i = 0; i < chosenHeroesMinis.length; i++) {
-        if (creature.attributes.code === chosenHeroesMinis[i]) counter++;
-      }
-    }
-  }
-
   const filters = {
     races: {
       getter: selectedRaces,
@@ -257,10 +275,12 @@ export default function Home() {
       <Head />
       <AppShell
         navbarOffsetBreakpoint="sm"
-        navbar={<CustomNavbar opened={opened} setLoading={setLoading} setOpened={setOpened} getSelectedHeroes={getSelectedHeroes} heroFilters={true} filters={filters} cartSize={chosenHeroesMinis.length + chosenHeroesSTLs.length} currentRoute='/index' loading={loading} nullFilters={nullFilters} mode={mode} setMode={setMode}/>}
+        navbar={<CustomNavbar opened={opened} setLoading={setLoading} setOpened={setOpened} getSelectedHeroes={getSelectedHeroes} heroFilters={true} filters={filters} cartSize={shoppingCart.length} currentRoute='/index' loading={loading} nullFilters={nullFilters} mode={mode} setMode={setMode}/>}
         header={<CustomHeader opened={opened} setOpened={setOpened} />}
       >
         <main>
+          <Button onClick={() => {setShoppingCart([])}}>clear</Button>
+          <Button onClick={() => {console.log(shoppingCart)}}>show</Button>
           <Title order={1} style={{marginBottom: '15px'}}>Найдено <Skeleton visible={loading} style={{display: 'inline'}}>{loading ? 22 : totalFound}</Skeleton> миниатюрок</Title>
           <SimpleGrid
             cols={4}
@@ -276,7 +296,14 @@ export default function Home() {
               loading ?
                 Array(25).fill('1').map((skeleton, id) => <Skeleton height={380} mb="xl" key={`skeleton-${id}`} />)
                 : miniatures?.length > 0 ?
-                  miniatures.map(creature => <CreatureCard creatureData={creature} key={`card-${creature.id}`} chosenHeroesMinis={chosenHeroesMinis} chosenHeroesSTLs={chosenHeroesSTLs} addACreatureToACart={addACreatureToACart} removeACreatureFromACart={removeACreatureFromACart} opacity={creature.opacity} mode={mode}/>)
+                  miniatures.map(creature => <CreatureCard
+                     item={creature}
+                     key={`card-${creature.id}`}
+                     amountInCart={getAmountInCart(creature.attributes.code)}
+                     addToACart={addToACart}
+                     removeItem={removeItem}
+                     mode={mode}
+                     />)
                   :
                   <Group>
                     Нет фигурок по таким фильтрам!
