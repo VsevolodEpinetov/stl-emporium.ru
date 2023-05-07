@@ -1,4 +1,4 @@
-import { ActionIcon, Code, Image, Modal, Skeleton } from '@mantine/core';
+import { ActionIcon, Badge, Code, Image, Modal, Skeleton } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import React from 'react';
 import CreatureImageWithModal from './CreatureImageWithModal';
@@ -14,18 +14,8 @@ async function fetchDataFromURI(URI) {
     return data?.data;
 }
 
-const ItemRow = ({ itemCartInfo, priceForItems, setPriceForItems  }) => {
-    const [itemData, setItemData] = useState();
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        setLoading(true);
-        fetchDataFromURI(`${API_URL}&filters[code][$eq]=${itemCartInfo.code}`).then(data => {
-            setItemData(data[0].attributes);
-            setPriceForItems(priceForItems + data[0].attributes.price * itemCartInfo.count)
-            setLoading(false);
-        })
-    }, [itemCartInfo])
+const ItemRow = ({ itemCartInfo, removeAllInstances }) => {
+    const [loading, setLoading] = useState(false);
 
     return (
         <>
@@ -42,14 +32,14 @@ const ItemRow = ({ itemCartInfo, priceForItems, setPriceForItems  }) => {
                 :
                 <tr>
                     <td>
-                        <CreatureImageWithModal imageSource={`https://api.stl-emporium.ru${itemData?.mainPicture.data.attributes.url}`} miniName={itemData?.name} />
+                        <CreatureImageWithModal imageSource={`https://api.stl-emporium.ru${itemCartInfo.info.mainPicture.data.attributes.url}`} miniName={itemCartInfo.info.name} />
                     </td>
-                    <td>{itemCartInfo.type}</td>
-                    <td><Code>{itemData?.code}</Code></td>
-                    <td>{itemCartInfo.count}</td>
-                    <td>{itemData?.price}</td>
-                    <td>{itemData?.price * itemCartInfo.count}</td>
-                    <td><ActionIcon size="lg" onClick={() => removeAllInstances(itemCartInfo.code)}><IconTrash size="1.625rem" /></ActionIcon></td>
+                    <td>{itemCartInfo.type === 'stl' ? <Badge variant="filled">STL</Badge> : <Badge color='green' variant="filled">Фигурка</Badge>}</td>
+                    <td><Code>{itemCartInfo.code}</Code></td>
+                    <td>{itemCartInfo.amount}</td>
+                    <td>{itemCartInfo.type === 'stl' ? itemCartInfo.info.priceSTL : itemCartInfo.info.pricePhysical}</td>
+                    <td>{itemCartInfo.type === 'stl' ? itemCartInfo.info.priceSTL * itemCartInfo.amount : itemCartInfo.info.pricePhysical * itemCartInfo.amount}</td>
+                    <td><ActionIcon size="lg" onClick={() => removeAllInstances(itemCartInfo.code, itemCartInfo.type)}><IconTrash size="1.625rem" /></ActionIcon></td>
                 </tr>
             }
         </>

@@ -1,109 +1,396 @@
 import Head from 'next/head'
-import { useLocalStorage, useDisclosure, useClipboard } from '@mantine/hooks';
+import { useLocalStorage, useDisclosure, useClipboard, useMediaQuery } from '@mantine/hooks';
 import { useState, useEffect } from 'react'
-import { Group, Text, Table, ActionIcon, AppShell, Title, Button, Modal, Code, CopyButton, List, ScrollArea, Anchor, Grid, Paper, Divider } from '@mantine/core'
-import { IconTrash } from '@tabler/icons-react'
+import { Group, Text, Table, ActionIcon, AppShell, Title, Button, Modal, Code, CopyButton, List, ScrollArea, Anchor, Grid, Paper, Divider, Stack, Input, Select, TextInput } from '@mantine/core'
+import { IconAt, IconBrandTelegram, IconBrandVk, IconTrash } from '@tabler/icons-react'
 import { CustomHeader } from '@/components/CustomHeader'
 import { CustomNavbar } from '@/components/CustomNavbar'
 import CreatureImageWithModal from '@/components/CreatureImageWithModal';
 import ItemRow from '@/components/ItemRow';
 
-const API_URL = 'https://api.stl-emporium.ru/api/creatures?populate=*'
+const token = '8721eb0fe7756b16ad0abb03650965113f4e26d8a0958a70c15b932124d39157eb132156e1676d9efb42fc2afed5cc7b20390edf19dd755a7e3914f43358e3f4c8e5d5368d5efe72d778d4f23d0158c6a239f48709a60a9771f87dac5c6bc9a3245314a673ba8e9c4bb7dccb0c3f76eea14717501474ebfa02583d81251c1bca'
 
-export default function CartPage () {
+function generateToken() {
+  const firstPart = [
+    'Обычный',
+    'Редкий',
+    'Эпический',
+    'Легендарный',
+    'Мифический',
+    'Необычный',
+    'Магический',
+    'Странный',
+    'Тайный',
+    'Мерцающий',
+    'Благословенный',
+    'Жевательный',
+    'Эфирный',
+    'Мрачный',
+    'Боевой',
+    'Поддельный',
+    'Фальшивый',
+    'Темный',
+    'Светлый',
+    'Нескончаемый',
+    'Резной',
+    'Маленький',
+    'Полный',
+    'Цветной',
+    'Монохромный',
+    'Призрачный',
+    'Серебрянный',
+    'Золотой',
+    'Алмазный',
+    'Изумрудный',
+    'Каменный',
+    'Стальной',
+    'Заколдованный',
+    'Зачаренный',
+    'Счастливый',
+    'Угрюмый',
+    'Унылый',
+    'Радостный',
+    'Затерянный',
+    'Спокойный',
+    'Кричащий',
+    'Орущий',
+    'Странствующий',
+    'Болтливый',
+    'Смертоносный',
+    'Исцеляющий',
+    'Невредимый',
+    'Пророческий',
+    'Мясной',
+    'Пьяный',
+    'Трезвый',
+    'Острый',
+    'Тупой',
+    'Свежий',
+    'Вонючий',
+    'Грязный',
+    'Восхитительный',
+    'Большой',
+    'Праздничный',
+    'Обыденный',
+    'Пивной',
+    'Мощный',
+    'Хилый',
+    'Возрожденный',
+    'Высокорожденный',
+    'Перерожденный',
+    'Древний',
+    'Новый',
+    'Точный',
+    'Меткий',
+    'Слепой',
+    'Зрячий',
+    'Рыбацкий',
+    'Боевой',
+    'Мирный',
+    'Душный',
+    'Прыткий',
+    'Тренировочный',
+    'Пахучий',
+    'Составной',
+    'Гейзерный',
+    'Панцирный',
+    'Терракотовый',
+    'Запечатанный',
+    'Небесный',
+    'Земной',
+    'Подземный',
+    'Падающий',
+    'Летящий',
+    'Зимний',
+    'Летний',
+    'Весенний',
+    'Осенний',
+    'Хитроумный',
+    'Игрушечный',
+    'Лунный',
+    'Любвеобильный',
+    'Хмельной',
+    'Вкусный',
+    'Плетенный',
+    'Мятный',
+    'Взрывчатый',
+    'Грибной',
+    'Утиный'
+  ]
+  const secondPart = [
+    'Мурлок',
+    'Дракон',
+    'Мимик',
+    'Меч',
+    'Посох',
+    'Моргенштерн',
+    'Кистень',
+    'Слизень',
+    'Кинжал',
+    'Молот',
+    'Арбалет',
+    'Лук',
+    'Топор',
+    'Кнут',
+    'Цеп',
+    'Шакрам',
+    'Лич',
+    'Тролль',
+    'Огр',
+    'Бармаглот',
+    'Архимаг',
+    'Волшебник',
+    'Паладин',
+    'Следопыт',
+    'Друид',
+    'Архидруид',
+    'Дух',
+    'Рух',
+    'Ифрит',
+    'Трент',
+    'Энт',
+    'Скелет',
+    'Изобретатель',
+    'Орк',
+    'Гоблин',
+    'Воин',
+    'Чернокнижник',
+    'Некромант',
+    'Эликсир',
+    'Рог',
+    'Разбойник',
+    'Бочонок',
+    'Дворф',
+    'Гном',
+    'Жрец',
+    'Маг',
+    'Таурен',
+    'Следопыт',
+    'Плут',
+    'Варвар',
+    'Чародей',
+    'Нагрудник',
+    'Шлем',
+    'Щит',
+    'Заряд',
+    'Олень',
+    'Брюхоног',
+    'Ящик',
+    'Сундук',
+    'Банан',
+    'Знак',
+    'Камень',
+    'Пульт',
+    'Мяч',
+    'Бард',
+    'Штырь',
+    'Жезл',
+    'Мастер',
+    'Наемник',
+    'Череп',
+    'Скакун',
+    'Ангел',
+    'Панцирь',
+    'Шаман',
+    'Цыпленок',
+    'Монах',
+    'Мистик',
+    'Алхимик',
+    'Бог',
+    'Петух',
+    'Орел'
+  ]
+  const thirdPart = [
+    'Подземелья',
+    'Слизня',
+    'Вулкана',
+    'Божества',
+    'Бога',
+    'Богини',
+    'Митрила',
+    'Болота',
+    'Банана',
+    'Рыбы',
+    'Щенков',
+    'Котят',
+    'Камня',
+    'Самоцветов',
+    'Сплава',
+    'Огня',
+    'Магмы',
+    'Воздуха',
+    'Кожи',
+    'Воды',
+    'Снега',
+    'Тряпок',
+    'Ткани',
+    'Меди',
+    'Серебра',
+    'Платины',
+    'Льда',
+    'Роз',
+    'Жара',
+    'Бочонка',
+    'Ларца',
+    'Ящика',
+    'Тыквы',
+    'Зубов',
+    'Кости',
+    'Конфет',
+    'Шоколада',
+    'Печенья',
+    'Сахара',
+    'Карамели',
+    'Бумаги',
+    'Смолы',
+    'Волка',
+    'Пластика',
+    'Луносвета',
+    'Подгорода',
+    'Оргриммара',
+    'Штормграда',
+    'Даларана',
+    'Стальгорна',
+    'Дарнаса',
+    'Экзодара',
+    'Лимонада',
+    'Лимонов',
+    'Апельсинов',
+    'Яблок',
+    'Курицы',
+    'Говядины',
+    'Призрака',
+    'Стали',
+    'Генератора',
+    'Вуду',
+    'Монастыря',
+    'Яйца',
+    'Енота',
+    'Пива',
+    'Хмеля',
+    'Эля',
+    'Бухты',
+    'Осколков',
+    'Будущего',
+    'Прошлого'
+  ]
+
+  const string = `${firstPart[Math.floor(Math.random()*firstPart.length)]}${secondPart[Math.floor(Math.random()*secondPart.length)]}Из${thirdPart[Math.floor(Math.random()*thirdPart.length)]}`
+  return string;
+}
+
+export default function CartPage() {
   const [opened, setOpened] = useState(false);
-  const [chosenHeroesSTLs, setChosenHeroesSTLs] = useLocalStorage({ key: 'chosen-fantasy-heroes-stls', defaultValue: [] });
-  const [chosenHeroesMinis, setChosenHeroesMinis] = useLocalStorage({ key: 'chosen-fantasy-heroes-physical', defaultValue: [] });
-  const [cart, setCart] = useState([]);
-  const [cartSTLs, setCartSTLs] = useState([]);
-  const [cartMinis, setCartMinis] = useState([]);
-  const [modalOpened, handlersModal] = useDisclosure(false);
-  const [priceForItems, setPriceForItems] = useState(0);
+  const [shoppingCart, setShoppingCart] = useLocalStorage({ key: 'shopping-cart', defaultValue: [] })
+  const [shoppingCartWithData, setShoppingCartWithData] = useState([]);
+  const [modalOpened, modalHandlers] = useDisclosure(false);
+  
   const [discount, setDiscount] = useState(0);
-  const [total, setTotal] = useState(0);
-  const clipboard = useClipboard({ timeout: 500 });
+  const [identificator, setIdentificator] = useState('')
+  const [paymentIsInProgress, setPaymentIsInProgress] = useState(false)
+
+
+  const isMobile = useMediaQuery("(max-width: 50em)");
+  const [vk, setVK] = useState('');
+  const [tg, setTg] = useState('');
+  const [mail, setMail] = useState('');
+  const [optionsContacts, setOptionsContacts] = useState([]);
+  const [chosenPreferredContact, setChosenPreferredContact] = useState('');
+  const [payButtonIsDisabled, setPayButtonIsDisabled] = useState(true);
+
+  async function placeOrder() {
+    //TODO: field verifications
+    setPaymentIsInProgress(true);
+    let newCart = shoppingCart.map(item => {
+      let newObj = {
+        code: item.code,
+        amount: item.amount,
+        type: item.type
+      }
+      return newObj;
+    })
+    const response = await fetch(`https://api.stl-emporium.ru/api/orders`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        data: {
+          total: getTotal(),
+          items: newCart,
+          vk: vk,
+          telegram: tg,
+          mail: mail,
+          preferredMethod: chosenPreferredContact,
+          delivered: false,
+          paid: false,
+          identificator: identificator
+        }
+      })
+    });
+  
+    if (!response.ok) {
+      console.log(response.statusText);
+    } else {
+      console.log('success!')
+    }
+  }
 
   async function fetchDataFromURI(URI) {
     const rawData = await fetch(URI)
     const data = await rawData.json();
-  
+
     return data?.data;
   }
 
   useEffect(() => {
-    let newCartMinis = [];
-    let dictionaryMinis = {};
-    if (chosenHeroesMinis) {
-      chosenHeroesMinis.forEach(heroID => {
-        if (typeof dictionaryMinis[heroID] == 'undefined') {
-          dictionaryMinis[heroID] = newCartMinis.length;
-          newCartMinis.push({
-            code: heroID,
-            count: 1,
-            type: 'physical'
-          })
-          setCartMinis(newCartMinis);
-        } else {
-          newCartMinis[dictionaryMinis[heroID]].count = newCartMinis[dictionaryMinis[heroID]].count + 1;
-          setCartSTLs(newCartMinis);
-        }
-      })
-    }
-  }, [chosenHeroesMinis])
+    let contacts = [];
+    if (vk.length > 0) contacts.push({ label: 'ВКонтакте', value: 'vk' })
+    if (tg.length > 0) contacts.push({ label: 'Telegram', value: 'tg' })
+    if (mail.length > 0) contacts.push({ label: 'Почту', value: 'mail' })
+
+    if (chosenPreferredContact === 'vk' && vk.length === 0) setChosenPreferredContact('')
+    if (chosenPreferredContact === 'tg' && tg.length === 0) setChosenPreferredContact('')
+    if (chosenPreferredContact === 'mail' && mail.length === 0) setChosenPreferredContact('')
+
+    setOptionsContacts(contacts);
+  }, [tg, vk, mail])
 
   useEffect(() => {
-    let newCartSTLs = [];
-    let dictionarySTLs = {};
-    if (chosenHeroesSTLs) {
-      chosenHeroesSTLs.forEach(heroID => {
-        if (typeof dictionarySTLs[heroID] == 'undefined') {
-          dictionarySTLs[heroID] = newCartSTLs.length;
-          newCartSTLs.push({
-            code: heroID,
-            count: 1,
-            type: 'stl'
-          })
-          setCartSTLs(newCartSTLs)
-        } else {
-          newCartSTLs[dictionarySTLs[heroID]].count = newCartSTLs[dictionarySTLs[heroID]].count + 1;
-          setCartSTLs(newCartSTLs);
-        }
-      })
-    }
-  }, [chosenHeroesSTLs])
-
-  useEffect(() => {
-    let newCart = cartSTLs.concat(cartMinis);
-    setCart(newCart)
-  }, [cartSTLs, cartMinis])
-  useEffect(() => {
-    let newCart = cartSTLs.concat(cartMinis);
-    setCart(newCart)
+    setIdentificator(generateToken());
   }, [])
 
-  function getAllIndexes(arr, val) {
-    var indexes = [], i = -1;
-    while ((i = arr.indexOf(val, i+1)) != -1){
-        indexes.push(i);
-    }
-    return indexes;
-}
+  useEffect(() => {
+    if (chosenPreferredContact !== '') setPayButtonIsDisabled(false);
+    else setPayButtonIsDisabled(true);
+  }, [chosenPreferredContact])
 
-  function addItemPrice (itemCode, itemPrice) {
-    
-  }
+  useEffect(() => {
+    const allIds = shoppingCart.map(i => i.code);
+    let reqString = '';
+    reqString += allIds.join('&filters[code][$eq]=');
+    reqString = '&filters[code][$eq]=' + reqString;
+    fetchDataFromURI(`https://api.stl-emporium.ru/api/creatures?populate=*${reqString}`).then(data => {
+      let cartWithData = shoppingCart.slice();
+      cartWithData.forEach(item => {
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].attributes.code === item.code) {
+            item.info = data[i].attributes;
+            break;
+          }
+        }
+      })
+      setShoppingCartWithData(cartWithData);
+    })
+  }, [shoppingCart])
 
   const getTotal = () => {
     let total = 0;
-    /*cart.forEach(cr => {
-      total += cr.info.price * cr.count;
-    })*/
+    shoppingCartWithData.forEach(item => {
+      let price = 9999;
+      if (item.type === 'stl') price = item.info.priceSTL
+      if (item.type === 'physical') price = item.info.pricePhysical
+      total += price * item.amount;
+    })
     return total;
-  }
-
-  const getStringWithCodes = () => {
-    let str = cart.map(cr => cr.attributes.code).join(', ');
-    return str;
   }
 
   const getArrayWithCodes = () => {
@@ -112,10 +399,34 @@ export default function CartPage () {
   }
 
 
-  function removeAllInstances(creature) {
-    let copy = chosenCreatures.slice();
-    copy = copy.filter(cr => creature.id !== cr.id)
-    setChosenCreatures(copy)
+  function removeAllInstances(itemCode, type) {
+    /*let copy = chosenCreatures.slice();
+    copy = copy.filter(cr => creature.id !== cr.id && )
+    setChosenCreatures(copy)*/
+    let copy = shoppingCart.slice();
+    copy = copy.filter(item => item.code != itemCode || item.type != type)
+    setShoppingCart(copy);
+  }
+
+  function getTotalByType(type) {
+    let counter = 0;
+    shoppingCartWithData.forEach(item => {
+      if (item.type === type) {
+        let price = 9999;
+        if (type === 'stl') price = item.info.priceSTL
+        if (type === 'physical') price = item.info.pricePhysical
+        counter += price * item.amount;
+      }
+    })
+    return counter;
+  }
+
+  function getAmountByType(type) {
+    let counter = 0;
+    shoppingCart.forEach(item => {
+      if (item.type === type) counter += item.amount;
+    })
+    return counter;
   }
 
   return (
@@ -123,19 +434,16 @@ export default function CartPage () {
       <Head />
       <AppShell
         navbarOffsetBreakpoint="sm"
-        navbar={<CustomNavbar opened={opened} setOpened={setOpened} cartSize={chosenHeroesMinis.length + chosenHeroesSTLs.length} currentRoute='/cart' />}
+        navbar={<CustomNavbar opened={opened} setOpened={setOpened} cartSize={shoppingCart.reduce((partial, item) => partial + item.amount, 0)} currentRoute='/cart' />}
         header={<CustomHeader opened={opened} setOpened={setOpened} />}
       >
         <main>
           <Title order={1}>Твоя корзина</Title>
-          <Button onClick={() => {console.log(cart)}}>cart</Button>
-          <Button onClick={() => {console.log(cartSTLs)}}>cartSTLs</Button>
-          <Button onClick={() => {console.log(cartMinis)}}>cartMinis</Button>
           <Grid>
             <Grid.Col span={8}>
               <Paper shadow="xs" p="md">
                 {
-                  cart.length > 0
+                  shoppingCartWithData.length > 0
                     ?
                     <>
                       <ScrollArea w={'100%'}>
@@ -152,9 +460,9 @@ export default function CartPage () {
                             </tr>
                           </thead>
                           <tbody>
-                            {cart && cart.map((creature, id) => (
-                              <ItemRow itemCartInfo={creature} key={`item-row-${creature.code}-${id}`} priceForItems={priceForItems} setPriceForItems={setPriceForItems}/>
-                            ))}
+                            {shoppingCartWithData.length > 0 && shoppingCartWithData.map((item, id) => {
+                              return (<ItemRow itemCartInfo={item} key={`item-row-${item.info.code}-${id}`} removeAllInstances={removeAllInstances} />)
+                            })}
                           </tbody>
                         </Table>
                       </ScrollArea>
@@ -168,19 +476,23 @@ export default function CartPage () {
               </Paper>
             </Grid.Col>
             <Grid.Col span={4}>
-              <Paper shadow="xs" p="md" style={{position: 'sticky', top: '15px'}}>
-                <Button fullWidth size='lg' color='green' radius='md'>
+              <Paper shadow="xs" p="md" style={{ position: 'sticky', top: '15px' }}>
+                <Button fullWidth size='lg' color='green' radius='md' onClick={() => { modalHandlers.open() }}>
                   Оформить заказ
                 </Button>
                 <Text size='sm' style={{ color: '#707070', margin: '25px 10px' }}>После оплаты будет предоставлен код, который нужно будет отправить нам в Telegram/VK</Text>
                 <Divider />
                 <Group position="apart" style={{ margin: '15px 10px' }}>
                   <Title order={3}>Ваша корзина</Title>
-                  <Text size='sm'>{cart.length} минек</Text>
+                  <Text size='sm'>{shoppingCart.length} минек</Text>
                 </Group>
                 <Group position="apart" style={{ margin: '25px 10px 0' }}>
-                  <Text size='md'>Миниатюры ({cart.length})</Text>
-                  <Text size='md'>{priceForItems}₽ </Text>
+                  <Text size='md'>STL ({getAmountByType('stl')})</Text>
+                  <Text size='md'>{getTotalByType('stl')}₽ </Text>
+                </Group>
+                <Group position="apart" style={{ margin: '5px 10px 0' }}>
+                  <Text size='md'>Фигурки ({getAmountByType('physical')})</Text>
+                  <Text size='md'>{getTotalByType('physical')}₽ </Text>
                 </Group>
                 <Group position="apart" style={{ margin: '5px 10px 15px' }}>
                   <Text size='md'>Скидка</Text>
@@ -189,29 +501,57 @@ export default function CartPage () {
                 <Divider />
                 <Group position="apart" style={{ margin: '15px 10px' }}>
                   <Title order={3}>Общая стоимость</Title>
-                  <Title order={3}>{total}₽</Title>
+                  <Title order={3}>{getTotal()}₽</Title>
                 </Group>
-
               </Paper>
             </Grid.Col>
           </Grid>
-          <Modal opened={modalOpened} onClose={() => handlersModal.close()} title='Как оплатить и получить файлы?' centered size='lg' style={{ padding: '45px' }}>
-            <Group style={{ margin: '25px' }}>
-              <Text>На данный момент файлы можно получить одним образом:</Text>
-              <List>
-                <List.Item>Напиши мне в телегу.</List.Item>
-                <List.Item>Приложи артикулы нужных тебе минек: </List.Item>
-                <List withPadding unordered>
-                  {getArrayWithCodes().map(cr => <List.Item><Code>{cr}</Code></List.Item>)}
+          <Modal fullScreen={isMobile} opened={modalOpened} onClose={modalHandlers.close} title="Оплата и информация" centered size="lg">
+            <Group position='center'>
+              <Stack>
+                <Text>
+                  После оплаты заказ попадёт к нам, и мы начнём работу. В течение трёх дней (обычно - двух часов) с вами свяжутся по предпочитаемому каналу связи.
+                </Text>
+                <Text>
+                  Достаточно указать один любой контакт, но лучше указать все на всякий случай!
+                </Text>
+                <Divider />
+                <TextInput
+                  icon={<IconBrandTelegram />}
+                  placeholder="Telegram"
+                  value={tg}
+                  onChange={(e) => setTg(e.currentTarget.value)}
+                />
+                <TextInput
+                  icon={<IconBrandVk />}
+                  placeholder="VK"
+                  value={vk}
+                  onChange={(e) => setVK(e.currentTarget.value)}
+                />
+                <TextInput
+                  icon={<IconAt />}
+                  placeholder="Почта"
+                  value={mail}
+                  onChange={(e) => setMail(e.currentTarget.value)}
+                />
+                <Select
+                  label="Лучше, если со мной свяжутся через"
+                  placeholder="Выбрать..."
+                  data={optionsContacts}
+                  value={chosenPreferredContact}
+                  onChange={setChosenPreferredContact}
+                />
+                <Divider />
+                <Text style={{fontWeight: 'bold', color: '#a13838'}}>
+                  Для того, чтобы потом ты мог отследить заказ на сайте, запиши следующие данные:
+                </Text>
+                <List>
+                  <List.Item>Уникальный идентификатор: <b>{identificator}</b></List.Item>
+                  <List.Item>Стоимость заказа: <b>{getTotal()}</b></List.Item>
+                  <List.Item>Свои контакты</List.Item>
                 </List>
-              </List>
-              <CopyButton value="test text btw">
-                {({ copied, copy }) => (
-                  <Button color={copied ? 'teal' : 'blue'} onClick={copy}>
-                    {copied ? 'Copied url' : 'Copy url'}
-                  </Button>
-                )}
-              </CopyButton>
+                <Button size="xl" disabled={payButtonIsDisabled} onClick={() => placeOrder()} loading={paymentIsInProgress}>Оплатить {getTotal()} рублей</Button>
+              </Stack>
             </Group>
           </Modal>
         </main >

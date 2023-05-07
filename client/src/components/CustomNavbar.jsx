@@ -64,6 +64,7 @@ export const CustomNavbar = ({ opened, setOpened, cartSize = 0, heroFilters = fa
           <MainLink icon={<IconCircle size={16} />} color={'purple'} label={'Базы'} link={currentRoute == '/bases' ? '' : '/bases'} />
           <MainLink icon={<IconShoppingCart size={16} />} color={'violet'} label={`Корзина (${cartSize})`} link={currentRoute == '/cart' ? '' : '/cart'} />
           <MainLink icon={<IconQuestionMark size={16} />} color={'blue'} label={`FAQ`} link={currentRoute == '/faq' ? '' : '/faq'} />
+          <MainLink icon={<IconQuestionMark size={16} />} color={'blue'} label={`Отследить заказ`} link={currentRoute == '/my-order' ? '' : '/my-order'} />
         </Group>
 
         {

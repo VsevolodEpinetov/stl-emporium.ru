@@ -21,9 +21,6 @@ async function fetchDataFromURI(URI) {
 
 export default function Home() {
   const [opened, setOpened] = useState(false);
-
-  const [chosenHeroesSTLs, setChosenHeroesSTLs] = useLocalStorage({ key: 'chosen-fantasy-heroes-stls', defaultValue: [] });
-  const [chosenHeroesMinis, setChosenHeroesMinis] = useLocalStorage({ key: 'chosen-fantasy-heroes-physical', defaultValue: [] });
   const [shoppingCart, setShoppingCart] = useLocalStorage({key: 'shopping-cart', defaultValue: []})
 
   const [scroll, scrollTo] = useWindowScroll();
@@ -206,27 +203,6 @@ export default function Home() {
     }
   }
 
-  function removeACreatureFromACart(creature, modeOfItem) {
-    let index = -1;
-    if (modeOfItem === 'stl') {
-      for (let i = 0; i < chosenHeroesSTLs.length; i++) {
-        if (creature.attributes.code == chosenHeroesSTLs[i]) {
-          index = i;
-          break;
-        }
-      }
-      setChosenHeroesSTLs([...chosenHeroesSTLs.slice(0, index), ...chosenHeroesSTLs.slice(index + 1)])
-    } else {
-      for (let i = 0; i < chosenHeroesMinis.length; i++) {
-        if (creature.attributes.code == chosenHeroesMinis[i]) {
-          index = i;
-          break;
-        }
-      }
-      setChosenHeroesMinis([...chosenHeroesMinis.slice(0, index), ...chosenHeroesMinis.slice(index + 1)])
-    }
-  }
-
   function nullFilters() {
     setLoading.open();
     setSelectedClasses([]);
@@ -275,12 +251,10 @@ export default function Home() {
       <Head />
       <AppShell
         navbarOffsetBreakpoint="sm"
-        navbar={<CustomNavbar opened={opened} setLoading={setLoading} setOpened={setOpened} getSelectedHeroes={getSelectedHeroes} heroFilters={true} filters={filters} cartSize={shoppingCart.length} currentRoute='/index' loading={loading} nullFilters={nullFilters} mode={mode} setMode={setMode}/>}
+        navbar={<CustomNavbar opened={opened} setLoading={setLoading} setOpened={setOpened} getSelectedHeroes={getSelectedHeroes} heroFilters={true} filters={filters} cartSize={shoppingCart.reduce((partial, item) => partial + item.amount, 0)} currentRoute='/index' loading={loading} nullFilters={nullFilters} mode={mode} setMode={setMode}/>}
         header={<CustomHeader opened={opened} setOpened={setOpened} />}
       >
         <main>
-          <Button onClick={() => {setShoppingCart([])}}>clear</Button>
-          <Button onClick={() => {console.log(shoppingCart)}}>show</Button>
           <Title order={1} style={{marginBottom: '15px'}}>Найдено <Skeleton visible={loading} style={{display: 'inline'}}>{loading ? 22 : totalFound}</Skeleton> миниатюрок</Title>
           <SimpleGrid
             cols={4}

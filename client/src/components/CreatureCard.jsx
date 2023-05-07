@@ -157,7 +157,7 @@ export const CreatureCard = ({ item, addToACart, removeItem, mode, amountInCart 
         <div>
           <Group position="apart" spacing="xs">
             <Text size="lg" className={classes.title} weight={500}>
-              {mode === 'stl' ? item.attributes.price : item.attributes.price * 3}₽
+              {mode === 'stl' ? item.attributes.priceSTL : item.attributes.pricePhysical}₽
             </Text>
           </Group>
 
