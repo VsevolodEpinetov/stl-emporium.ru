@@ -16,7 +16,7 @@ export default function FAQPage () {
         navbar={<CustomNavbar opened={opened} setOpened={setOpened} currentRoute='/faq' />}
         header={<CustomHeader opened={opened} setOpened={setOpened} />}
       >
-        <main>
+        <main style={{padding: '25px'}}>
           <Title order={1} style={{ marginBottom: '15px' }}>Часто задаваемые вопросы</Title>
           <Accordion defaultValue="customization">
             <Accordion.Item value="scale">

@@ -437,10 +437,10 @@ export default function CartPage() {
         navbar={<CustomNavbar opened={opened} setOpened={setOpened} cartSize={shoppingCart.reduce((partial, item) => partial + item.amount, 0)} currentRoute='/cart' />}
         header={<CustomHeader opened={opened} setOpened={setOpened} />}
       >
-        <main>
+        <main style={{padding: '25px'}}>
           <Title order={1}>Твоя корзина</Title>
           <Grid>
-            <Grid.Col span={8}>
+            <Grid.Col md={8} sm={12}>
               <Paper shadow="xs" p="md">
                 {
                   shoppingCartWithData.length > 0
@@ -475,7 +475,7 @@ export default function CartPage() {
                 }
               </Paper>
             </Grid.Col>
-            <Grid.Col span={4}>
+            <Grid.Col md={4} sm={12}>
               <Paper shadow="xs" p="md" style={{ position: 'sticky', top: '15px' }}>
                 <Button fullWidth size='lg' color='green' radius='md' onClick={() => { modalHandlers.open() }}>
                   Оформить заказ
