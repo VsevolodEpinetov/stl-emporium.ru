@@ -39,6 +39,15 @@ export default function FAQPage() {
     if (total.length > 0 || total.length != '0') setErrorTotal('')
   }, [total])
 
+  useEffect(() => {
+    if (errorContact === 'Проверь данные, такого заказа нет') { // Just one field is enough
+      setErrorContact('')
+      setErrorContactType('')
+      setErrorTotal('')
+      setErrorIdentificator('')
+    } 
+  }, [contactType, contact, identificator, total])
+
   async function findOrder() {
     let thereIsAnError = false;
 
@@ -155,7 +164,6 @@ export default function FAQPage() {
           {orderInfo &&
             <>
               <Title>Информация о заказе</Title>
-              <Text>Идентификатор: {orderInfo.attributes.identificator}</Text>
               <List>
                 {orderInfo.attributes.items.map((item, id) => <List.Item key={`item-${item.code}-${id}`}>
                   <Code>{item.code}</Code> - {item.amount}шт., {item.type}
