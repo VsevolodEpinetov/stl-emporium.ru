@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { useLocalStorage, useDisclosure, useClipboard, useMediaQuery } from '@mantine/hooks';
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Group, Text, Table, ActionIcon, AppShell, Title, Button, Modal, Code, CopyButton, List, ScrollArea, Anchor, Grid, Paper, Divider, Stack, Input, Select, TextInput } from '@mantine/core'
 import { IconAt, IconBrandTelegram, IconBrandVk, IconTrash } from '@tabler/icons-react'
 import { CustomHeader } from '@/components/CustomHeader'
@@ -302,6 +302,25 @@ export default function CartPage() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const createQueryString = useCallback(
+    (name, value) => {
+      const params = new URLSearchParams(searchParams);
+      params.set(name, value);
+ 
+      return params.toString();
+    },
+    [searchParams],
+  );
+    
+  function redirectToSuccess ( identificator, total, preferredMethod ) {
+    const params = new URLSearchParams(searchParams);
+    params.set('identificator', identificator);
+    params.set('total', total);
+    params.set('preferredContact', preferredMethod)
+
+    router.push('/payment-success' + '?' + params.toString());
+  }
+
   async function placeOrder() {
 
     //TODO: field verifications
@@ -314,12 +333,13 @@ export default function CartPage() {
       }
       return newObj;
     })
+    const totalCost = getTotal();
     const response = await fetch(`https://api.stl-emporium.ru/api/orders`, {
       method: "POST",
       headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
       body: JSON.stringify({
         data: {
-          total: getTotal(),
+          total: totalCost,
           items: newCart,
           vk: vk,
           telegram: tg,
@@ -335,7 +355,8 @@ export default function CartPage() {
     if (!response.ok) {
       console.log(response.statusText);
     } else {
-      push('/payment-success?');
+      setShoppingCart([]);
+      redirectToSuccess(identificator, totalCost, chosenPreferredContact);
     }
   }
 

@@ -85,12 +85,13 @@ export default function FAQPage() {
         if (data) {
           if (data[0]) { setOrderInfo(data[0]) }
           else {
+            setOrderInfo(undefined)
             setErrorContact('Проверь данные, такого заказа нет')
             setErrorContactType('Проверь данные, такого заказа нет')
             setErrorTotal('Проверь данные, такого заказа нет')
             setErrorIdentificator('Проверь данные, такого заказа нет')
           }
-        }
+        } else { setOrderInfo(undefined) }
       })
     }
 
