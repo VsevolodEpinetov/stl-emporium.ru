@@ -22,6 +22,7 @@ async function fetchDataFromURI(URI) {
 export default function Home() {
   const [opened, setOpened] = useState(false);
   const [shoppingCart, setShoppingCart] = useLocalStorage({key: 'shopping-cart', defaultValue: []})
+  const [chosenMode, setChosenMode] = useLocalStorage({key: 'user-setting-mode', defaultValue: 'stl'})
 
   const [scroll, scrollTo] = useWindowScroll();
 
@@ -39,7 +40,7 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(20);
   const [totalPages, setTotalPages] = useState(0);
-  const [mode, setMode] = useState('stl');
+  //const [mode, setMode] = useState('stl');
 
   useEffect(async () => {
     fetchDataFromURI(`${API_URL}&pagination[pageSize]=20`).then(data => {
@@ -130,19 +131,19 @@ export default function Home() {
   function addToACart (itemCode) {
     const itemObject = {
       code: itemCode,
-      type: mode,
+      type: chosenMode,
       amount: 1
     }
 
     let index = -1;
     for (let i = 0; i < shoppingCart.length; i++) {
-      if (shoppingCart[i].code === itemCode && shoppingCart[i].type === mode) {
+      if (shoppingCart[i].code === itemCode && shoppingCart[i].type === chosenMode) {
         index = i
       }
     }
 
     if (index > -1) {
-      if (mode === 'stl') { return; }
+      if (chosenMode === 'stl') { return; }
       else {
         let newAmount = shoppingCart[index].amount + 1;
         setShoppingCart(shoppingCart.map((item, id) => {
@@ -169,7 +170,7 @@ export default function Home() {
   function getAmountInCart (itemCode) {
     let index = -1;
     for (let i = 0; i < shoppingCart.length; i++) {
-      if (shoppingCart[i].code === itemCode && shoppingCart[i].type === mode) {
+      if (shoppingCart[i].code === itemCode && shoppingCart[i].type === chosenMode) {
         index = i;
         break;
       }
@@ -180,7 +181,7 @@ export default function Home() {
 
   function removeItem (itemCode) {
     for (let i = 0; i < shoppingCart.length; i++) {
-      if (shoppingCart[i].code === itemCode && shoppingCart[i].type === mode) {
+      if (shoppingCart[i].code === itemCode && shoppingCart[i].type === chosenMode) {
         if (shoppingCart[i].amount > 1) {
           console.log('amount > 1')
           let newAmount = shoppingCart[i].amount - 1;
@@ -251,7 +252,7 @@ export default function Home() {
       <Head />
       <AppShell
         navbarOffsetBreakpoint="sm"
-        navbar={<CustomNavbar opened={opened} setLoading={setLoading} setOpened={setOpened} getSelectedHeroes={getSelectedHeroes} heroFilters={true} filters={filters} cartSize={shoppingCart.reduce((partial, item) => partial + item.amount, 0)} currentRoute='/index' loading={loading} nullFilters={nullFilters} mode={mode} setMode={setMode}/>}
+        navbar={<CustomNavbar opened={opened} setLoading={setLoading} setOpened={setOpened} getSelectedHeroes={getSelectedHeroes} heroFilters={true} filters={filters} cartSize={shoppingCart.reduce((partial, item) => partial + item.amount, 0)} currentRoute='/index' loading={loading} nullFilters={nullFilters} chosenMode={chosenMode} setChosenMode={setChosenMode}/>}
         header={<CustomHeader opened={opened} setOpened={setOpened} />}
       >
         <main>
@@ -276,7 +277,7 @@ export default function Home() {
                      amountInCart={getAmountInCart(creature.attributes.code)}
                      addToACart={addToACart}
                      removeItem={removeItem}
-                     mode={mode}
+                     chosenMode={chosenMode}
                      />)
                   :
                   <Group>

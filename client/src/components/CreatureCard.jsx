@@ -100,7 +100,7 @@ function getStringForClassesAndRaces(creature) {
   return str;
 }
 
-export const CreatureCard = ({ item, addToACart, removeItem, mode, amountInCart }) => {
+export const CreatureCard = ({ item, addToACart, removeItem, chosenMode, amountInCart }) => {
   const { classes, theme } = useStyles();
   const [opened, handlers] = useDisclosure(false);
   const [displayMode, setDisplayMode] = useState();
@@ -148,7 +148,7 @@ export const CreatureCard = ({ item, addToACart, removeItem, mode, amountInCart 
 
       <div className={classes.content}>
         {
-          mode === 'stl' 
+          chosenMode === 'stl' 
           ?
             <Badge size="lg" style={{ position: 'absolute', top: '0', right: '0' }}>STL</Badge>
           : 
@@ -157,7 +157,7 @@ export const CreatureCard = ({ item, addToACart, removeItem, mode, amountInCart 
         <div>
           <Group position="apart" spacing="xs">
             <Text size="lg" className={classes.title} weight={500}>
-              {mode === 'stl' ? item.attributes.priceSTL : item.attributes.pricePhysical}₽
+              {chosenMode === 'stl' ? item.attributes.priceSTL : item.attributes.pricePhysical}₽
             </Text>
           </Group>
 
@@ -170,15 +170,15 @@ export const CreatureCard = ({ item, addToACart, removeItem, mode, amountInCart 
               <Center>
                 {amountInCart == 0
                   ?
-                  <ActionIcon size="lg" variant="light" onClick={() => addToACart(item.attributes.code, mode)}>
+                  <ActionIcon size="lg" variant="light" onClick={() => addToACart(item.attributes.code, chosenMode)}>
                     <IconPlus size={26} />
                   </ActionIcon>
                   :
                   <Group>
-                    <ActionIcon size="lg" color={'red'} variant="outline" onClick={() => removeItem(item.attributes.code, mode)}>
+                    <ActionIcon size="lg" color={'red'} variant="outline" onClick={() => removeItem(item.attributes.code, chosenMode)}>
                       <IconMinus size={26} />
                     </ActionIcon>
-                    <ActionIcon size="lg" color={'green'} variant="outline" onClick={() => addToACart(item.attributes.code, mode)}>
+                    <ActionIcon size="lg" color={'green'} variant="outline" onClick={() => addToACart(item.attributes.code, chosenMode)}>
                       {amountInCart}
                     </ActionIcon>
                   </Group>

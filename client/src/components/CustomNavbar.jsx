@@ -45,7 +45,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 
-export const CustomNavbar = ({ opened, setOpened, cartSize = 0, heroFilters = false, filters, currentRoute = '/', getSelectedHeroes, setLoading, loading, nullFilters, mode, setMode }) => {
+export const CustomNavbar = ({ opened, setOpened, cartSize = 0, heroFilters = false, filters, currentRoute = '/', getSelectedHeroes, setLoading, loading, nullFilters, chosenMode, setChosenMode }) => {
   const { classes } = useStyles();
 
   return (
@@ -71,7 +71,7 @@ export const CustomNavbar = ({ opened, setOpened, cartSize = 0, heroFilters = fa
           heroFilters && (
             <>
               <Divider />
-              <SegmentedControl color="violet" data={[{ label: 'STL', value: 'stl' }, { label: 'Фигурки', value: 'physical' }]} value={mode} onChange={setMode} fullWidth style={{ marginTop: '15px', marginBottom: '15px' }} />
+              <SegmentedControl color="violet" data={[{ label: 'STL', value: 'stl' }, { label: 'Фигурки', value: 'physical' }]} value={chosenMode} onChange={setChosenMode} fullWidth style={{ marginTop: '15px', marginBottom: '15px' }} />
               <Divider />
               <Title order={3} style={{ marginTop: '15px' }}>Фильтры</Title>
               <MultiSelect
