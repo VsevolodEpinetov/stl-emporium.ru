@@ -39,6 +39,10 @@
     {
       "value": "goliath",
       "label": "Голиафы"
+    },
+    {
+      "value": "arakkoa",
+      "label": "Араккоа"
     }
   ],
   "classes": [

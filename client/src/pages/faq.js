@@ -7,14 +7,27 @@ import { CustomNavbar } from '@/components/CustomNavbar'
 
 export default function FAQPage () {
   const [opened, setOpened] = useState(false);
+  const [filtersOpened, setFiltersOpened] = useState(false);
+  const [menuOpened, setMenuOpened] = useState(false);
 
   return (
     <>
       <Head />
       <AppShell
         navbarOffsetBreakpoint="sm"
-        navbar={<CustomNavbar opened={opened} setOpened={setOpened} currentRoute='/faq' />}
-        header={<CustomHeader opened={opened} setOpened={setOpened} />}
+        navbar={<CustomNavbar 
+          menuOpened={menuOpened}
+          setMenuOpened={setMenuOpened}
+          filtersOpened={filtersOpened}
+          setFiltersOpened={setFiltersOpened}
+          currentRoute='/faq' 
+        />}
+        header={<CustomHeader 
+          menuOpened={menuOpened}
+          setMenuOpened={setMenuOpened}
+          filtersOpened={filtersOpened}
+          setFiltersOpened={setFiltersOpened}
+        />}
       >
         <main style={{padding: '25px'}}>
           <Title order={1} style={{ marginBottom: '15px' }}>Часто задаваемые вопросы</Title>

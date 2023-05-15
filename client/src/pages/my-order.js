@@ -1,9 +1,10 @@
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
-import { Accordion, AppShell, Title, Anchor, Text, TextInput, NumberInput, Select, Button, List, Code, Container, Box, SimpleGrid } from '@mantine/core'
+import { Accordion, AppShell, Title, Anchor, Text, TextInput, NumberInput, Select, Button, List, Code, Container, Box, SimpleGrid, Card, ActionIcon, Group } from '@mantine/core'
 import { CustomHeader } from '@/components/CustomHeader'
 import { CustomNavbar } from '@/components/CustomNavbar'
-import { useInterval } from '@mantine/hooks'
+import { useInterval, useLocalStorage } from '@mantine/hooks'
+import { IconTrash } from '@tabler/icons-react'
 
 const token = '25132c43556e68d9898b82ee31c1acdbd949e3b63867a0cc030b2c774bf4b80496db0c38bbca20324e87885dd2d01c76e741e4f49477d255bce23920c66c5ba8d2a73f534b70bd11662d1395d091078594d9d7d5d44cc921da25a1af7f65fa15796ad5c754400ae8f4a0278829e7abffa6a28319782cdf96068e59c3714623b1'
 async function fetchDataFromURI(URI) {
@@ -31,6 +32,7 @@ export default function FAQPage() {
   const [firstBlood, setFirstBlood] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const interval = useInterval(() => setSeconds((s) => s - 1), 1000);
+  const [possibleOrders, setPossibleOrders] = useLocalStorage({ key: 'possible-orders', defaultValue: [] })
 
   useEffect(() => {
     if (contactType.length > 0) setErrorContactType('')
@@ -45,7 +47,7 @@ export default function FAQPage() {
       setErrorContactType('')
       setErrorTotal('')
       setErrorIdentificator('')
-    } 
+    }
   }, [contactType, contact, identificator, total])
 
   async function findOrder() {
@@ -83,7 +85,27 @@ export default function FAQPage() {
         setSeconds(7)
         interval.start();
         if (data) {
-          if (data[0]) { setOrderInfo(data[0]) }
+          if (data[0]) {
+            setOrderInfo(data[0])
+            let found = false;
+            for (let i = 0; i < possibleOrders.length; i++) {
+              if (possibleOrders[i].identificator === identificator && possibleOrders[i].total == total && possibleOrders[i].preferredContact === contactType) {
+                found = true;
+                break;
+              }
+            }
+
+            if (!found && identificator !== '' && total !== '' && contactType !== '') {
+              setPossibleOrders([
+                ...possibleOrders,
+                {
+                  identificator: identificator,
+                  total: total,
+                  preferredContact: contactType
+                }
+              ])
+            }
+          }
           else {
             setOrderInfo(undefined)
             setErrorContact('Проверь данные, такого заказа нет')
@@ -159,7 +181,7 @@ export default function FAQPage() {
               />
             </SimpleGrid>
           </Box>
-          <Box style={{margin: '25px 0'}}>
+          <Box style={{ margin: '25px 0' }}>
             <Button fullWidth onClick={() => findOrder()} size='lg' loading={loading} disabled={seconds > 0 ? true : false}>{seconds > 0 ? seconds : 'Найти заказ'}</Button>
           </Box>
           {orderInfo &&
@@ -180,6 +202,46 @@ export default function FAQPage() {
                 <Title>Нет такого заказа</Title>
               }
             </>
+          }
+          {possibleOrders.length > 0 &&
+            <SimpleGrid
+              cols={4}
+              spacing="lg"
+              breakpoints={[
+                { maxWidth: 'lg', cols: 5, spacing: 'md' },
+                { maxWidth: 'md', cols: 3, spacing: 'md' },
+                { maxWidth: 'sm', cols: 3, spacing: 'sm' },
+                { maxWidth: 'xs', cols: 2, spacing: 'sm' },
+              ]}
+            >
+              {possibleOrders.map((order, id) => {
+                return (
+                  <Card shadow="sm" padding="lg" radius="md" withBorder key={`card-guess-${id}`}>
+                    <Group position="apart" mt="md" mb="xs">
+                      <Text weight={500}>Заказ на {order.total}₽</Text>
+                      <ActionIcon variant='transparent' onClick={() => {
+                        console.log(`removing element ${id}...`)
+                        setPossibleOrders([...possibleOrders.slice(0, id), ...possibleOrders.slice(id + 1)])
+                      }}> <IconTrash /> </ActionIcon>
+                    </Group>
+
+                    <Text size="sm" color="dimmed">
+                      Идентификатор - {order.identificator}
+                    </Text>
+                    <Button variant="light" color="blue" fullWidth mt="md" radius="md"
+                      onClick={() => {
+                        console.log(order)
+                        setIdentificator(order.identificator)
+                        setTotal(parseInt(order.total))
+                        setContactType(order.preferredContact)
+                      }}
+                    >
+                      Найти этот заказ
+                    </Button>
+                  </Card>
+                )
+              })}
+            </SimpleGrid>
           }
         </main >
       </AppShell >

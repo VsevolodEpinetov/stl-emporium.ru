@@ -370,11 +370,11 @@ export default function CartPage() {
   useEffect(() => {
     let contacts = [];
     if (vk.length > 0) contacts.push({ label: 'ВКонтакте', value: 'vk' })
-    if (tg.length > 0) contacts.push({ label: 'Telegram', value: 'tg' })
+    if (tg.length > 0) contacts.push({ label: 'Telegram', value: 'telegram' })
     if (mail.length > 0) contacts.push({ label: 'Почту', value: 'mail' })
 
     if (chosenPreferredContact === 'vk' && vk.length === 0) setChosenPreferredContact('')
-    if (chosenPreferredContact === 'tg' && tg.length === 0) setChosenPreferredContact('')
+    if (chosenPreferredContact === 'telegram' && tg.length === 0) setChosenPreferredContact('')
     if (chosenPreferredContact === 'mail' && mail.length === 0) setChosenPreferredContact('')
 
     setOptionsContacts(contacts);

@@ -12,7 +12,7 @@ const API_URL = 'https://api.stl-emporium.ru/api/creatures?populate=*&sort=creat
 async function fetchDataFromURI(URI) {
   const rawData = await fetch(URI)
   const data = await rawData.json();
-  
+
   return {
     miniatures: data?.data,
     meta: data?.meta
@@ -20,9 +20,10 @@ async function fetchDataFromURI(URI) {
 }
 
 export default function Home() {
-  const [opened, setOpened] = useState(false);
-  const [shoppingCart, setShoppingCart] = useLocalStorage({key: 'shopping-cart', defaultValue: []})
-  const [chosenMode, setChosenMode] = useLocalStorage({key: 'user-setting-mode', defaultValue: 'stl'})
+  const [filtersOpened, setFiltersOpened] = useState(false);
+  const [menuOpened, setMenuOpened] = useState(false);
+  const [shoppingCart, setShoppingCart] = useLocalStorage({ key: 'shopping-cart', defaultValue: [] })
+  const [chosenMode, setChosenMode] = useLocalStorage({ key: 'user-setting-mode', defaultValue: 'stl' })
 
   const [scroll, scrollTo] = useWindowScroll();
 
@@ -36,11 +37,9 @@ export default function Home() {
   const [miniatures, setMiniatures] = useState();
   const [loading, setLoading] = useDisclosure(true);
   const [totalFound, setTotalFound] = useState(0);
-  const [totalFoundIsHidden, setTotalFoundIsHidden] = useDisclosure(true);
   const [currentPage, setCurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(20);
   const [totalPages, setTotalPages] = useState(0);
-  //const [mode, setMode] = useState('stl');
 
   useEffect(async () => {
     fetchDataFromURI(`${API_URL}&pagination[pageSize]=20`).then(data => {
@@ -128,7 +127,7 @@ export default function Home() {
     setLoading.close();
   }, [miniatures])
 
-  function addToACart (itemCode) {
+  function addToACart(itemCode) {
     const itemObject = {
       code: itemCode,
       type: chosenMode,
@@ -151,7 +150,7 @@ export default function Home() {
             // This isn't the item we care about - keep it as-is
             return item
           }
-      
+
           // Otherwise, this is the one we want - return an updated value
           return {
             ...item,
@@ -167,7 +166,7 @@ export default function Home() {
     }
   }
 
-  function getAmountInCart (itemCode) {
+  function getAmountInCart(itemCode) {
     let index = -1;
     for (let i = 0; i < shoppingCart.length; i++) {
       if (shoppingCart[i].code === itemCode && shoppingCart[i].type === chosenMode) {
@@ -175,11 +174,11 @@ export default function Home() {
         break;
       }
     }
-    if (index > -1) { return shoppingCart[index].amount; } 
+    if (index > -1) { return shoppingCart[index].amount; }
     else { return 0; }
   }
 
-  function removeItem (itemCode) {
+  function removeItem(itemCode) {
     for (let i = 0; i < shoppingCart.length; i++) {
       if (shoppingCart[i].code === itemCode && shoppingCart[i].type === chosenMode) {
         if (shoppingCart[i].amount > 1) {
@@ -190,7 +189,7 @@ export default function Home() {
               // This isn't the item we care about - keep it as-is
               return item
             }
-        
+
             // Otherwise, this is the one we want - return an updated value
             return {
               ...item,
@@ -252,11 +251,31 @@ export default function Home() {
       <Head />
       <AppShell
         navbarOffsetBreakpoint="sm"
-        navbar={<CustomNavbar opened={opened} setLoading={setLoading} setOpened={setOpened} getSelectedHeroes={getSelectedHeroes} heroFilters={true} filters={filters} cartSize={shoppingCart.reduce((partial, item) => partial + item.amount, 0)} currentRoute='/index' loading={loading} nullFilters={nullFilters} chosenMode={chosenMode} setChosenMode={setChosenMode}/>}
-        header={<CustomHeader opened={opened} setOpened={setOpened} />}
+        navbar={<CustomNavbar
+          menuOpened={menuOpened}
+          setMenuOpened={setMenuOpened}
+          filtersOpened={filtersOpened}
+          setFiltersOpened={setFiltersOpened}
+          setLoading={setLoading}
+          getSelectedHeroes={getSelectedHeroes}
+          heroFilters={true}
+          filters={filters}
+          cartSize={shoppingCart.reduce((partial, item) => partial + item.amount, 0)}
+          loading={loading}
+          nullFilters={nullFilters}
+          chosenMode={chosenMode}
+          setChosenMode={setChosenMode}
+        />}
+        header={<CustomHeader
+          menuOpened={menuOpened}
+          setMenuOpened={setMenuOpened}
+          filtersOpened={filtersOpened}
+          setFiltersOpened={setFiltersOpened}
+          withFilters
+        />}
       >
         <main>
-          <Title order={1} style={{marginBottom: '15px'}}>Найдено <Skeleton visible={loading} style={{display: 'inline'}}>{loading ? 22 : totalFound}</Skeleton> миниатюрок</Title>
+          <Title order={1} style={{ marginBottom: '15px' }}>Найдено <Skeleton visible={loading} style={{ display: 'inline' }}>{loading ? 22 : totalFound}</Skeleton> миниатюрок</Title>
           <SimpleGrid
             cols={4}
             spacing="lg"
@@ -272,20 +291,20 @@ export default function Home() {
                 Array(25).fill('1').map((skeleton, id) => <Skeleton height={380} mb="xl" key={`skeleton-${id}`} />)
                 : miniatures?.length > 0 ?
                   miniatures.map(creature => <CreatureCard
-                     item={creature}
-                     key={`card-${creature.id}`}
-                     amountInCart={getAmountInCart(creature.attributes.code)}
-                     addToACart={addToACart}
-                     removeItem={removeItem}
-                     chosenMode={chosenMode}
-                     />)
+                    item={creature}
+                    key={`card-${creature.id}`}
+                    amountInCart={getAmountInCart(creature.attributes.code)}
+                    addToACart={addToACart}
+                    removeItem={removeItem}
+                    chosenMode={chosenMode}
+                  />)
                   :
                   <Group>
                     Нет фигурок по таким фильтрам!
                     <Image
                       src="dude.svg"
                       alt="Shrug dude"
-                      style={{filter: "invert(95%) sepia(1%) saturate(0%) hue-rotate(139deg) brightness(82%) contrast(90%)"}}
+                      style={{ filter: "invert(95%) sepia(1%) saturate(0%) hue-rotate(139deg) brightness(82%) contrast(90%)" }}
                     />
                   </Group>
             }

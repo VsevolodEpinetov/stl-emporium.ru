@@ -1,11 +1,12 @@
 import React from 'react';
-import { createStyles, Header, MediaQuery, Burger, Text, Container, rem } from "@mantine/core"
+import { createStyles, Header, MediaQuery, Burger, Text, Container, rem, Menu, Center, Group, Image, Title, ActionIcon } from "@mantine/core"
+import { IconChevronDown, IconAdjustments, IconSettingsFilled, IconSettings, IconFilter, IconColorFilter, IconFilterEdit, } from '@tabler/icons-react';
 
 const useStyles = createStyles((theme) => ({
   inner: {
-    height: rem(56),
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
+    gap: '20px',
     alignItems: 'center',
   },
 
@@ -23,12 +24,11 @@ const useStyles = createStyles((theme) => ({
 
   link: {
     display: 'block',
-    lineHeight: 1,
-    padding: `${rem(8)} ${rem(12)}`,
+    padding: `0.5rem 0.75rem`,
     borderRadius: theme.radius.sm,
     textDecoration: 'none',
     color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
-    fontSize: theme.fontSizes.sm,
+    fontSize: theme.fontSizes.md,
     fontWeight: 500,
 
     '&:hover': {
@@ -37,11 +37,18 @@ const useStyles = createStyles((theme) => ({
   },
 
   linkLabel: {
-    marginRight: rem(5),
+    marginRight: '0.5rem',
+  },
+
+  wrapper: {
+    marginLeft: '280px',
+    '@media (max-width: 1200px)': {
+      marginLeft: '200px'
+    }
   },
 }));
 
-export const CustomHeader = ({ opened, setOpened }) => {
+export const CustomHeader = ({ filtersOpened, setFiltersOpened, menuOpened, setMenuOpened, withFilters = false, }) => {
   const links = [
     {
       link: '/',
@@ -72,6 +79,10 @@ export const CustomHeader = ({ opened, setOpened }) => {
     {
       link: 'my-order',
       label: 'Отследить'
+    },
+    {
+      link: 'cart',
+      label: 'Корзина'
     }
   ]
 
@@ -83,12 +94,11 @@ export const CustomHeader = ({ opened, setOpened }) => {
 
     if (menuItems) {
       return (
-        <Menu key={link.label} trigger="hover" transitionProps={{ exitDuration: 0 }} withinPortal>
+        <Menu key={link.label} trigger="hover" withinPortal>
           <Menu.Target>
             <a
               href={link.link}
               className={classes.link}
-              onClick={(event) => event.preventDefault()}
             >
               <Center>
                 <span className={classes.linkLabel}>{link.label}</span>
@@ -106,7 +116,6 @@ export const CustomHeader = ({ opened, setOpened }) => {
         key={link.label}
         href={link.link}
         className={classes.link}
-        onClick={(event) => event.preventDefault()}
       >
         {link.label}
       </a>
@@ -115,26 +124,40 @@ export const CustomHeader = ({ opened, setOpened }) => {
 
 
   return (
-    <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
-      <Header height={{ base: 50, md: 70 }} p="md">
-        <Container>
-          <div className={classes.inner}>
-            <Group spacing={5} className={classes.links}>
-              {items}
-            </Group>
-            <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
-              <Burger
-                opened={opened}
-                onClick={() => setOpened((o) => !o)}
-                size="sm"
-                mr="xl"
-              />
-            </MediaQuery>
+    <Header height={{ base: 70, md: 70 }} p="md" style={{ borderBottom: 'none', boxShadow: '0px 1px 16px 1px rgba(45, 45, 45, 0.25)', zIndex: '99' }}>
+      <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
+        <Group position="apart">
+          <Burger
+            size="sm"
+            mr="xl"
+            onClick={() => {
+              setMenuOpened((o) => !o)
+              setFiltersOpened(false)
+            }}
+            opened={menuOpened}
+          />
+          <Title order={3} component='a' href='/'>STLEmporium</Title>
+          <ActionIcon size="xl" variant="transparent" style={{ opacity: withFilters ? '100' : '0', cursor: withFilters ? 'pointer' : 'default' }}
+            onClick={(e) => {
+              if (withFilters) {
+                setFiltersOpened((o) => !o)
+                setMenuOpened(false)
+              } else {
+                e.preventDefault();
+              }
+            }}>
+            {filtersOpened ? <IconFilter size="1.5rem" /> : <IconFilterEdit size="1.5rem" />}
+          </ActionIcon>
+        </Group>
+      </MediaQuery>
 
-            <Text>Меню и фильтры</Text>
-          </div>
-        </Container>
-      </Header>
-    </MediaQuery>
+      <Container className={classes.wrapper}>
+        <div className={classes.inner}>
+          <Group spacing={5} className={classes.links}>
+            {items}
+          </Group>
+        </div>
+      </Container>
+    </Header>
   );
 };

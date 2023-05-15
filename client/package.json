@@ -17,7 +17,7 @@
     "@mantine/next": "^5.10.3",
     "@next/font": "13.1.5",
     "@tabler/icons": "^2.2.0",
-    "@tabler/icons-react": "^2.2.0",
+    "@tabler/icons-react": "^2.18.0",
     "eslint": "8.32.0",
     "eslint-config-next": "13.1.5",
     "next": "13.1.5",
