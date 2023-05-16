@@ -1,0 +1,28 @@
+[
+  {
+    "link": "#",
+    "label": "STL",
+    "links": [
+      {
+        "link": "/",
+        "label": "Фентези Герои"
+      },
+      {
+        "link": "/bases",
+        "label": "Базы"
+      }
+    ]
+  },
+  {
+    "link": "/faq",
+    "label": "FAQ"
+  },
+  {
+    "link": "contacts",
+    "label": "Контакты"
+  },
+  {
+    "link": "my-order",
+    "label": "Отследить"
+  }
+]

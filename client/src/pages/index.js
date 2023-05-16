@@ -5,6 +5,7 @@ import { CreatureCard } from '@/components/CreatureCard'
 import { CustomHeader } from '@/components/CustomHeader'
 import { CustomNavbar } from '@/components/CustomNavbar'
 import { SimpleGrid, Image, Group, AppShell, Skeleton, Title, Pagination, Center, Button } from '@mantine/core'
+import CustomAppShell from '@/components/CustomAppShell';
 const FILTERS = require("../../data/filters.json")
 
 const API_URL = 'https://api.stl-emporium.ru/api/creatures?populate=*&sort=createdAt:desc'
@@ -20,10 +21,8 @@ async function fetchDataFromURI(URI) {
 }
 
 export default function Home() {
-  const [filtersOpened, setFiltersOpened] = useState(false);
-  const [menuOpened, setMenuOpened] = useState(false);
-  const [shoppingCart, setShoppingCart] = useLocalStorage({ key: 'shopping-cart', defaultValue: [] })
   const [chosenMode, setChosenMode] = useLocalStorage({ key: 'user-setting-mode', defaultValue: 'stl' })
+  const [shoppingCart, setShoppingCart] = useLocalStorage({ key: 'shopping-cart', defaultValue: [] })
 
   const [scroll, scrollTo] = useWindowScroll();
 
@@ -249,73 +248,58 @@ export default function Home() {
   return (
     <>
       <Head />
-      <AppShell
-        navbarOffsetBreakpoint="sm"
-        navbar={<CustomNavbar
-          menuOpened={menuOpened}
-          setMenuOpened={setMenuOpened}
-          filtersOpened={filtersOpened}
-          setFiltersOpened={setFiltersOpened}
-          setLoading={setLoading}
-          getSelectedHeroes={getSelectedHeroes}
-          heroFilters={true}
-          filters={filters}
-          cartSize={shoppingCart.reduce((partial, item) => partial + item.amount, 0)}
-          loading={loading}
-          nullFilters={nullFilters}
-          chosenMode={chosenMode}
-          setChosenMode={setChosenMode}
-        />}
-        header={<CustomHeader
-          menuOpened={menuOpened}
-          setMenuOpened={setMenuOpened}
-          filtersOpened={filtersOpened}
-          setFiltersOpened={setFiltersOpened}
-          withFilters
-        />}
+      <CustomAppShell
+        setLoading={setLoading}
+        getSelectedHeroes={getSelectedHeroes}
+        withFilters
+        filters={filters}
+        loading={loading}
+        nullFilters={nullFilters}
+        chosenMode={chosenMode}
+        setChosenMode={setChosenMode}
       >
-        <main>
-          <Title order={1} style={{ marginBottom: '15px' }}>Найдено <Skeleton visible={loading} style={{ display: 'inline' }}>{loading ? 22 : totalFound}</Skeleton> миниатюрок</Title>
-          <SimpleGrid
-            cols={4}
-            spacing="lg"
-            breakpoints={[
-              { maxWidth: 'lg', cols: 4, spacing: 'md' },
-              { maxWidth: 'md', cols: 3, spacing: 'md' },
-              { maxWidth: 'sm', cols: 3, spacing: 'sm' },
-              { maxWidth: 'xs', cols: 2, spacing: 'sm' },
-            ]}
-          >
-            {
-              loading ?
-                Array(25).fill('1').map((skeleton, id) => <Skeleton height={380} mb="xl" key={`skeleton-${id}`} />)
-                : miniatures?.length > 0 ?
-                  miniatures.map(creature => <CreatureCard
-                    item={creature}
-                    key={`card-${creature.id}`}
-                    amountInCart={getAmountInCart(creature.attributes.code)}
-                    addToACart={addToACart}
-                    removeItem={removeItem}
-                    chosenMode={chosenMode}
-                  />)
-                  :
-                  <Group>
-                    Нет фигурок по таким фильтрам!
-                    <Image
-                      src="dude.svg"
-                      alt="Shrug dude"
-                      style={{ filter: "invert(95%) sepia(1%) saturate(0%) hue-rotate(139deg) brightness(82%) contrast(90%)" }}
-                    />
-                  </Group>
-            }
-          </SimpleGrid>
-          <div style={{ marginTop: '25px' }}>
-            <Center>
-              <Pagination total={totalPages} siblings={1} value={currentPage} onChange={setCurrentPage} disabled={loading} />
-            </Center>
-          </div>
-        </main>
-      </AppShell>
+      <main>
+        <Title order={1} style={{ marginBottom: '15px' }}>Найдено <Skeleton visible={loading} style={{ display: 'inline' }}>{loading ? 22 : totalFound}</Skeleton> миниатюрок</Title>
+        <SimpleGrid
+          cols={4}
+          spacing="lg"
+          breakpoints={[
+            { maxWidth: 'lg', cols: 4, spacing: 'md' },
+            { maxWidth: 'md', cols: 3, spacing: 'md' },
+            { maxWidth: 'sm', cols: 3, spacing: 'sm' },
+            { maxWidth: 'xs', cols: 2, spacing: 'sm' },
+          ]}
+        >
+          {
+            loading ?
+              Array(25).fill('1').map((skeleton, id) => <Skeleton height={380} mb="xl" key={`skeleton-${id}`} />)
+              : miniatures?.length > 0 ?
+                miniatures.map(creature => <CreatureCard
+                  item={creature}
+                  key={`card-${creature.id}`}
+                  amountInCart={getAmountInCart(creature.attributes.code)}
+                  addToACart={addToACart}
+                  removeItem={removeItem}
+                  chosenMode={chosenMode}
+                />)
+                :
+                <Group>
+                  Нет фигурок по таким фильтрам!
+                  <Image
+                    src="dude.svg"
+                    alt="Shrug dude"
+                    style={{ filter: "invert(95%) sepia(1%) saturate(0%) hue-rotate(139deg) brightness(82%) contrast(90%)" }}
+                  />
+                </Group>
+          }
+        </SimpleGrid>
+        <div style={{ marginTop: '25px' }}>
+          <Center>
+            <Pagination total={totalPages} siblings={1} value={currentPage} onChange={setCurrentPage} disabled={loading} />
+          </Center>
+        </div>
+      </main>
+    </CustomAppShell>
     </>
   )
 }

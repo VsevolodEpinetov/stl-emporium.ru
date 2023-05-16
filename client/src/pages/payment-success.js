@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { IconCircleCheckFilled } from '@tabler/icons-react'
 import { useLocalStorage } from '@mantine/hooks'
+import CustomAppShell from '@/components/CustomAppShell'
 
 
 export default function FAQPage() {
@@ -54,11 +55,7 @@ export default function FAQPage() {
   return (
     <>
       <Head />
-      <AppShell
-        navbarOffsetBreakpoint="sm"
-        navbar={<CustomNavbar opened={opened} setOpened={setOpened} currentRoute='/faq' />}
-        header={<CustomHeader opened={opened} setOpened={setOpened} />}
-      >
+      <CustomAppShell>
         <main style={{ padding: '25px' }}>
           {thereIsAnOrder
             ?
@@ -81,7 +78,7 @@ export default function FAQPage() {
             <Text>Ошибка-рыбка</Text>
           }
         </main >
-      </AppShell >
+      </CustomAppShell >
     </>
   )
 }

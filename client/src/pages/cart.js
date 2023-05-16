@@ -8,6 +8,7 @@ import { CustomNavbar } from '@/components/CustomNavbar'
 import CreatureImageWithModal from '@/components/CreatureImageWithModal';
 import ItemRow from '@/components/ItemRow';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import CustomAppShell from '@/components/CustomAppShell';
 
 const token = '8721eb0fe7756b16ad0abb03650965113f4e26d8a0958a70c15b932124d39157eb132156e1676d9efb42fc2afed5cc7b20390edf19dd755a7e3914f43358e3f4c8e5d5368d5efe72d778d4f23d0158c6a239f48709a60a9771f87dac5c6bc9a3245314a673ba8e9c4bb7dccb0c3f76eea14717501474ebfa02583d81251c1bca'
 
@@ -458,11 +459,7 @@ export default function CartPage() {
   return (
     <>
       <Head />
-      <AppShell
-        navbarOffsetBreakpoint="sm"
-        navbar={<CustomNavbar opened={opened} setOpened={setOpened} cartSize={shoppingCart.reduce((partial, item) => partial + item.amount, 0)} currentRoute='/cart' />}
-        header={<CustomHeader opened={opened} setOpened={setOpened} />}
-      >
+      <CustomAppShell>
         <main style={{padding: '25px'}}>
           <Title order={1}>Твоя корзина</Title>
           <Grid>
@@ -581,7 +578,7 @@ export default function CartPage() {
             </Group>
           </Modal>
         </main >
-      </AppShell >
+      </CustomAppShell >
     </>
   )
 }

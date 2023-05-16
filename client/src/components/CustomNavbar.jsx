@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navbar, Group, Divider, Text, UnstyledButton, ThemeIcon, Image, MultiSelect, Checkbox, Button, MediaQuery, ActionIcon, createStyles, Title, ScrollArea, Center, SegmentedControl, NavLink } from "@mantine/core"
 import { IconSword, IconShoppingCart, IconRotateClockwise, IconQuestionMark, IconCircle } from '@tabler/icons-react'
+import { useLocalStorage } from '@mantine/hooks';
+const LINKS = require("../../data/links.json")
 
 const useStyles = createStyles((theme) => ({
   label: {
@@ -17,46 +19,10 @@ const useStyles = createStyles((theme) => ({
 }));
 
 
-export const CustomNavbar = ({ filtersOpened, setFiltersOpened, menuOpened, setMenuOpened, cartSize = 0, heroFilters = false, filters, currentRoute = '/', getSelectedHeroes, setLoading, loading, nullFilters, chosenMode, setChosenMode }) => {
+export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOpened, withFilters = false, filters, getSelectedHeroes, loading, nullFilters, chosenMode, setChosenMode }) => {
   const { classes } = useStyles();
-  const links = [
-    {
-      link: '/',
-      label: 'Главная'
-    },
-    {
-      link: '#',
-      label: 'STL',
-      links: [
-        {
-          link: '/',
-          label: 'Фентези Герои'
-        },
-        {
-          link: '/bases',
-          label: 'Базы'
-        }
-      ]
-    },
-    {
-      link: '/faq',
-      label: 'FAQ'
-    },
-    {
-      link: 'contacts',
-      label: 'Контакты'
-    },
-    {
-      link: 'my-order',
-      label: 'Отследить'
-    },
-    {
-      link: 'cart',
-      label: 'Корзина'
-    }
-  ]
 
-  const items = links.map((link) => {
+  const items = LINKS.map((link) => {
     const menuItems = link.links?.map((item) => (
       <NavLink key={item.link} label={item.label} component='a' href={item.link} classNames={{
         label: classes.linkStyle
@@ -80,6 +46,8 @@ export const CustomNavbar = ({ filtersOpened, setFiltersOpened, menuOpened, setM
     );
   });
 
+  items.push(<Button key='cart-button-for-menu' component='a' href='/cart' color="teal" leftIcon={<IconShoppingCart />} fullWidth size='lg'>Корзина ({cartSize})</Button>)
+
   return (
     <>
       <Navbar p="md" hiddenBreakpoint="sm" hidden={!filtersOpened} width={{ sm: 200, lg: 300 }} style={{ backgroundColor: '#141517', border: 'none', zIndex: '98' }}>
@@ -92,7 +60,7 @@ export const CustomNavbar = ({ filtersOpened, setFiltersOpened, menuOpened, setM
         </MediaQuery>
         <Navbar.Section grow mt="md" component={ScrollArea}>
           {
-            heroFilters && (
+            withFilters && (
               <>
                 <Title order={3} style={{ marginTop: '15px' }}>Фильтры</Title>
                 <SegmentedControl color="violet" data={[{ label: 'STL', value: 'stl' }, { label: 'Фигурки', value: 'physical' }]} value={chosenMode} onChange={setChosenMode} fullWidth style={{ marginTop: '15px', marginBottom: '15px' }} />

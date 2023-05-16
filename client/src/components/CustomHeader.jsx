@@ -1,6 +1,8 @@
-import React from 'react';
-import { createStyles, Header, MediaQuery, Burger, Text, Container, rem, Menu, Center, Group, Image, Title, ActionIcon } from "@mantine/core"
-import { IconChevronDown, IconAdjustments, IconSettingsFilled, IconSettings, IconFilter, IconColorFilter, IconFilterEdit, } from '@tabler/icons-react';
+import React, { useEffect, useState } from 'react';
+import { createStyles, Header, MediaQuery, Burger, Text, Container, rem, Menu, Center, Group, Image, Title, ActionIcon, Button } from "@mantine/core"
+import { IconChevronDown, IconAdjustments, IconSettingsFilled, IconSettings, IconFilter, IconColorFilter, IconFilterEdit, IconShoppingCart, } from '@tabler/icons-react';
+import { useLocalStorage } from '@mantine/hooks';
+const LINKS = require("../../data/links.json")
 
 const useStyles = createStyles((theme) => ({
   inner: {
@@ -48,48 +50,12 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export const CustomHeader = ({ filtersOpened, setFiltersOpened, menuOpened, setMenuOpened, withFilters = false, }) => {
-  const links = [
-    {
-      link: '/',
-      label: 'Главная'
-    },
-    {
-      link: '#',
-      label: 'STL',
-      links: [
-        {
-          link: '/',
-          label: 'Фентези Герои'
-        },
-        {
-          link: '/bases',
-          label: 'Базы'
-        }
-      ]
-    },
-    {
-      link: '/faq',
-      label: 'FAQ'
-    },
-    {
-      link: 'contacts',
-      label: 'Контакты'
-    },
-    {
-      link: 'my-order',
-      label: 'Отследить'
-    },
-    {
-      link: 'cart',
-      label: 'Корзина'
-    }
-  ]
-
+export const CustomHeader = ({ filtersOpened, cartSize, setFiltersOpened, menuOpened, setMenuOpened, withFilters = false }) => {
   const { classes } = useStyles();
-  const items = links.map((link) => {
+
+  const items = LINKS.map((link) => {
     const menuItems = link.links?.map((item) => (
-      <Menu.Item key={item.link}>{item.label}</Menu.Item>
+      <Menu.Item key={item.link} component='a' href={item.link}>{item.label}</Menu.Item>
     ));
 
     if (menuItems) {
@@ -121,6 +87,8 @@ export const CustomHeader = ({ filtersOpened, setFiltersOpened, menuOpened, setM
       </a>
     );
   });
+
+  items.push(<Button key='cart-button-for-menu' component='a' href='/cart' color="teal" leftIcon={<IconShoppingCart />}>Корзина ({cartSize})</Button>)
 
 
   return (

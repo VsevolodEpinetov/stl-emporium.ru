@@ -1,34 +1,14 @@
 import Head from 'next/head'
 import { useState } from 'react'
 import { Accordion, AppShell, Title, Anchor, Text } from '@mantine/core'
-import { CustomHeader } from '@/components/CustomHeader'
-import { CustomNavbar } from '@/components/CustomNavbar'
+import CustomAppShell from '@/components/CustomAppShell'
 
 
 export default function FAQPage () {
-  const [opened, setOpened] = useState(false);
-  const [filtersOpened, setFiltersOpened] = useState(false);
-  const [menuOpened, setMenuOpened] = useState(false);
-
   return (
     <>
       <Head />
-      <AppShell
-        navbarOffsetBreakpoint="sm"
-        navbar={<CustomNavbar 
-          menuOpened={menuOpened}
-          setMenuOpened={setMenuOpened}
-          filtersOpened={filtersOpened}
-          setFiltersOpened={setFiltersOpened}
-          currentRoute='/faq' 
-        />}
-        header={<CustomHeader 
-          menuOpened={menuOpened}
-          setMenuOpened={setMenuOpened}
-          filtersOpened={filtersOpened}
-          setFiltersOpened={setFiltersOpened}
-        />}
-      >
+      <CustomAppShell >
         <main style={{padding: '25px'}}>
           <Title order={1} style={{ marginBottom: '15px' }}>Часто задаваемые вопросы</Title>
           <Accordion defaultValue="customization">
@@ -44,7 +24,7 @@ export default function FAQPage () {
 
           </Accordion>
         </main >
-      </AppShell >
+      </CustomAppShell >
     </>
   )
 }

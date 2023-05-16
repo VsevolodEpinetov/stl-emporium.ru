@@ -5,6 +5,7 @@ import { CustomHeader } from '@/components/CustomHeader'
 import { CustomNavbar } from '@/components/CustomNavbar'
 import { useInterval, useLocalStorage } from '@mantine/hooks'
 import { IconTrash } from '@tabler/icons-react'
+import CustomAppShell from '@/components/CustomAppShell'
 
 const token = '25132c43556e68d9898b82ee31c1acdbd949e3b63867a0cc030b2c774bf4b80496db0c38bbca20324e87885dd2d01c76e741e4f49477d255bce23920c66c5ba8d2a73f534b70bd11662d1395d091078594d9d7d5d44cc921da25a1af7f65fa15796ad5c754400ae8f4a0278829e7abffa6a28319782cdf96068e59c3714623b1'
 async function fetchDataFromURI(URI) {
@@ -122,11 +123,7 @@ export default function FAQPage() {
   return (
     <>
       <Head />
-      <AppShell
-        navbarOffsetBreakpoint="sm"
-        navbar={<CustomNavbar opened={opened} setOpened={setOpened} currentRoute='/my-order' />}
-        header={<CustomHeader opened={opened} setOpened={setOpened} />}
-      >
+      <CustomAppShell>
         <main style={{ padding: '25px' }}>
           <Title order={1} style={{ marginBottom: '15px' }}>Информация о заказе</Title>
           <Text>Тут ты можешь найти информацию по своему заказу. Чтобы посмотреть информацию о заказе, тебе нужно верно заполнить поля ниже. Если ты не помнишь что-то из необходимых полей, то свяжись с нами через группу ВК.</Text>
@@ -244,7 +241,7 @@ export default function FAQPage() {
             </SimpleGrid>
           }
         </main >
-      </AppShell >
+      </CustomAppShell>
     </>
   )
 }
