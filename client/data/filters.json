@@ -113,6 +113,10 @@
     {
       "value": "monk",
       "label": "Монах"
+    },
+    {
+      "value": "cleric",
+      "label": "Клирик"
     }
   ]
 }

@@ -103,34 +103,7 @@ function getStringForClassesAndRaces(creature) {
 export const CreatureCard = ({ item, addToACart, removeItem, chosenMode, amountInCart }) => {
   const { classes, theme } = useStyles();
   const [opened, handlers] = useDisclosure(false);
-  const [displayMode, setDisplayMode] = useState();
-  const [actualOpacity, setActualOpacity] = useState(100);
   const [currentAmount, setCurrentAmount] = useState(0)
-  const cardElement = useRef(null);
-
-  useEffect(() => {
-    if (item.opacity == 100) {
-      setActualOpacity(100);
-      setDisplayMode('block')
-    } else {
-      setActualOpacity(0)
-      setDisplayMode('none')
-    }
-  }, [])
-
-  useEffect(() => {
-    if (item.opacity == 100) {
-      setDisplayMode('block')
-      setTimeout(function () {
-        setActualOpacity(100)
-      }, 50)
-    } else {
-      setActualOpacity(0)
-      setTimeout(function () {
-        setDisplayMode('none')
-      }, 150)
-    }
-  }, [item.opacity])
 
   return (
     <Card
@@ -139,8 +112,7 @@ export const CreatureCard = ({ item, addToACart, removeItem, chosenMode, amountI
       className={classes.card}
       radius="md"
       target="_blank"
-      style={{ opacity: actualOpacity, transition: 'all 150ms ease', display: displayMode, cursor: 'pointer' }}
-      ref={cardElement}
+      style={{cursor: 'pointer' }}
       onClick={(e) => { if (e.target.tagName == 'DIV') handlers.open(); }}
     >
       <div className={classes.image} style={{ backgroundImage: `url(https://api.epinetov.com${item.attributes.mainPicture.data.attributes.url})`, backgroundPosition: 'center' }} />

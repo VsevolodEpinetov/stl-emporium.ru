@@ -405,6 +405,7 @@ export default function CartPage() {
           }
         }
       })
+      console.log(cartWithData)
       setShoppingCartWithData(cartWithData);
     })
   }, [shoppingCart])

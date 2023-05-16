@@ -54,7 +54,7 @@ export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
         <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
           <Navbar.Section>
             <Center>
-              <Image src="/logo.png" alt='logo' style={{ maxWidth: '200px' }} classNames={classes.logo} />
+              <Image src="/logo.png" alt='logo' style={{ maxWidth: '200px' }} classNames={classes.logo} component='a' href='/'/>
             </Center>
           </Navbar.Section>
         </MediaQuery>
