@@ -7,14 +7,13 @@ import { CustomNavbar } from '@/components/CustomNavbar'
 import { SimpleGrid, Image, Group, AppShell, Skeleton, Title, Pagination, Center, Button } from '@mantine/core'
 import CustomAppShell from '@/components/CustomAppShell';
 import { TerrainCard } from '@/components/TerrainCard';
-const FILTERS = require("../../data/filters.json")
+const FILTERS = require("../../data/filtersTerrain.json")
 
 const API_URL = 'https://api.stl-emporium.ru/api'
-const STL_ENDPOINT = 'creatures';
+const STL_ENDPOINT = 'terrains';
 const DEFAULT_SORT = 'sort=createdAt:desc';
 const FILL_WITH_DATA = 'populate=*'
-const ONLY_HEROES = "filter[$ne]=base"
-const REQUEST_URL = `${API_URL}/${STL_ENDPOINT}?${FILL_WITH_DATA}&${DEFAULT_SORT}&${ONLY_HEROES}`
+const REQUEST_URL = `${API_URL}/${STL_ENDPOINT}?${FILL_WITH_DATA}&${DEFAULT_SORT}`
 
 
 async function fetchDataFromURI(URI) {
@@ -33,13 +32,11 @@ export default function Home() {
 
   const [scroll, scrollTo] = useWindowScroll();
 
-  const races = FILTERS.races;
-  const classes = FILTERS.classes;
-
+  const tags = FILTERS.tags;
+  
   const [atLeast1Visible, handleAtLeast1Visible] = useDisclosure(true);
-  const [selectedRaces, setSelectedRaces] = useState([]);
-  const [selectedClasses, setSelectedClasses] = useState([]);
-  const [selectedSexes, setSelectedSexes] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([]);
+  
   const [miniatures, setMiniatures] = useState();
   const [loading, setLoading] = useDisclosure(true);
   const [totalFound, setTotalFound] = useState(0);
@@ -49,6 +46,7 @@ export default function Home() {
 
   useEffect(async () => {
     fetchDataFromURI(`${REQUEST_URL}&pagination[pageSize]=20`).then(data => {
+      console.log(data)
       const minis = data?.miniatures;
       setMiniatures(minis);
       setTotalFound(data.meta.pagination.total);
@@ -63,21 +61,9 @@ export default function Home() {
     scrollTo({ y: 0 })
     let options = '';
 
-    if (selectedRaces.length > 0) {
-      selectedRaces.forEach(r => {
-        options += `&filters[race][$contains]=${r}`
-      })
-    }
-
-    if (selectedClasses.length > 0) {
-      selectedClasses.forEach(c => {
-        options += `&filters[classes][$contains]=${c}`
-      })
-    }
-
-    if (selectedSexes.length > 0) {
-      selectedSexes.forEach(s => {
-        options += `&filters[sex][$contains]=${s}`
+    if (selectedTags.length > 0) {
+      selectedTags.forEach(t => {
+        options += `&filters[tags][$contains]=${t}`
       })
     }
 
@@ -100,21 +86,9 @@ export default function Home() {
     scrollTo({ y: 0 })
     let options = '';
 
-    if (selectedRaces.length > 0) {
-      selectedRaces.forEach(r => {
-        options += `&filters[race][$contains]=${r}`
-      })
-    }
-
-    if (selectedClasses.length > 0) {
-      selectedClasses.forEach(c => {
-        options += `&filters[classes][$contains]=${c}`
-      })
-    }
-
-    if (selectedSexes.length > 0) {
-      selectedSexes.forEach(s => {
-        options += `&filters[sex][$contains]=${s}`
+    if (selectedTags.length > 0) {
+      selectedTags.forEach(t => {
+        options += `&filters[classes][$contains]=${t}`
       })
     }
 
@@ -211,9 +185,7 @@ export default function Home() {
 
   function nullFilters() {
     setLoading.open();
-    setSelectedClasses([]);
-    setSelectedRaces([]);
-    setSelectedSexes([]);
+    setSelectedTags([]);
     setCurrentPage(1);
     scrollTo({ y: 0 })
     fetchDataFromURI(`${REQUEST_URL}&pagination[pageSize]=${pageSize}`).then(data => {
@@ -230,26 +202,14 @@ export default function Home() {
   }
 
   const filters = {
-    races: {
-      getter: selectedRaces,
-      setter: setSelectedRaces,
-      data: races,
-      placeholder: "Показываются все расы",
-      nothingFound: "Таких рас нет :(",
-      label: "Фильтр по расам"
+    tags: {
+      getter: selectedTags,
+      setter: setSelectedTags,
+      data: tags,
+      placeholder: "Показываются все базы",
+      nothingFound: "Такого не знаем :(",
+      label: "Теги"
     },
-    classes: {
-      getter: selectedClasses,
-      setter: setSelectedClasses,
-      data: classes,
-      placeholder: "Показываются все классы",
-      nothingFound: "Не знаем таких классов :(",
-      label: "Фильтр по классам"
-    },
-    sex: {
-      getter: selectedSexes,
-      setter: setSelectedSexes,
-    }
   }
 
   return (
@@ -258,7 +218,7 @@ export default function Home() {
       <CustomAppShell
         setLoading={setLoading}
         getSelectedHeroes={getSelectedHeroes}
-        heroFilters
+        basesFilters
         filters={filters}
         loading={loading}
         nullFilters={nullFilters}
@@ -281,7 +241,7 @@ export default function Home() {
             loading ?
               Array(25).fill('1').map((skeleton, id) => <Skeleton height={380} mb="xl" key={`skeleton-${id}`} />)
               : miniatures?.length > 0 ?
-                miniatures.map(creature => <CreatureCard
+                miniatures.map(creature => <TerrainCard
                   item={creature}
                   key={`card-${creature.id}`}
                   amountInCart={getAmountInCart(creature.attributes.code)}

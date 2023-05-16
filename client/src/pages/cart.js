@@ -395,8 +395,8 @@ export default function CartPage() {
     let reqString = '';
     reqString += allIds.join('&filters[code][$eq]=');
     reqString = '&filters[code][$eq]=' + reqString;
+    let cartWithData = shoppingCart.slice();
     fetchDataFromURI(`https://api.stl-emporium.ru/api/creatures?populate=*${reqString}`).then(data => {
-      let cartWithData = shoppingCart.slice();
       cartWithData.forEach(item => {
         for (let i = 0; i < data.length; i++) {
           if (data[i].attributes.code === item.code) {
@@ -405,8 +405,18 @@ export default function CartPage() {
           }
         }
       })
-      console.log(cartWithData)
-      setShoppingCartWithData(cartWithData);
+      fetchDataFromURI(`https://api.stl-emporium.ru/api/terrains?populate=*${reqString}`).then(dataTerrain => {
+        cartWithData.forEach(item => {
+          for (let i = 0; i < dataTerrain.length; i++) {
+            if (dataTerrain[i].attributes.code === item.code) {
+              item.info = dataTerrain[i].attributes;
+              break;
+            }
+          }
+        })
+        
+        setShoppingCartWithData(cartWithData);
+      })
     })
   }, [shoppingCart])
 
@@ -421,16 +431,7 @@ export default function CartPage() {
     return total;
   }
 
-  const getArrayWithCodes = () => {
-    let arr = []//cart.map(cr => cr.attributes.code);
-    return arr;
-  }
-
-
   function removeAllInstances(itemCode, type) {
-    /*let copy = chosenCreatures.slice();
-    copy = copy.filter(cr => creature.id !== cr.id && )
-    setChosenCreatures(copy)*/
     let copy = shoppingCart.slice();
     copy = copy.filter(item => item.code != itemCode || item.type != type)
     setShoppingCart(copy);

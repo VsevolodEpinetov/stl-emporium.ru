@@ -1,0 +1,24 @@
+{
+  "tags": [
+    {
+      "value": "forest",
+      "label": "Лес"
+    },
+    {
+      "value": "mushroom",
+      "label": "Грибы"
+    },
+    {
+      "value": "skulls",
+      "label": "Черепа"
+    },
+    {
+      "value": "sand",
+      "label": "Песок"
+    },
+    {
+      "value": "stones",
+      "label": "Камни"
+    }
+  ]
+}

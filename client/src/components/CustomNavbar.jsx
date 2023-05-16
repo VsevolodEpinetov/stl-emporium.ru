@@ -19,21 +19,21 @@ const useStyles = createStyles((theme) => ({
 }));
 
 
-export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOpened, withFilters = false, filters, getSelectedHeroes, loading, nullFilters, chosenMode, setChosenMode }) => {
+export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOpened, heroFilters = false, basesFilters = false, filters, getSelectedHeroes, loading, nullFilters, chosenMode, setChosenMode }) => {
   const { classes } = useStyles();
 
   const items = LINKS.map((link) => {
     const menuItems = link.links?.map((item) => (
       <NavLink key={item.link} label={item.label} component='a' href={item.link} classNames={{
         label: classes.linkStyle
-      }}/>
+      }} />
     ));
 
     if (menuItems) {
       return (
         <NavLink key={link.label} component='a' href={link.link} label={link.label} classNames={{
           label: classes.linkStyle
-        }}> 
+        }}>
           {menuItems}
         </NavLink>
       );
@@ -42,7 +42,7 @@ export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
     return (
       <NavLink key={link.label} component='a' href={link.link} label={link.label} classNames={{
         label: classes.linkStyle
-      }}/> 
+      }} />
     );
   });
 
@@ -54,13 +54,13 @@ export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
         <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
           <Navbar.Section>
             <Center>
-              <Image src="/logo.png" alt='logo' style={{ maxWidth: '200px' }} classNames={classes.logo} component='a' href='/'/>
+              <Image src="/logo.png" alt='logo' style={{ maxWidth: '200px' }} classNames={classes.logo} component='a' href='/' />
             </Center>
           </Navbar.Section>
         </MediaQuery>
         <Navbar.Section grow mt="md" component={ScrollArea}>
           {
-            withFilters && (
+            heroFilters && (
               <>
                 <Title order={3} style={{ marginTop: '15px' }}>Фильтры</Title>
                 <SegmentedControl color="violet" data={[{ label: 'STL', value: 'stl' }, { label: 'Фигурки', value: 'physical' }]} value={chosenMode} onChange={setChosenMode} fullWidth style={{ marginTop: '15px', marginBottom: '15px' }} />
@@ -127,10 +127,51 @@ export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
 
           }
 
+          {
+            basesFilters && (
+              <>
+                <Title order={3} style={{ marginTop: '15px' }}>Фильтры</Title>
+                <SegmentedControl color="violet" data={[{ label: 'STL', value: 'stl' }, { label: 'Фигурки', value: 'physical' }]} value={chosenMode} onChange={setChosenMode} fullWidth style={{ marginTop: '15px', marginBottom: '15px' }} />
+                <Divider />
+
+                <MultiSelect
+                  value={filters.tags.getter}
+                  onChange={filters.tags.setter}
+                  data={filters.tags.data}
+                  placeholder={filters.tags.placeholder}
+                  searchable
+                  clearable
+                  nothingFound={filters.tags.nothingFound}
+                  label="Теги"
+                  style={{ margin: '15px 0' }}
+                  classNames={{
+                    label: classes.label
+                  }}
+                />
+
+                <Group spacing="sm" grow style={{ marginTop: '15px' }}>
+                  <Button loading={loading} color="green" style={{ maxWidth: '100%' }} onClick={() => {
+                    setFiltersOpened((o) => !o)
+                    getSelectedHeroes();
+                  }}>
+                    Применить
+                  </Button>
+                  <ActionIcon disabled={filters.tags.getter.length == 0 ? true : false} size='lg' color="red" variant="filled" style={{ maxWidth: '1.125rem' }} onClick={() => {
+                    setFiltersOpened((o) => !o)
+                    nullFilters();
+                  }}>
+                    <IconRotateClockwise size="1.125rem" />
+                  </ActionIcon>
+                </Group>
+              </>
+            )
+
+          }
+
         </Navbar.Section>
       </Navbar>
 
-      <MediaQuery largerThan='sm' styles={{display: 'none'}}>
+      <MediaQuery largerThan='sm' styles={{ display: 'none' }}>
         <Navbar p="md" hiddenBreakpoint="sm" hidden={!menuOpened} width={{ sm: 200, lg: 300 }} style={{ backgroundColor: '#141517', border: 'none', zIndex: '98' }}>
           <MediaQuery smallerThan="md" styles={{ display: 'none' }}>
             <Navbar.Section>

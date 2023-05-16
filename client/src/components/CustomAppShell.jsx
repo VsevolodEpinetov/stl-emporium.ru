@@ -4,7 +4,7 @@ import { AppShell } from '@mantine/core';
 import { CustomNavbar } from './CustomNavbar';
 import { useLocalStorage } from '@mantine/hooks';
 
-const CustomAppShell = ( {setLoading, getSelectedHeroes, withFilters, filters, loading, nullFilters, chosenMode, setChosenMode, children} ) => {
+const CustomAppShell = ( {setLoading, getSelectedHeroes, heroFilters = false, basesFilters = false, filters, loading, nullFilters, chosenMode, setChosenMode, children} ) => {
   const [filtersOpened, setFiltersOpened] = useState(false);
   const [menuOpened, setMenuOpened] = useState(false);
   const [shoppingCart, setShoppingCart] = useLocalStorage({ key: 'shopping-cart', defaultValue: [] })
@@ -24,7 +24,8 @@ const CustomAppShell = ( {setLoading, getSelectedHeroes, withFilters, filters, l
         setFiltersOpened={setFiltersOpened}
         setLoading={setLoading}
         getSelectedHeroes={getSelectedHeroes}
-        withFilters={withFilters}
+        heroFilters={heroFilters}
+        basesFilters={basesFilters}
         filters={filters}
         cartSize={cartSize}
         loading={loading}
@@ -37,7 +38,8 @@ const CustomAppShell = ( {setLoading, getSelectedHeroes, withFilters, filters, l
         setMenuOpened={setMenuOpened}
         filtersOpened={filtersOpened}
         setFiltersOpened={setFiltersOpened}
-        withFilters={withFilters}
+        heroFilters={heroFilters}
+        basesFilters={basesFilters}
         cartSize={cartSize}
       />}
     >
