@@ -50,7 +50,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export const CustomHeader = ({ filtersOpened, cartSize, setFiltersOpened, menuOpened, setMenuOpened, withFilters = false }) => {
+export const CustomHeader = ({ filtersOpened, cartSize, setFiltersOpened, menuOpened, setMenuOpened, heroFilters = false, basesFilters = false }) => {
   const { classes } = useStyles();
 
   const items = LINKS.map((link) => {
@@ -105,9 +105,9 @@ export const CustomHeader = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
             opened={menuOpened}
           />
           <Title order={3} component='a' href='/'>STLEmporium</Title>
-          <ActionIcon size="xl" variant="transparent" style={{ opacity: withFilters ? '100' : '0', cursor: withFilters ? 'pointer' : 'default' }}
+          <ActionIcon size="xl" variant="transparent" style={{ opacity: heroFilters ? '100' : '0', cursor: heroFilters || basesFilters ? 'pointer' : 'default' }}
             onClick={(e) => {
-              if (withFilters) {
+              if (heroFilters || basesFilters) {
                 setFiltersOpened((o) => !o)
                 setMenuOpened(false)
               } else {
