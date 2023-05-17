@@ -143,14 +143,20 @@ export const TerrainCard = ({ item, addToACart, removeItem, chosenMode, amountIn
         </div>
       </div>
 
-      <Modal opened={opened} onClose={() => handlers.close()} title={item.attributes.name} centered>
-        <Image mx="auto" radius="md" src={`https://api.epinetov.com${item.attributes.mainPicture.data.attributes.url}`} alt={`Превьюшка миньки ${item.attributes.name}`} style={{ marginBottom: '15px' }} />
+      <Modal opened={opened} onClose={() => handlers.close()} title={item.attributes.code} centered>
+        <Image mx="auto" radius="md" src={`https://api.epinetov.com${item.attributes.mainPicture.data.attributes.url}`} alt={`Превьюшка миньки ${item.attributes.code}`} style={{ marginBottom: '15px' }} />
         <Center>
-          {
-            currentAmount == 0 ?
-              <Button onClick={() => addToACart(item)}>Добавить в корзину</Button>
+          {amountInCart == 0 ?
+            <Button onClick={() => addToACart(item.attributes.code, chosenMode)}>Добавить в корзину</Button>
+            :
+            chosenMode == 'stl' ?
+              <Button onClick={() => removeItem(item.attributes.code, chosenMode)} color="red">Удалить из корзины</Button>
               :
-              <Button onClick={() => removeACreatureFromACart(item)} color="red">Удалить из корзины</Button>
+              <Group>
+                <Button onClick={() => addToACart(item.attributes.code, chosenMode)} variant='outline' color='green'>+1</Button>
+                <Text size='lg'>{amountInCart}</Text>
+                <Button onClick={() => removeItem(item.attributes.code, chosenMode)} variant='outline' color='red'>-1</Button>
+              </Group>
           }
         </Center>
       </Modal>

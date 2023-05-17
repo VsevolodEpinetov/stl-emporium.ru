@@ -13,8 +13,8 @@ const API_URL = 'https://api.stl-emporium.ru/api'
 const STL_ENDPOINT = 'creatures';
 const DEFAULT_SORT = 'sort=createdAt:desc';
 const FILL_WITH_DATA = 'populate=*'
-const ONLY_HEROES = "filter[$ne]=base"
-const REQUEST_URL = `${API_URL}/${STL_ENDPOINT}?${FILL_WITH_DATA}&${DEFAULT_SORT}&${ONLY_HEROES}`
+const NOT_ONLY_PHYSICAL = "filters[onlyPhysical][$ne]=true"
+const REQUEST_URL = `${API_URL}/${STL_ENDPOINT}?${FILL_WITH_DATA}&${DEFAULT_SORT}`
 
 
 async function fetchDataFromURI(URI) {
@@ -47,8 +47,11 @@ export default function Home() {
   const [pageSize, setPageSize] = useState(20);
   const [totalPages, setTotalPages] = useState(0);
 
-  useEffect(async () => {
-    fetchDataFromURI(`${REQUEST_URL}&pagination[pageSize]=20`).then(data => {
+  useEffect(() => {
+    let requestString;
+    if (chosenMode === 'physical') requestString = `${REQUEST_URL}&pagination[pageSize]=20`
+    else requestString = `${REQUEST_URL}&${NOT_ONLY_PHYSICAL}&pagination[pageSize]=20`
+    fetchDataFromURI(requestString).then(data => {
       const minis = data?.miniatures;
       setMiniatures(minis);
       setTotalFound(data.meta.pagination.total);
@@ -56,6 +59,10 @@ export default function Home() {
       setCurrentPage(1);
     })
   }, [])
+
+  useEffect(() => {
+    getSelectedHeroes();
+  }, [chosenMode])
 
   const getSelectedHeroes = async () => {
     setLoading.open();
@@ -81,7 +88,11 @@ export default function Home() {
       })
     }
 
-    fetchDataFromURI(`${REQUEST_URL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}${options}`).then(data => {
+    let requestString;
+    if (chosenMode === 'physical') requestString = `${REQUEST_URL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}${options}`
+    else requestString = `${REQUEST_URL}&${NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}${options}`
+    console.log(requestString)
+    fetchDataFromURI(requestString).then(data => {
       let minis = data.miniatures.map(cr => {
         return {
           ...cr,
@@ -118,7 +129,10 @@ export default function Home() {
       })
     }
 
-    fetchDataFromURI(`${REQUEST_URL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}${options}`).then(data => {
+    let requestString
+    if (chosenMode === 'physical') requestString = `${REQUEST_URL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}${options}`
+    else requestString = `${REQUEST_URL}&${NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}${options}`
+    fetchDataFromURI(requestString).then(data => {
       let minis = data.miniatures.map(cr => {
         return {
           ...cr,
@@ -216,7 +230,11 @@ export default function Home() {
     setSelectedSexes([]);
     setCurrentPage(1);
     scrollTo({ y: 0 })
-    fetchDataFromURI(`${REQUEST_URL}&pagination[pageSize]=${pageSize}`).then(data => {
+
+    let requestString;
+    if (chosenMode === 'physical') requestString = `${REQUEST_URL}&pagination[pageSize]=${pageSize}`
+    else requestString = `${REQUEST_URL}&${NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}`
+    fetchDataFromURI(requestString).then(data => {
       let minis = data.miniatures.map(cr => {
         return {
           ...cr,

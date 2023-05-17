@@ -63,7 +63,14 @@ export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
             heroFilters && (
               <>
                 <Title order={3} style={{ marginTop: '15px' }}>Фильтры</Title>
-                <SegmentedControl color="violet" data={[{ label: 'STL', value: 'stl' }, { label: 'Фигурки', value: 'physical' }]} value={chosenMode} onChange={setChosenMode} fullWidth style={{ marginTop: '15px', marginBottom: '15px' }} />
+                <SegmentedControl 
+                  color="violet" 
+                  data={[{ label: 'STL', value: 'stl' }, { label: 'Фигурки', value: 'physical' }]} 
+                  value={chosenMode} 
+                  onChange={setChosenMode} 
+                  fullWidth 
+                  style={{ marginTop: '15px', marginBottom: '15px' }} 
+                />
                 <Divider />
                 <MultiSelect
                   value={filters.races.getter}

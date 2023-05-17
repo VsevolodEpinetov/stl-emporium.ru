@@ -103,7 +103,6 @@ function getStringForClassesAndRaces(creature) {
 export const CreatureCard = ({ item, addToACart, removeItem, chosenMode, amountInCart }) => {
   const { classes, theme } = useStyles();
   const [opened, handlers] = useDisclosure(false);
-  const [currentAmount, setCurrentAmount] = useState(0)
 
   return (
     <Card
@@ -112,7 +111,7 @@ export const CreatureCard = ({ item, addToACart, removeItem, chosenMode, amountI
       className={classes.card}
       radius="md"
       target="_blank"
-      style={{cursor: 'pointer' }}
+      style={{ cursor: 'pointer' }}
       onClick={(e) => { if (e.target.tagName == 'DIV') handlers.open(); }}
     >
       <div className={classes.image} style={{ backgroundImage: `url(https://api.epinetov.com${item.attributes.mainPicture.data.attributes.url})`, backgroundPosition: 'center' }} />
@@ -120,10 +119,10 @@ export const CreatureCard = ({ item, addToACart, removeItem, chosenMode, amountI
 
       <div className={classes.content}>
         {
-          chosenMode === 'stl' 
-          ?
+          chosenMode === 'stl'
+            ?
             <Badge size="lg" style={{ position: 'absolute', top: '0', right: '0' }}>STL</Badge>
-          : 
+            :
             <Badge size="lg" color='green' style={{ position: 'absolute', top: '0', right: '0' }}>Фигурка</Badge>
         }
         <div>
@@ -162,14 +161,20 @@ export const CreatureCard = ({ item, addToACart, removeItem, chosenMode, amountI
         </div>
       </div>
 
-      <Modal opened={opened} onClose={() => handlers.close()} title={item.attributes.name} centered>
-        <Image mx="auto" radius="md" src={`https://api.epinetov.com${item.attributes.mainPicture.data.attributes.url}`} alt={`Превьюшка миньки ${item.attributes.name}`} style={{ marginBottom: '15px' }} />
+      <Modal opened={opened} onClose={() => handlers.close()} title={item.attributes.code} centered >
+        <Image mx="auto" radius="md" src={`https://api.epinetov.com${item.attributes.mainPicture.data.attributes.url}`} alt={`Превьюшка миньки ${item.attributes.code}`} style={{ marginBottom: '15px' }} />
         <Center>
-          {
-            currentAmount == 0 ?
-              <Button onClick={() => addToACart(item)}>Добавить в корзину</Button>
+          {amountInCart == 0 ?
+            <Button onClick={() => addToACart(item.attributes.code, chosenMode)}>Добавить в корзину</Button>
+            :
+            chosenMode == 'stl' ?
+              <Button onClick={() => removeItem(item.attributes.code, chosenMode)} color="red">Удалить из корзины</Button>
               :
-              <Button onClick={() => removeACreatureFromACart(item)} color="red">Удалить из корзины</Button>
+              <Group>
+                <Button onClick={() => addToACart(item.attributes.code, chosenMode)} variant='outline' color='green'>+1</Button>
+                <Text size='lg'>{amountInCart}</Text>
+                <Button onClick={() => removeItem(item.attributes.code, chosenMode)} variant='outline' color='red'>-1</Button>
+              </Group>
           }
         </Center>
       </Modal>
