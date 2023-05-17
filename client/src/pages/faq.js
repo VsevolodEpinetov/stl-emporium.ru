@@ -22,6 +22,11 @@ export default function FAQPage () {
               <Accordion.Panel>Это значит только одно - миниатюрка предоставляется без специальной базы. Уверяю, что все файлы досконально проверяются перед тем, как будут отправлены приобретателю. Ты можешь либо скачать бесплатную базу (<Anchor href='https://www.thingiverse.com/thing:3438699'>28мм</Anchor>, <Anchor href='https://www.thingiverse.com/thing:2589358'>32мм</Anchor>), либо выбрать базу из нашей <Anchor href='/bases'>библиотеки</Anchor>.</Accordion.Panel>
             </Accordion.Item>
 
+            <Accordion.Item value="return-policy">
+              <Accordion.Control>Какие условия возврата и обмена?</Accordion.Control>
+              <Accordion.Panel>Товары обмену и возврату не подлежат. </Accordion.Panel>
+            </Accordion.Item>
+
           </Accordion>
         </main >
       </CustomAppShell >

@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { useState } from 'react'
 import { createStyles, ThemeIcon, Text, SimpleGrid, Box, Stack, Title } from '@mantine/core';
-import { IconSun, IconPhone, IconMapPin, IconAt } from '@tabler/icons-react';
+import { IconSun, IconPhone, IconMapPin, IconAt, IconFileDescription } from '@tabler/icons-react';
 import CustomAppShell from '@/components/CustomAppShell'
 
 const useStyles = createStyles((theme) => ({
@@ -27,8 +27,11 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const MOCKDATA = [
-  { title: 'Почта', description: "mail@mail.com", icon: IconAt },
-  { title: 'Телефон', description: '+7 999 999-99-99', icon: IconPhone }
+  { title: 'Почта', description: "stl-emporium@outlook.com", icon: IconAt },
+  { title: 'Телефон', description: '+7 909 918-70-18', icon: IconPhone },
+  { title: 'Организация', description: 'ИП Епинетов Всеволод Михайлович', icon: IconFileDescription},
+  { title: 'ИНН', description: '301509345382' },
+  { title: 'ОГРНИП', description: '323784700160773' },
 ];
 
 function ContactIcon({
@@ -42,15 +45,15 @@ function ContactIcon({
   const { classes, cx } = useStyles({ variant });
   return (
     <div className={cx(classes.wrapper, className)} {...others}>
-      {variant === 'gradient' ? (
-        <ThemeIcon size={40} radius="md" className={classes.icon}>
-          <Icon size="1.5rem" />
-        </ThemeIcon>
-      ) : (
+      {Icon ?
         <Box mr="md">
           <Icon size="1.5rem" />
         </Box>
-      )}
+        :
+        <Box mr="md">
+          <div style={{height: '1.5rem', width: '1.5rem'}}></div>
+        </Box>
+      }
 
       <div>
         <Text size="xs" className={classes.title}>

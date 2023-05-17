@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { useLocalStorage, useDisclosure, useClipboard, useMediaQuery } from '@mantine/hooks';
 import { useState, useEffect, useCallback } from 'react'
-import { Group, Text, Table, ActionIcon, AppShell, Title, Button, Modal, Code, CopyButton, List, ScrollArea, Anchor, Grid, Paper, Divider, Stack, Input, Select, TextInput } from '@mantine/core'
+import { Group, Text, Table, ActionIcon, AppShell, Title, Button, Modal, Code, CopyButton, List, ScrollArea, Anchor, Grid, Paper, Divider, Stack, Input, Select, TextInput, Image, Box, SimpleGrid, Container } from '@mantine/core'
 import { IconAt, IconBrandTelegram, IconBrandVk, IconTrash } from '@tabler/icons-react'
 import { CustomHeader } from '@/components/CustomHeader'
 import { CustomNavbar } from '@/components/CustomNavbar'
@@ -277,7 +277,7 @@ function generateToken() {
     'Прошлого'
   ]
 
-  const string = `${firstPart[Math.floor(Math.random()*firstPart.length)]}${secondPart[Math.floor(Math.random()*secondPart.length)]}Из${thirdPart[Math.floor(Math.random()*thirdPart.length)]}`
+  const string = `${firstPart[Math.floor(Math.random() * firstPart.length)]}${secondPart[Math.floor(Math.random() * secondPart.length)]}Из${thirdPart[Math.floor(Math.random() * thirdPart.length)]}`
   return string;
 }
 
@@ -286,7 +286,7 @@ export default function CartPage() {
   const [shoppingCart, setShoppingCart] = useLocalStorage({ key: 'shopping-cart', defaultValue: [] })
   const [shoppingCartWithData, setShoppingCartWithData] = useState([]);
   const [modalOpened, modalHandlers] = useDisclosure(false);
-  
+
   const [discount, setDiscount] = useState(0);
   const [identificator, setIdentificator] = useState('')
   const [paymentIsInProgress, setPaymentIsInProgress] = useState(false)
@@ -299,7 +299,7 @@ export default function CartPage() {
   const [optionsContacts, setOptionsContacts] = useState([]);
   const [chosenPreferredContact, setChosenPreferredContact] = useState('');
   const [payButtonIsDisabled, setPayButtonIsDisabled] = useState(true);
-  const router  = useRouter();
+  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -307,13 +307,13 @@ export default function CartPage() {
     (name, value) => {
       const params = new URLSearchParams(searchParams);
       params.set(name, value);
- 
+
       return params.toString();
     },
     [searchParams],
   );
-    
-  function redirectToSuccess ( identificator, total, preferredMethod ) {
+
+  function redirectToSuccess(identificator, total, preferredMethod) {
     const params = new URLSearchParams(searchParams);
     params.set('identificator', identificator);
     params.set('total', total);
@@ -352,7 +352,7 @@ export default function CartPage() {
         }
       })
     });
-  
+
     if (!response.ok) {
       console.log(response.statusText);
     } else {
@@ -414,7 +414,7 @@ export default function CartPage() {
             }
           }
         })
-        
+
         setShoppingCartWithData(cartWithData);
       })
     })
@@ -462,7 +462,7 @@ export default function CartPage() {
     <>
       <Head />
       <CustomAppShell>
-        <main style={{padding: '25px'}}>
+        <main style={{ padding: '25px' }}>
           <Title order={1}>Твоя корзина</Title>
           <Grid>
             <Grid.Col md={8} sm={12}>
@@ -567,7 +567,7 @@ export default function CartPage() {
                   onChange={setChosenPreferredContact}
                 />
                 <Divider />
-                <Text style={{fontWeight: 'bold', color: '#a13838'}}>
+                <Text style={{ fontWeight: 'bold', color: '#a13838' }}>
                   Для того, чтобы потом ты мог отследить заказ на сайте, запиши следующие данные:
                 </Text>
                 <List>
@@ -576,6 +576,12 @@ export default function CartPage() {
                   <List.Item>Свои контакты</List.Item>
                 </List>
                 <Button size="xl" disabled={payButtonIsDisabled} onClick={() => placeOrder()} loading={paymentIsInProgress}>Оплатить {getTotal()} рублей</Button>
+                <Group position="center">
+                  <Image src='/tinkoff-logo.png' height={'15px'} width={'auto'} fit="contain" />
+                  <Image src='/mir-logo.png' height={'15px'} width={'auto'} fit="contain" />
+                  <Image src='/visa-logo.png' height={'15px'} width={'auto'} fit="contain" />
+                  <Image src='/mastercard-logo.png' height={'15px'} width={'auto'} fit="contain" />
+                </Group>
               </Stack>
             </Group>
           </Modal>
