@@ -43,9 +43,18 @@ const useStyles = createStyles((theme) => ({
   },
 
   wrapper: {
+    maxWidth: '9999px',
+    marginRight: '30px',
     marginLeft: '280px',
     '@media (max-width: 1200px)': {
       marginLeft: '200px'
+    }
+  },
+
+  buttonCart: {
+    display: 'block',
+    '@media (max-width: 767px)': {
+      display: 'none'
     }
   },
 }));
@@ -88,7 +97,7 @@ export const CustomHeader = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
     );
   });
 
-  items.push(<Button key='cart-button-for-menu' component='a' href='/cart' color="teal" leftIcon={<IconShoppingCart />}>Корзина ({cartSize})</Button>)
+  //items.push(<Button key='cart-button-for-menu' component='a' href='/cart' color="teal" leftIcon={<IconShoppingCart />}>Корзина ({cartSize})</Button>)
 
 
   return (
@@ -120,11 +129,14 @@ export const CustomHeader = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
       </MediaQuery>
 
       <Container className={classes.wrapper}>
+        <Group position='apart' style={{width:'100%'}}>
         <div className={classes.inner}>
           <Group spacing={5} className={classes.links}>
             {items}
           </Group>
         </div>
+        <Button className={classes.buttonCart} key='cart-button-for-menu' component='a' size="md" href='/cart' color="teal" leftIcon={<IconShoppingCart />}>Корзина ({cartSize})</Button>
+        </Group>
       </Container>
     </Header>
   );

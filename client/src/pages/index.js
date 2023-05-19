@@ -14,7 +14,24 @@ const STL_ENDPOINT = 'creatures';
 const DEFAULT_SORT = 'sort=createdAt:desc';
 const FILL_WITH_DATA = 'populate=*'
 const NOT_ONLY_PHYSICAL = "filters[onlyPhysical][$ne]=true"
-const REQUEST_URL = `${API_URL}/${STL_ENDPOINT}?${FILL_WITH_DATA}&${DEFAULT_SORT}`
+const SELECTED_FIELDS = [
+  "race",
+  'sex',
+  'classes',
+  'code',
+  'priceSTL',
+  'pricePhysical',
+  'onlyPhysical'
+]
+const FIELDS = (selectedFields) => {
+  let string = '';
+  selectedFields.forEach((field, id) => {
+    if (id > 0) string += `&`;
+    string += `fields[${id}]=${field}`
+  })
+  return string;
+}
+const REQUEST_URL = `${API_URL}/${STL_ENDPOINT}?${FIELDS(SELECTED_FIELDS)}&${FILL_WITH_DATA}&${DEFAULT_SORT}`
 
 
 async function fetchDataFromURI(URI) {
@@ -53,6 +70,7 @@ export default function Home() {
     else requestString = `${REQUEST_URL}&${NOT_ONLY_PHYSICAL}&pagination[pageSize]=20`
     fetchDataFromURI(requestString).then(data => {
       const minis = data?.miniatures;
+      console.log(minis);
       setMiniatures(minis);
       setTotalFound(data.meta.pagination.total);
       setTotalPages(data.meta.pagination.pageCount);

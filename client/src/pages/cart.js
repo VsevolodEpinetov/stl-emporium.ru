@@ -356,6 +356,7 @@ export default function CartPage() {
     if (!response.ok) {
       console.log(response.statusText);
     } else {
+      console.log(response.statusText);
       setShoppingCart([]);
       redirectToSuccess(identificator, totalCost, chosenPreferredContact);
     }
@@ -396,7 +397,24 @@ export default function CartPage() {
     reqString += allIds.join('&filters[code][$eq]=');
     reqString = '&filters[code][$eq]=' + reqString;
     let cartWithData = shoppingCart.slice();
-    fetchDataFromURI(`https://api.stl-emporium.ru/api/creatures?populate=*${reqString}`).then(data => {
+    const SELECTED_FIELDS = [
+      "race",
+      'sex',
+      'classes',
+      'code',
+      'priceSTL',
+      'pricePhysical',
+      'onlyPhysical'
+    ]
+    const FIELDS = (selectedFields) => {
+      let string = '';
+      selectedFields.forEach((field, id) => {
+        if (id > 0) string += `&`;
+        string += `fields[${id}]=${field}`
+      })
+      return string;
+    }
+    fetchDataFromURI(`https://api.stl-emporium.ru/api/creatures?${FIELDS(SELECTED_FIELDS)}&populate=*${reqString}`).then(data => {
       cartWithData.forEach(item => {
         for (let i = 0; i < data.length; i++) {
           if (data[i].attributes.code === item.code) {

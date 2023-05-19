@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Navbar, Group, Divider, Text, UnstyledButton, ThemeIcon, Image, MultiSelect, Checkbox, Button, MediaQuery, ActionIcon, createStyles, Title, ScrollArea, Center, SegmentedControl, NavLink } from "@mantine/core"
+import { Navbar, Group, Divider, Text, UnstyledButton, ThemeIcon, Image, MultiSelect, Checkbox, Button, MediaQuery, ActionIcon, createStyles, Title, ScrollArea, Center, SegmentedControl, NavLink, Container, Overlay } from "@mantine/core"
 import { IconSword, IconShoppingCart, IconRotateClockwise, IconQuestionMark, IconCircle } from '@tabler/icons-react'
 import { useLocalStorage } from '@mantine/hooks';
 const LINKS = require("../../data/links.json")
@@ -18,9 +18,20 @@ const useStyles = createStyles((theme) => ({
   }
 }));
 
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 
 export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOpened, heroFilters = false, basesFilters = false, filters, getSelectedHeroes, loading, nullFilters, chosenMode, setChosenMode }) => {
   const { classes } = useStyles();
+  const [chosenImage, setChosenImage] = useState('');
+
+  useEffect(() => {
+    setChosenImage(getRandomInt(1, 17))
+  }, [])
 
   const items = LINKS.map((link) => {
     const menuItems = link.links?.map((item) => (
@@ -50,7 +61,13 @@ export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
 
   return (
     <>
-      <Navbar p="md" hiddenBreakpoint="sm" hidden={!filtersOpened} width={{ sm: 200, lg: 300 }} style={{ backgroundColor: '#141517', border: 'none', zIndex: '98' }}>
+      <Navbar p="md" hiddenBreakpoint="sm" hidden={!filtersOpened} width={{ sm: 200, lg: 300 }} 
+      style={{ 
+        backgroundColor: '#141517', 
+        border: 'none', 
+        zIndex: '98', 
+        padding: !heroFilters && !basesFilters ? '0px' : ''
+      }}>
         <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
           <Navbar.Section>
             <Center>
@@ -173,6 +190,16 @@ export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
               </>
             )
 
+          }
+
+          {!heroFilters && !basesFilters &&
+          <Overlay color='#141517' style={{
+            backgroundImage: `url(/bg-${chosenImage}.png)`,
+            opacity: '10%',
+            //position: 'relative',
+            backgroundSize: 'cover'
+          }}>
+          </Overlay>
           }
 
         </Navbar.Section>
