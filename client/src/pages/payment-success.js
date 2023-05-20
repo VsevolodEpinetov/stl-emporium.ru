@@ -1,8 +1,6 @@
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
-import { Accordion, AppShell, Title, Anchor, Text, Box, List } from '@mantine/core'
-import { CustomHeader } from '@/components/CustomHeader'
-import { CustomNavbar } from '@/components/CustomNavbar'
+import { Title, Anchor, Text, Box, List } from '@mantine/core'
 import { useRouter } from 'next/router'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { IconCircleCheckFilled } from '@tabler/icons-react'
@@ -60,7 +58,7 @@ export default function FAQPage() {
           {thereIsAnOrder
             ?
             <>
-              <Title order={1} style={{ marginBottom: '15px' }}><IconCircleCheckFilled size='1.85rem' /> Заказ успешно оплачен!</Title>
+              <Title order={1} style={{ marginBottom: '15px' }}><IconCircleCheckFilled size='1.85rem' /> Заказ успешно размещён!</Title>
               <Box>
                 <Text>Совсем скоро мы займёмся обработкой заказа и свяжемся с тобой по предпочитаемому способу связи.</Text>
                 <br />

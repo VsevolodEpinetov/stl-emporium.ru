@@ -2,7 +2,7 @@
 import { Card, Text, Group, Center, createStyles, Modal, Image, Badge } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Button, ActionIcon } from '@mantine/core';
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { IconMinus, IconPlus } from '@tabler/icons-react';
 const FILTERS = require("../../data/filtersTerrain.json")
 

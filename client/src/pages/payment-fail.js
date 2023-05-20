@@ -1,12 +1,6 @@
 import Head from 'next/head'
-import { useEffect, useState } from 'react'
-import { Accordion, AppShell, Title, Anchor, Text, Box, List } from '@mantine/core'
-import { CustomHeader } from '@/components/CustomHeader'
-import { CustomNavbar } from '@/components/CustomNavbar'
-import { useRouter } from 'next/router'
-import { usePathname, useSearchParams } from 'next/navigation'
-import { IconCircleCheckFilled, IconCrossFilled, IconX } from '@tabler/icons-react'
-import { useLocalStorage } from '@mantine/hooks'
+import { Title } from '@mantine/core'
+import { IconX } from '@tabler/icons-react'
 import CustomAppShell from '@/components/CustomAppShell'
 
 

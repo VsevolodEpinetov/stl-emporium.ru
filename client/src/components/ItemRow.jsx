@@ -1,18 +1,9 @@
-import { ActionIcon, Badge, Code, Image, Modal, Skeleton } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { ActionIcon, Badge, Code, Skeleton } from '@mantine/core';
 import React from 'react';
 import CreatureImageWithModal from './CreatureImageWithModal';
 import { useState } from 'react';
-import { useEffect } from 'react';
 import { IconTrash } from '@tabler/icons-react';
 
-const API_URL = 'https://api.stl-emporium.ru/api/creatures?populate=*'
-async function fetchDataFromURI(URI) {
-    const rawData = await fetch(URI)
-    const data = await rawData.json();
-
-    return data?.data;
-}
 
 const ItemRow = ({ itemCartInfo, removeAllInstances }) => {
     const [loading, setLoading] = useState(false);

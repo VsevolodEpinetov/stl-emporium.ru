@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { createStyles, Header, MediaQuery, Burger, Text, Container, rem, Menu, Center, Group, Image, Title, ActionIcon, Button } from "@mantine/core"
-import { IconChevronDown, IconAdjustments, IconSettingsFilled, IconSettings, IconFilter, IconColorFilter, IconFilterEdit, IconShoppingCart, } from '@tabler/icons-react';
-import { useLocalStorage } from '@mantine/hooks';
+import { IconChevronDown, IconFilter, IconFilterEdit, IconShoppingCart, } from '@tabler/icons-react';
 const LINKS = require("../../data/links.json")
 
 const useStyles = createStyles((theme) => ({

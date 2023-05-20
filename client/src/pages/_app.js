@@ -1,23 +1,10 @@
 import '@/styles/globals.css'
-import { useState } from 'react';
 import {
-  AppShell,
-  Navbar,
-  Header,
-  Footer,
-  Aside,
-  Text,
-  MediaQuery,
-  Burger,
-  useMantineTheme,
   MantineProvider,
-  Image
 } from '@mantine/core';
 import Head from 'next/head';
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
-  const theme = useMantineTheme();
-  const [opened, setOpened] = useState(false);
   return (
     <>
       <Head>

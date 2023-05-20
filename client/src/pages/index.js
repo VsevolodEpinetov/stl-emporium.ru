@@ -2,11 +2,8 @@ import Head from 'next/head'
 import { useDisclosure, useLocalStorage, useWindowScroll, usePagination } from '@mantine/hooks';
 import { useState, useEffect } from 'react'
 import { CreatureCard } from '@/components/CreatureCard'
-import { CustomHeader } from '@/components/CustomHeader'
-import { CustomNavbar } from '@/components/CustomNavbar'
 import { SimpleGrid, Image, Group, AppShell, Skeleton, Title, Pagination, Center, Button } from '@mantine/core'
 import CustomAppShell from '@/components/CustomAppShell';
-import { TerrainCard } from '@/components/TerrainCard';
 const FILTERS = require("../../data/filters.json")
 
 const API_URL = 'https://api.stl-emporium.ru/api'
@@ -70,7 +67,6 @@ export default function Home() {
     else requestString = `${REQUEST_URL}&${NOT_ONLY_PHYSICAL}&pagination[pageSize]=20`
     fetchDataFromURI(requestString).then(data => {
       const minis = data?.miniatures;
-      console.log(minis);
       setMiniatures(minis);
       setTotalFound(data.meta.pagination.total);
       setTotalPages(data.meta.pagination.pageCount);
@@ -109,7 +105,6 @@ export default function Home() {
     let requestString;
     if (chosenMode === 'physical') requestString = `${REQUEST_URL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}${options}`
     else requestString = `${REQUEST_URL}&${NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}${options}`
-    console.log(requestString)
     fetchDataFromURI(requestString).then(data => {
       let minis = data.miniatures.map(cr => {
         return {
@@ -220,7 +215,6 @@ export default function Home() {
     for (let i = 0; i < shoppingCart.length; i++) {
       if (shoppingCart[i].code === itemCode && shoppingCart[i].type === chosenMode) {
         if (shoppingCart[i].amount > 1) {
-          console.log('amount > 1')
           let newAmount = shoppingCart[i].amount - 1;
           setShoppingCart(shoppingCart.map((item, id) => {
             if (id !== i) {

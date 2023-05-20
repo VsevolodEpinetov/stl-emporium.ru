@@ -1,6 +1,5 @@
 import Head from 'next/head'
-import { useState } from 'react'
-import { Accordion, AppShell, Title, Anchor, Text } from '@mantine/core'
+import { Accordion, Title, Anchor, Text } from '@mantine/core'
 import CustomAppShell from '@/components/CustomAppShell'
 
 

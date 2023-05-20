@@ -1,11 +1,8 @@
 import Head from 'next/head'
-import { useLocalStorage, useDisclosure, useClipboard, useMediaQuery } from '@mantine/hooks';
+import { useLocalStorage, useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useState, useEffect, useCallback } from 'react'
-import { Group, Text, Table, ActionIcon, AppShell, Title, Button, Modal, Code, CopyButton, List, ScrollArea, Anchor, Grid, Paper, Divider, Stack, Input, Select, TextInput, Image, Box, SimpleGrid, Container } from '@mantine/core'
-import { IconAt, IconBrandTelegram, IconBrandVk, IconTrash } from '@tabler/icons-react'
-import { CustomHeader } from '@/components/CustomHeader'
-import { CustomNavbar } from '@/components/CustomNavbar'
-import CreatureImageWithModal from '@/components/CreatureImageWithModal';
+import { Group, Text, Table,Title, Button, Modal, List, ScrollArea, Anchor, Grid, Paper, Divider, Stack, Input, Select, TextInput } from '@mantine/core'
+import { IconAt, IconBrandTelegram, IconBrandVk } from '@tabler/icons-react'
 import ItemRow from '@/components/ItemRow';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import CustomAppShell from '@/components/CustomAppShell';
@@ -282,7 +279,6 @@ function generateToken() {
 }
 
 export default function CartPage() {
-  const [opened, setOpened] = useState(false);
   const [shoppingCart, setShoppingCart] = useLocalStorage({ key: 'shopping-cart', defaultValue: [] })
   const [shoppingCartWithData, setShoppingCartWithData] = useState([]);
   const [modalOpened, modalHandlers] = useDisclosure(false);
@@ -523,7 +519,7 @@ export default function CartPage() {
                 <Button fullWidth size='lg' color='green' radius='md' onClick={() => { modalHandlers.open() }}>
                   Оформить заказ
                 </Button>
-                <Text size='sm' style={{ color: '#707070', margin: '25px 10px' }}>После оплаты будет предоставлен код, который нужно будет отправить нам в Telegram/VK</Text>
+                <Text size='sm' style={{ color: '#707070', margin: '25px 10px' }}>Оплатить заказ можно будет после того, как мы свяжемся для подтверждения.</Text>
                 <Divider />
                 <Group position="apart" style={{ margin: '15px 10px' }}>
                   <Title order={3}>Ваша корзина</Title>
@@ -553,7 +549,7 @@ export default function CartPage() {
             <Group position='center'>
               <Stack>
                 <Text>
-                  После оплаты заказ попадёт к нам, и мы начнём работу. В течение трёх дней (обычно - двух часов) с вами свяжутся по предпочитаемому каналу связи.
+                  После оплаты заказ попадёт к нам, и мы начнём работу. В течение трёх дней (обычно - двух часов) с тобой свяжутся по предпочитаемому каналу связи.
                 </Text>
                 <Text>
                   Достаточно указать один любой контакт, но лучше указать все на всякий случай!
@@ -593,13 +589,13 @@ export default function CartPage() {
                   <List.Item>Стоимость заказа: <b>{getTotal()}</b></List.Item>
                   <List.Item>Свои контакты</List.Item>
                 </List>
-                <Button size="xl" disabled={payButtonIsDisabled} onClick={() => placeOrder()} loading={paymentIsInProgress}>Оплатить {getTotal()} рублей</Button>
-                <Group position="center">
+                <Button size="xl" disabled={payButtonIsDisabled} onClick={() => placeOrder()} loading={paymentIsInProgress}>Разместить заказ на {getTotal()} рублей</Button>
+                {/* <Group position="center">
                   <Image src='/tinkoff-logo.png' height={'15px'} width={'auto'} fit="contain" />
                   <Image src='/mir-logo.png' height={'15px'} width={'auto'} fit="contain" />
                   <Image src='/visa-logo.png' height={'15px'} width={'auto'} fit="contain" />
                   <Image src='/mastercard-logo.png' height={'15px'} width={'auto'} fit="contain" />
-                </Group>
+                </Group> */}
               </Stack>
             </Group>
           </Modal>

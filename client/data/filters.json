@@ -1,98 +1,110 @@
 {
   "races": [
     {
+      "value": "arakkoa",
+      "label": "Ааракокра"
+    },
+    {
       "value": "orc",
-      "label": "Орки"
+      "label": "Орк"
     },
     {
       "value": "dragonborn",
-      "label": "Драконнорожденные"
+      "label": "Драконнорожденный"
     },
     {
       "value": "dwarf",
-      "label": "Дварфы"
+      "label": "Дварф"
     },
     {
       "value": "elf",
-      "label": "Эльфы"
+      "label": "Эльф"
     },
     {
       "value": "gnome",
-      "label": "Гномы"
+      "label": "Гном"
     },
     {
       "value": "half-orc",
-      "label": "Полуорки"
+      "label": "Полуорк"
+    },
+    {
+      "value": "halfling",
+      "label": "Полурослик"
+    },
+    {
+      "value": "half-elf",
+      "label": "Полуэльф"
     },
     {
       "value": "human",
-      "label": "Люди"
+      "label": "Человек"
     },
     {
       "value": "tiefling",
-      "label": "Тифлинги"
+      "label": "Тифлинг"
     },
     {
       "value": "half-giant",
-      "label": "Полугиганты"
+      "label": "Полугигант"
     },
     {
       "value": "goliath",
-      "label": "Голиафы"
-    },
-    {
-      "value": "arakkoa",
-      "label": "Араккоа"
+      "label": "Голиаф"
     }
   ],
   "classes": [
     {
-      "value": "warrior",
-      "label": "Воин"
-    },
-    {
-      "value": "druid",
-      "label": "Друид"
-    },
-    {
-      "value": "fighter",
-      "label": "Боец"
-    },
-    {
-      "value": "berserker",
-      "label": "Берсерк"
-    },
-    {
-      "value": "barbarian",
-      "label": "Варвар"
-    },
-    {
-      "value": "necromancer",
-      "label": "Некромант"
-    },
-    {
-      "value": "vampire",
-      "label": "Вампир"
-    },
-    {
-      "value": "paladin",
-      "label": "Паладин"
-    },
-    {
-      "value": "warlock",
-      "label": "Чародей"
+      "value": "alchemist",
+      "label": "Алхимик"
     },
     {
       "value": "bard",
       "label": "Бард"
     },
     {
+      "value": "barbarian",
+      "label": "Варвар"
+    },
+    {
+      "value": "spellsword",
+      "label": "Ведьмовской клинок"
+    },
+    {
+      "value": "fighter",
+      "label": "Воин"
+    },
+    {
       "value": "wizard",
       "label": "Волшебник"
     },
     {
-      "value": "mage",
-      "label": "Маг"
+      "value": "druid",
+      "label": "Друид"
+    },
+    {
+      "value": "cleric",
+      "label": "Жрец"
+    },
+    {
+      "value": "artificier",
+      "label": "Изобретатель"
+    },
+    {
+      "value": "blood-hunter",
+      "label": "Кровавый охотник"
+    },
+    {
+      "value": "warlock",
+      "label": "Колдун"
+    },
+    {
+      "value": "monk",
+      "label": "Монах"
+    },
+    {
+      "value": "paladin",
+      "label": "Паладин"
     },
     {
       "value": "rogue",
@@ -103,20 +115,12 @@
       "label": "Следопыт"
     },
     {
-      "value": "artificer",
-      "label": "Изобретатель"
+      "value": "sorcerer",
+      "label": "Чародей"
     },
     {
-      "value": "priest",
-      "label": "Жрец"
-    },
-    {
-      "value": "monk",
-      "label": "Монах"
-    },
-    {
-      "value": "cleric",
-      "label": "Клирик"
+      "value": "shaman",
+      "label": "Шаман"
     }
   ]
 }

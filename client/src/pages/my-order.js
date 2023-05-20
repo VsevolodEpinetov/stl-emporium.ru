@@ -217,7 +217,6 @@ export default function FAQPage() {
                     <Group position="apart" mt="md" mb="xs">
                       <Text weight={500}>Заказ на {order.total}₽</Text>
                       <ActionIcon variant='transparent' onClick={() => {
-                        console.log(`removing element ${id}...`)
                         setPossibleOrders([...possibleOrders.slice(0, id), ...possibleOrders.slice(id + 1)])
                       }}> <IconTrash /> </ActionIcon>
                     </Group>
@@ -227,7 +226,6 @@ export default function FAQPage() {
                     </Text>
                     <Button variant="light" color="blue" fullWidth mt="md" radius="md"
                       onClick={() => {
-                        console.log(order)
                         setIdentificator(order.identificator)
                         setTotal(parseInt(order.total))
                         setContactType(order.preferredContact)

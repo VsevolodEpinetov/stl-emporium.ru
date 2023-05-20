@@ -1,10 +1,7 @@
 import Head from 'next/head'
-import { useDisclosure, useLocalStorage, useWindowScroll, usePagination } from '@mantine/hooks';
+import { useDisclosure, useLocalStorage, useWindowScroll } from '@mantine/hooks';
 import { useState, useEffect } from 'react'
-import { CreatureCard } from '@/components/CreatureCard'
-import { CustomHeader } from '@/components/CustomHeader'
-import { CustomNavbar } from '@/components/CustomNavbar'
-import { SimpleGrid, Image, Group, AppShell, Skeleton, Title, Pagination, Center, Button } from '@mantine/core'
+import { SimpleGrid, Image, Group, Skeleton, Title, Pagination, Center } from '@mantine/core'
 import CustomAppShell from '@/components/CustomAppShell';
 import { TerrainCard } from '@/components/TerrainCard';
 const FILTERS = require("../../data/filtersTerrain.json")
@@ -46,7 +43,6 @@ export default function Home() {
 
   useEffect(async () => {
     fetchDataFromURI(`${REQUEST_URL}&pagination[pageSize]=20`).then(data => {
-      console.log(data)
       const minis = data?.miniatures;
       setMiniatures(minis);
       setTotalFound(data.meta.pagination.total);
@@ -162,7 +158,6 @@ export default function Home() {
     for (let i = 0; i < shoppingCart.length; i++) {
       if (shoppingCart[i].code === itemCode && shoppingCart[i].type === chosenMode) {
         if (shoppingCart[i].amount > 1) {
-          console.log('amount > 1')
           let newAmount = shoppingCart[i].amount - 1;
           setShoppingCart(shoppingCart.map((item, id) => {
             if (id !== i) {

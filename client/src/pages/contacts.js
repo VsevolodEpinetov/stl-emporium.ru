@@ -1,7 +1,6 @@
 import Head from 'next/head'
-import { useState } from 'react'
-import { createStyles, ThemeIcon, Text, SimpleGrid, Box, Stack, Title } from '@mantine/core';
-import { IconSun, IconPhone, IconMapPin, IconAt, IconFileDescription } from '@tabler/icons-react';
+import { createStyles, Text, Box, Stack, Title } from '@mantine/core';
+import { IconPhone, IconAt, IconFileDescription } from '@tabler/icons-react';
 import CustomAppShell from '@/components/CustomAppShell'
 
 const useStyles = createStyles((theme) => ({

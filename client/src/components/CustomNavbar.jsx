@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Navbar, Group, Divider, Text, UnstyledButton, ThemeIcon, Image, MultiSelect, Checkbox, Button, MediaQuery, ActionIcon, createStyles, Title, ScrollArea, Center, SegmentedControl, NavLink, Container, Overlay } from "@mantine/core"
-import { IconSword, IconShoppingCart, IconRotateClockwise, IconQuestionMark, IconCircle } from '@tabler/icons-react'
-import { useLocalStorage } from '@mantine/hooks';
+import { Navbar, Group, Divider, Image, MultiSelect, Checkbox, Button, MediaQuery, ActionIcon, createStyles, Title, ScrollArea, Center, SegmentedControl, NavLink, Overlay } from "@mantine/core"
+import { IconShoppingCart, IconRotateClockwise, } from '@tabler/icons-react'
 const LINKS = require("../../data/links.json")
 
 const useStyles = createStyles((theme) => ({

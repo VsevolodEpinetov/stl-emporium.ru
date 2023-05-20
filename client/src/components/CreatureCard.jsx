@@ -2,7 +2,6 @@
 import { Card, Text, Group, Center, createStyles, Modal, Image, Badge } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Button, ActionIcon } from '@mantine/core';
-import { useEffect, useRef, useState } from "react";
 import { IconMinus, IconPlus } from '@tabler/icons-react';
 const FILTERS = require("../../data/filters.json")
 
@@ -171,9 +170,9 @@ export const CreatureCard = ({ item, addToACart, removeItem, chosenMode, amountI
               <Button onClick={() => removeItem(item.attributes.code, chosenMode)} color="red">Удалить из корзины</Button>
               :
               <Group>
-                <Button onClick={() => addToACart(item.attributes.code, chosenMode)} variant='outline' color='green'>+1</Button>
-                <Text size='lg'>{amountInCart}</Text>
                 <Button onClick={() => removeItem(item.attributes.code, chosenMode)} variant='outline' color='red'>-1</Button>
+                <Text size='lg'>{amountInCart}</Text>
+                <Button onClick={() => addToACart(item.attributes.code, chosenMode)} variant='outline' color='green'>+1</Button>
               </Group>
           }
         </Center>
