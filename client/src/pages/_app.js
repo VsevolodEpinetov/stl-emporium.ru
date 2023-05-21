@@ -15,6 +15,11 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#1A1B1E" />
+        <meta name="description" content="STL Emporium - сайт для покупки STL файлов и распечатанных миниатюр." />
+        <meta name="og:description" content="STL Emporium - сайт для покупки STL файлов и распечатанных миниатюр." />
+        <meta property="og:title" content="STL Emporium | STL файлы и миниатюры" key="meta-title-og" />
+        <meta property="title" content="STL Emporium | STL файлы и миниатюры" key="meta-title" />
+        <meta property="og:image" content="/meta-logo.png" key="meta-image-og" />
       </Head>
       <MantineProvider
         theme={{ colorScheme: 'dark' }}
