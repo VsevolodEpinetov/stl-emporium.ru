@@ -287,6 +287,8 @@ export default function CartPage() {
   const [identificator, setIdentificator] = useState('')
   const [paymentIsInProgress, setPaymentIsInProgress] = useState(false)
 
+  const [tooLowTotal, setTooLowTotal] = useState(false);
+
 
   const isMobile = useMediaQuery("(max-width: 50em)");
   const [vk, setVK] = useState('');
@@ -472,6 +474,24 @@ export default function CartPage() {
     return counter;
   }
 
+  const getWord = (amount) => {
+    let lastDigit = amount % 10;
+    if (lastDigit == 1) return 'товар'
+    if (lastDigit > 1 && lastDigit <= 4) return 'товара'
+    if (lastDigit == 0 || lastDigit > 4) return 'товаров'
+
+    return ('товаров')
+  }
+
+  useEffect(() => {
+    const total = getTotalByType('physical');
+    if (total >= 1200 || total == 0) {
+      setTooLowTotal(false)
+    } else {
+      setTooLowTotal(true)
+    }
+  }, [shoppingCartWithData])
+
   return (
     <>
       <Head />
@@ -516,23 +536,33 @@ export default function CartPage() {
             </Grid.Col>
             <Grid.Col md={4} sm={12}>
               <Paper shadow="xs" p="md" style={{ position: 'sticky', top: '15px' }}>
-                <Button fullWidth size='lg' color='green' radius='md' onClick={() => { modalHandlers.open() }}>
+                <Button fullWidth size='lg' color='green' radius='md' onClick={() => { modalHandlers.open() }} disabled={tooLowTotal && true}>
                   Оформить заказ
                 </Button>
                 <Text size='sm' style={{ color: '#707070', margin: '25px 10px' }}>Оплатить заказ можно будет после того, как мы свяжемся для подтверждения.</Text>
                 <Divider />
                 <Group position="apart" style={{ margin: '15px 10px' }}>
                   <Title order={3}>Ваша корзина</Title>
-                  <Text size='sm'>{shoppingCart.length} минек</Text>
+                  <Text size='sm'>{getAmountByType('stl') + getAmountByType('physical')} {getWord(getAmountByType('stl') + getAmountByType('physical'))}</Text>
                 </Group>
                 <Group position="apart" style={{ margin: '25px 10px 0' }}>
                   <Text size='md'>STL ({getAmountByType('stl')})</Text>
                   <Text size='md'>{getTotalByType('stl')}₽ </Text>
                 </Group>
                 <Group position="apart" style={{ margin: '5px 10px 0' }}>
-                  <Text size='md'>Фигурки ({getAmountByType('physical')})</Text>
-                  <Text size='md'>{getTotalByType('physical')}₽ </Text>
+                  <Text size='md' style={{color: tooLowTotal && 'rgb(227, 69, 69)', fontWeight: tooLowTotal && 'bold'}}>Фигурки ({getAmountByType('physical')})</Text>
+                  <Text size='md' style={{color: tooLowTotal && 'rgb(227, 69, 69)', fontWeight: tooLowTotal && 'bold'}}>{getTotalByType('physical')}₽ </Text>
                 </Group>
+                {
+                  tooLowTotal && <Text size='sm' style={{ color: 'rgb(227, 69, 69)', margin: '0px 10px 10px' }}>Мы отправляем фигурки только при заказах больше 1200 рублей.</Text>
+                }
+                <Group position="apart" style={{ margin: '5px 10px 0' }}>
+                  <Text size='md'>Доставка</Text>
+                  <Text size='md'>{getTotalByType('physical') > 0 ? '???' : '0'}₽ </Text>
+                </Group>
+                {
+                  getAmountByType('physical') > 0 && <Text size='sm' style={{ color: '#707070', margin: '0px 10px 10px' }}>Стоимость доставки рассчитывается дополнительно.</Text>
+                }
                 <Group position="apart" style={{ margin: '5px 10px 15px' }}>
                   <Text size='md'>Скидка</Text>
                   <Text size='md'>-{discount}₽</Text>

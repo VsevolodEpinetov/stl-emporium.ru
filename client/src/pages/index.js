@@ -282,6 +282,15 @@ export default function Home() {
     }
   }
 
+  const getWord = (amount) => {
+    let lastDigit = amount % 10;
+    if (lastDigit == 1) return 'миниатюрка'
+    if (lastDigit > 1 && lastDigit <= 4) return 'миниатюрки'
+    if (lastDigit == 0 || lastDigit > 4) return 'миниатюрок'
+
+    return ('миниатюр')
+  }
+
   return (
     <>
       <Head />
@@ -296,7 +305,7 @@ export default function Home() {
         setChosenMode={setChosenMode}
       >
       <main>
-        <Title order={1} style={{ marginBottom: '15px' }}>Найдено <Skeleton visible={loading} style={{ display: 'inline' }}>{loading ? 22 : totalFound}</Skeleton> миниатюрок</Title>
+        <Title order={1} style={{ marginBottom: '15px' }}>Найдено <Skeleton visible={loading} style={{ display: 'inline' }}>{loading ? 22 : totalFound}</Skeleton> {getWord(totalFound)}</Title>
         <SimpleGrid
           cols={4}
           spacing="lg"
