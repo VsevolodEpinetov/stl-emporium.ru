@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { useLocalStorage, useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useState, useEffect, useCallback } from 'react'
-import { Group, Text, Table,Title, Button, Modal, List, ScrollArea, Anchor, Grid, Paper, Divider, Stack, Input, Select, TextInput } from '@mantine/core'
+import { Group, Text, Table, Title, Button, Modal, List, ScrollArea, Anchor, Grid, Paper, Divider, Stack, Input, Select, TextInput } from '@mantine/core'
 import { IconAt, IconBrandTelegram, IconBrandVk } from '@tabler/icons-react'
 import ItemRow from '@/components/ItemRow';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -320,6 +320,12 @@ export default function CartPage() {
     router.push('/payment-success' + '?' + params.toString());
   }
 
+  const sendInfoToTelegram = async (total, vk, telegram, mail, preferredMethod, identificator) => {
+    const response = await fetch(`/api/telegramService?total=${total}&vk=${vk}&telegram=${telegram}&mail=${mail}&preferredMethod=${preferredMethod}&identificator=${identificator}`, {
+
+    })
+  }
+
   async function placeOrder() {
 
     //TODO: field verifications
@@ -352,9 +358,10 @@ export default function CartPage() {
     });
 
     if (!response.ok) {
-      console.log(response.statusText);
+      //console.log(response.statusText);
     } else {
-      console.log(response.statusText);
+      //console.log(response.statusText);
+      sendInfoToTelegram(totalCost, vk, tg, mail, chosenPreferredContact, identificator)
       setShoppingCart([]);
       redirectToSuccess(identificator, totalCost, chosenPreferredContact);
     }
@@ -498,6 +505,7 @@ export default function CartPage() {
       <CustomAppShell>
         <main style={{ padding: '25px' }}>
           <Title order={1}>Твоя корзина</Title>
+          <Button onClick={() => sendInfoToTelegram()}>send</Button>
           <Grid>
             <Grid.Col md={8} sm={12}>
               <Paper shadow="xs" p="md">
@@ -550,8 +558,8 @@ export default function CartPage() {
                   <Text size='md'>{getTotalByType('stl')}₽ </Text>
                 </Group>
                 <Group position="apart" style={{ margin: '5px 10px 0' }}>
-                  <Text size='md' style={{color: tooLowTotal && 'rgb(227, 69, 69)', fontWeight: tooLowTotal && 'bold'}}>Фигурки ({getAmountByType('physical')})</Text>
-                  <Text size='md' style={{color: tooLowTotal && 'rgb(227, 69, 69)', fontWeight: tooLowTotal && 'bold'}}>{getTotalByType('physical')}₽ </Text>
+                  <Text size='md' style={{ color: tooLowTotal && 'rgb(227, 69, 69)', fontWeight: tooLowTotal && 'bold' }}>Фигурки ({getAmountByType('physical')})</Text>
+                  <Text size='md' style={{ color: tooLowTotal && 'rgb(227, 69, 69)', fontWeight: tooLowTotal && 'bold' }}>{getTotalByType('physical')}₽ </Text>
                 </Group>
                 {
                   tooLowTotal && <Text size='sm' style={{ color: 'rgb(227, 69, 69)', margin: '0px 10px 10px' }}>Мы отправляем фигурки только при заказах больше 1200 рублей.</Text>
