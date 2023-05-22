@@ -505,7 +505,6 @@ export default function CartPage() {
       <CustomAppShell>
         <main style={{ padding: '25px' }}>
           <Title order={1}>Твоя корзина</Title>
-          <Button onClick={() => sendInfoToTelegram()}>send</Button>
           <Grid>
             <Grid.Col md={8} sm={12}>
               <Paper shadow="xs" p="md">
