@@ -1,6 +1,6 @@
 import Head from 'next/head'
-import { createStyles, Text, Box, Stack, Title } from '@mantine/core';
-import { IconPhone, IconAt, IconFileDescription } from '@tabler/icons-react';
+import { createStyles, Text, Box, Stack, Title, Anchor } from '@mantine/core';
+import { IconPhone, IconAt, IconFileDescription, IconBrandVk } from '@tabler/icons-react';
 import CustomAppShell from '@/components/CustomAppShell'
 
 const useStyles = createStyles((theme) => ({
@@ -28,6 +28,7 @@ const useStyles = createStyles((theme) => ({
 const MOCKDATA = [
   { title: 'Почта', description: "stl-emporium@outlook.com", icon: IconAt },
   { title: 'Телефон', description: '+7 909 918-70-18', icon: IconPhone },
+  { title: 'VK', description: <Anchor href='https://vk.com/stlemporium' target='_blank'>https://vk.com/stlemporium</Anchor>, icon: IconBrandVk },
   { title: 'Организация', description: 'ИП Епинетов Всеволод Михайлович', icon: IconFileDescription},
   { title: 'ИНН', description: '301509345382' },
   { title: 'ОГРНИП', description: '323784700160773' },
