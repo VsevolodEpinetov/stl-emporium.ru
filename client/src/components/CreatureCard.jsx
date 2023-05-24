@@ -75,12 +75,18 @@ function getStringForClassesAndRaces(creature) {
   })
 
 
-  for (let i = 0; i < FILTERS.races.length; i++) {
+  creature.races.forEach(cl => {
+    FILTERS.races.forEach(clData => {
+      if (clData.value == cl) arr.push(clData.label)
+    })
+  })
+
+  /*for (let i = 0; i < FILTERS.races.length; i++) {
     if (FILTERS.races[i].value == creature.race) {
       str += FILTERS.races[i].label + ', ';
       break;
     }
-  }
+  }*/
 
   switch (creature.sex) {
     case 'f':

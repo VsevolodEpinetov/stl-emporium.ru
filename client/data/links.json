@@ -4,11 +4,25 @@
     "label": "STL",
     "links": [
       {
-        "link": "/",
+        "link": "/?type=stl",
         "label": "Фентези Герои"
       },
       {
-        "link": "/bases",
+        "link": "/bases?type=stl",
+        "label": "Базы"
+      }
+    ]
+  },
+  {
+    "link": "#",
+    "label": "Фигурки",
+    "links": [
+      {
+        "link": "/?type=physical",
+        "label": "Фентези Герои"
+      },
+      {
+        "link": "/bases?type=physical",
         "label": "Базы"
       }
     ]

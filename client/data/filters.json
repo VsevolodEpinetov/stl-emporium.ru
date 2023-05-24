@@ -1,7 +1,7 @@
 {
   "races": [
     {
-      "value": "arakkoa",
+      "value": "aarakocra",
       "label": "Ааракокра"
     },
     {
@@ -51,6 +51,42 @@
     {
       "value": "goliath",
       "label": "Голиаф"
+    },
+    {
+      "value": "wolfkind",
+      "label": "Волколюд"
+    },
+    {
+      "value": "harengon",
+      "label": "Зайчан"
+    },
+    {
+      "value": "apeling",
+      "label": "Обезъяноподобный"
+    },
+    {
+      "value": "hadozee",
+      "label": "Гадози"
+    },
+    {
+      "value": "leonin",
+      "label": "Леонинец"
+    },
+    {
+      "value": "dhampir",
+      "label": "Вампир"
+    },
+    {
+      "value": "hogfolk",
+      "label": "Кабанолюд"
+    },
+    {
+      "value": "strix",
+      "label": "Неясыть"
+    },
+    {
+      "value": "giff",
+      "label": "Гифф"
     }
   ],
   "classes": [

@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { CreatureCard } from '@/components/CreatureCard'
 import { SimpleGrid, Image, Group, AppShell, Skeleton, Title, Pagination, Center, Button } from '@mantine/core'
 import CustomAppShell from '@/components/CustomAppShell';
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
 const FILTERS = require("../../data/filters.json")
 
 const API_URL = 'https://api.stl-emporium.ru/api'
@@ -12,7 +14,7 @@ const DEFAULT_SORT = 'sort=createdAt:desc';
 const FILL_WITH_DATA = 'populate=*'
 const NOT_ONLY_PHYSICAL = "filters[onlyPhysical][$ne]=true"
 const SELECTED_FIELDS = [
-  "race",
+  "races",
   'sex',
   'classes',
   'code',
@@ -50,6 +52,9 @@ export default function Home() {
   const races = FILTERS.races;
   const classes = FILTERS.classes;
 
+  const params = useSearchParams();
+  const router = useRouter();
+
   const [atLeast1Visible, handleAtLeast1Visible] = useDisclosure(true);
   const [selectedRaces, setSelectedRaces] = useState([]);
   const [selectedClasses, setSelectedClasses] = useState([]);
@@ -75,6 +80,15 @@ export default function Home() {
   }, [])
 
   useEffect(() => {
+    if (params.has('type')) {
+      if (params.get('type').length > 0) {
+        setChosenMode(params.get('type'))
+        router.push('/');
+      }
+    }
+  })
+
+  useEffect(() => {
     getSelectedHeroes();
   }, [chosenMode])
 
@@ -86,7 +100,7 @@ export default function Home() {
 
     if (selectedRaces.length > 0) {
       selectedRaces.forEach(r => {
-        options += `&filters[race][$contains]=${r}`
+        options += `&filters[races][$contains]=${r}`
       })
     }
 
@@ -126,7 +140,7 @@ export default function Home() {
 
     if (selectedRaces.length > 0) {
       selectedRaces.forEach(r => {
-        options += `&filters[race][$contains]=${r}`
+        options += `&filters[races][$contains]=${r}`
       })
     }
 
@@ -304,48 +318,48 @@ export default function Home() {
         chosenMode={chosenMode}
         setChosenMode={setChosenMode}
       >
-      <main>
-        <Title order={1} style={{ marginBottom: '15px' }}>Найдено <Skeleton visible={loading} style={{ display: 'inline' }}>{loading ? 22 : totalFound}</Skeleton> {getWord(totalFound)}</Title>
-        <SimpleGrid
-          cols={4}
-          spacing="lg"
-          breakpoints={[
-            { maxWidth: 'lg', cols: 4, spacing: 'md' },
-            { maxWidth: 'md', cols: 3, spacing: 'md' },
-            { maxWidth: 'sm', cols: 3, spacing: 'sm' },
-            { maxWidth: 'xs', cols: 2, spacing: 'sm' },
-          ]}
-        >
-          {
-            loading ?
-              Array(25).fill('1').map((skeleton, id) => <Skeleton height={380} mb="xl" key={`skeleton-${id}`} />)
-              : miniatures?.length > 0 ?
-                miniatures.map(creature => <CreatureCard
-                  item={creature}
-                  key={`card-${creature.id}`}
-                  amountInCart={getAmountInCart(creature.attributes.code)}
-                  addToACart={addToACart}
-                  removeItem={removeItem}
-                  chosenMode={chosenMode}
-                />)
-                :
-                <Group>
-                  Нет фигурок по таким фильтрам!
-                  <Image
-                    src="dude.svg"
-                    alt="Shrug dude"
-                    style={{ filter: "invert(95%) sepia(1%) saturate(0%) hue-rotate(139deg) brightness(82%) contrast(90%)" }}
-                  />
-                </Group>
-          }
-        </SimpleGrid>
-        <div style={{ marginTop: '25px' }}>
-          <Center>
-            <Pagination total={totalPages} siblings={1} value={currentPage} onChange={setCurrentPage} disabled={loading} />
-          </Center>
-        </div>
-      </main>
-    </CustomAppShell>
+        <main>
+          <Title order={1} style={{ marginBottom: '15px' }}>Найдено <Skeleton visible={loading} style={{ display: 'inline' }}>{loading ? 22 : totalFound}</Skeleton> {getWord(totalFound)}</Title>
+          <SimpleGrid
+            cols={4}
+            spacing="lg"
+            breakpoints={[
+              { maxWidth: 'lg', cols: 4, spacing: 'md' },
+              { maxWidth: 'md', cols: 3, spacing: 'md' },
+              { maxWidth: 'sm', cols: 3, spacing: 'sm' },
+              { maxWidth: 'xs', cols: 2, spacing: 'sm' },
+            ]}
+          >
+            {
+              loading ?
+                Array(25).fill('1').map((skeleton, id) => <Skeleton height={380} mb="xl" key={`skeleton-${id}`} />)
+                : miniatures?.length > 0 ?
+                  miniatures.map(creature => <CreatureCard
+                    item={creature}
+                    key={`card-${creature.id}`}
+                    amountInCart={getAmountInCart(creature.attributes.code)}
+                    addToACart={addToACart}
+                    removeItem={removeItem}
+                    chosenMode={chosenMode}
+                  />)
+                  :
+                  <Group>
+                    Нет фигурок по таким фильтрам!
+                    <Image
+                      src="dude.svg"
+                      alt="Shrug dude"
+                      style={{ filter: "invert(95%) sepia(1%) saturate(0%) hue-rotate(139deg) brightness(82%) contrast(90%)" }}
+                    />
+                  </Group>
+            }
+          </SimpleGrid>
+          <div style={{ marginTop: '25px' }}>
+            <Center>
+              <Pagination total={totalPages} siblings={1} value={currentPage} onChange={setCurrentPage} disabled={loading} />
+            </Center>
+          </div>
+        </main>
+      </CustomAppShell>
     </>
   )
 }

@@ -403,7 +403,7 @@ export default function CartPage() {
     reqString = '&filters[code][$eq]=' + reqString;
     let cartWithData = shoppingCart.slice();
     const SELECTED_FIELDS = [
-      "race",
+      "races",
       'sex',
       'classes',
       'code',

@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { SimpleGrid, Image, Group, Skeleton, Title, Pagination, Center } from '@mantine/core'
 import CustomAppShell from '@/components/CustomAppShell';
 import { TerrainCard } from '@/components/TerrainCard';
+import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
 const FILTERS = require("../../data/filtersTerrain.json")
 
 const API_URL = 'https://api.stl-emporium.ru/api'
@@ -33,6 +35,9 @@ export default function Home() {
   
   const [atLeast1Visible, handleAtLeast1Visible] = useDisclosure(true);
   const [selectedTags, setSelectedTags] = useState([]);
+
+  const params = useSearchParams();
+  const router = useRouter();
   
   const [miniatures, setMiniatures] = useState();
   const [loading, setLoading] = useDisclosure(true);
@@ -50,6 +55,15 @@ export default function Home() {
       setCurrentPage(1);
     })
   }, [])
+
+  useEffect(() => {
+    if (params.has('type')) {
+      if (params.get('type').length > 0) {
+        setChosenMode(params.get('type'))
+        router.push('/bases');
+      }
+    }
+  })
 
   const getSelectedHeroes = async () => {
     setLoading.open();

@@ -12,9 +12,14 @@ export default function FAQPage () {
           <Title order={1} style={{ marginBottom: '15px' }}>Часто задаваемые вопросы</Title>
           <Accordion defaultValue="what">
 
-          <Accordion.Item value="what">
+            <Accordion.Item value="what">
               <Accordion.Control>Чем мы занимаемся?</Accordion.Control>
               <Accordion.Panel><Text>Продажей доступа к STL файлам из нашего каталога, если вы хотите печатать самостоятельно (unsupported и presupported версии), а также печатью миниатюр из нашего каталога и библиотеки KS на фотополимерных принтерах 4К и 6К </Text></Accordion.Panel>
+            </Accordion.Item>
+
+            <Accordion.Item value="stl">
+              <Accordion.Control>Что такое STL файлы?</Accordion.Control>
+              <Accordion.Panel><Text>STL - это формат файлов, предназначенных для 3d печати. Это электронный товар, который вам нужен для самостоятельной печати.</Text></Accordion.Panel>
             </Accordion.Item>
 
             <Accordion.Item value="how">
