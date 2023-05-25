@@ -1,28 +1,132 @@
 {
   "races": [
     {
+      "value": "aasimar",
+      "label": "Аазимар"
+    },
+    {
       "value": "aarakocra",
       "label": "Ааракокра"
     },
     {
-      "value": "orc",
-      "label": "Орк"
+      "value": "bugbear",
+      "label": "Багбир"
     },
     {
-      "value": "dragonborn",
-      "label": "Драконнорожденный"
+      "value": "dhampir",
+      "label": "Вампир"
+    },
+    {
+      "value": "verdan",
+      "label": "Вердан"
+    },
+    {
+      "value": "wolfkind",
+      "label": "Волколюд"
+    },
+    {
+      "value": "hadozee",
+      "label": "Гадози"
+    },
+    {
+      "value": "githyanki",
+      "label": "Гитьянки"
+    },
+    {
+      "value": "giff",
+      "label": "Гифф"
+    },
+    {
+      "value": "gnome",
+      "label": "Гном"
+    },
+    {
+      "value": "goblin",
+      "label": "Гоблин"
+    },
+    {
+      "value": "goliath",
+      "label": "Голиаф"
     },
     {
       "value": "dwarf",
       "label": "Дварф"
     },
     {
-      "value": "elf",
-      "label": "Эльф"
+      "value": "water-genasi",
+      "label": "Джинази воды"
     },
     {
-      "value": "gnome",
-      "label": "Гном"
+      "value": "air-genasi",
+      "label": "Джинази воздуха"
+    },
+    {
+      "value": "earth-genasi",
+      "label": "Джинази земли"
+    },
+    {
+      "value": "fire-genasi",
+      "label": "Джинази огня"
+    },
+    {
+      "value": "dragonborn",
+      "label": "Драконнорожденный"
+    },
+    {
+      "value": "duergar",
+      "label": "Дуэргар"
+    },
+    {
+      "value": "harengon",
+      "label": "Зайчан"
+    },
+    {
+      "value": "hogfolk",
+      "label": "Кабанолюд"
+    },
+    {
+      "value": "kenku",
+      "label": "Кенку"
+    },
+    {
+      "value": "centaur",
+      "label": "Кентавр"
+    },
+    {
+      "value": "leonin",
+      "label": "Леонинец"
+    },
+    {
+      "value": "loxodon",
+      "label": "Локсодон"
+    },
+    {
+      "value": "lizardfolk",
+      "label": "Людоящер"
+    },
+    {
+      "value": "minotaur",
+      "label": "Минотавр"
+    },
+    {
+      "value": "strix",
+      "label": "Неясыть"
+    },
+    {
+      "value": "apeling",
+      "label": "Обезъяноподобный"
+    },
+    {
+      "value": "changeling",
+      "label": "Оборотень"
+    },
+    {
+      "value": "orc",
+      "label": "Орк"
+    },
+    {
+      "value": "half-giant",
+      "label": "Полугигант"
     },
     {
       "value": "half-orc",
@@ -37,56 +141,44 @@
       "label": "Полуэльф"
     },
     {
-      "value": "human",
-      "label": "Человек"
+      "value": "satyr",
+      "label": "Сатир"
+    },
+    {
+      "value": "tabaxi",
+      "label": "Табакси"
     },
     {
       "value": "tiefling",
       "label": "Тифлинг"
     },
     {
-      "value": "half-giant",
-      "label": "Полугигант"
+      "value": "tortle",
+      "label": "Тортл"
     },
     {
-      "value": "goliath",
-      "label": "Голиаф"
+      "value": "triton",
+      "label": "Тритон"
     },
     {
-      "value": "wolfkind",
-      "label": "Волколюд"
+      "value": "fairy",
+      "label": "Фея"
     },
     {
-      "value": "harengon",
-      "label": "Зайчан"
+      "value": "firbolg",
+      "label": "Фирболг"
     },
     {
-      "value": "apeling",
-      "label": "Обезъяноподобный"
+      "value": "human",
+      "label": "Человек"
     },
     {
-      "value": "hadozee",
-      "label": "Гадози"
+      "value": "eladrin",
+      "label": "Эладрин"
     },
     {
-      "value": "leonin",
-      "label": "Леонинец"
-    },
-    {
-      "value": "dhampir",
-      "label": "Вампир"
-    },
-    {
-      "value": "hogfolk",
-      "label": "Кабанолюд"
-    },
-    {
-      "value": "strix",
-      "label": "Неясыть"
-    },
-    {
-      "value": "giff",
-      "label": "Гифф"
+      "value": "elf",
+      "label": "Эльф"
     }
   ],
   "classes": [
