@@ -10,6 +10,10 @@
       {
         "link": "/bases?type=stl",
         "label": "Базы"
+      },
+      {
+        "link": "/monsters?type=stl",
+        "label": "Монстры"
       }
     ]
   },
@@ -24,6 +28,10 @@
       {
         "link": "/bases?type=physical",
         "label": "Базы"
+      },
+      {
+        "link": "/monsters?type=physical",
+        "label": "Монстры"
       }
     ]
   },

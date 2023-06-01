@@ -24,7 +24,7 @@ function getRandomInt(min, max) {
 }
 
 
-export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOpened, heroFilters = false, basesFilters = false, filters, getSelectedHeroes, loading, nullFilters, chosenMode, setChosenMode }) => {
+export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOpened, heroFilters = false, basesFilters = false, monstersFilters = false, filters, getSelectedHeroes, loading, nullFilters, chosenMode, setChosenMode }) => {
   const { classes } = useStyles();
   const [chosenImage, setChosenImage] = useState('');
 
@@ -60,13 +60,13 @@ export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
 
   return (
     <>
-      <Navbar p="md" hiddenBreakpoint="sm" hidden={!filtersOpened} width={{ sm: 200, lg: 300 }} 
-      style={{ 
-        backgroundColor: '#141517', 
-        border: 'none', 
-        zIndex: '98', 
-        padding: !heroFilters && !basesFilters ? '0px' : ''
-      }}>
+      <Navbar p="md" hiddenBreakpoint="sm" hidden={!filtersOpened} width={{ sm: 200, lg: 300 }}
+        style={{
+          backgroundColor: '#141517',
+          border: 'none',
+          zIndex: '98',
+          padding: !heroFilters && !basesFilters && !monstersFilters ? '0px' : ''
+        }}>
         <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
           <Navbar.Section>
             <Center>
@@ -79,13 +79,13 @@ export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
             heroFilters && (
               <>
                 <Title order={3} style={{ marginTop: '15px' }}>Фильтры</Title>
-                <SegmentedControl 
-                  color="violet" 
-                  data={[{ label: 'STL', value: 'stl' }, { label: 'Фигурки', value: 'physical' }]} 
-                  value={chosenMode} 
-                  onChange={setChosenMode} 
-                  fullWidth 
-                  style={{ marginTop: '15px', marginBottom: '15px' }} 
+                <SegmentedControl
+                  color="violet"
+                  data={[{ label: 'STL', value: 'stl' }, { label: 'Фигурки', value: 'physical' }]}
+                  value={chosenMode}
+                  onChange={setChosenMode}
+                  fullWidth
+                  style={{ marginTop: '15px', marginBottom: '15px' }}
                 />
                 <Divider />
                 <MultiSelect
@@ -191,14 +191,55 @@ export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
 
           }
 
-          {!heroFilters && !basesFilters &&
-          <Overlay color='#141517' style={{
-            backgroundImage: `url(/bg-${chosenImage}.png)`,
-            opacity: '10%',
-            //position: 'relative',
-            backgroundSize: 'cover'
-          }}>
-          </Overlay>
+          {
+            monstersFilters && (
+              <>
+                <Title order={3} style={{ marginTop: '15px' }}>Фильтры</Title>
+                <SegmentedControl color="violet" data={[{ label: 'STL', value: 'stl' }, { label: 'Фигурки', value: 'physical' }]} value={chosenMode} onChange={setChosenMode} fullWidth style={{ marginTop: '15px', marginBottom: '15px' }} />
+                <Divider />
+
+                <MultiSelect
+                  value={filters.monsterType.getter}
+                  onChange={filters.monsterType.setter}
+                  data={filters.monsterType.data}
+                  placeholder={filters.monsterType.placeholder}
+                  searchable
+                  clearable
+                  nothingFound={filters.monsterType.nothingFound}
+                  label="Виды монстров"
+                  style={{ margin: '15px 0' }}
+                  classNames={{
+                    label: classes.label
+                  }}
+                />
+
+                <Group spacing="sm" grow style={{ marginTop: '15px' }}>
+                  <Button loading={loading} color="green" style={{ maxWidth: '100%' }} onClick={() => {
+                    setFiltersOpened((o) => !o)
+                    getSelectedHeroes();
+                  }}>
+                    Применить
+                  </Button>
+                  <ActionIcon disabled={filters.monsterType.getter.length == 0 ? true : false} size='lg' color="red" variant="filled" style={{ maxWidth: '1.125rem' }} onClick={() => {
+                    setFiltersOpened((o) => !o)
+                    nullFilters();
+                  }}>
+                    <IconRotateClockwise size="1.125rem" />
+                  </ActionIcon>
+                </Group>
+              </>
+            )
+
+          }
+
+          {!heroFilters && !basesFilters && !monstersFilters &&
+            <Overlay color='#141517' style={{
+              backgroundImage: `url(/bg-${chosenImage}.png)`,
+              opacity: '10%',
+              //position: 'relative',
+              backgroundSize: 'cover'
+            }}>
+            </Overlay>
           }
 
         </Navbar.Section>

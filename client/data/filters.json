@@ -186,73 +186,43 @@
     }
   ],
   "classes": [
-    {
-      "value": "alchemist",
-      "label": "Алхимик"
-    },
-    {
-      "value": "bard",
-      "label": "Бард"
-    },
-    {
-      "value": "barbarian",
-      "label": "Варвар"
-    },
-    {
-      "value": "spellsword",
-      "label": "Ведьмовской клинок"
-    },
-    {
-      "value": "fighter",
-      "label": "Воин"
-    },
-    {
-      "value": "wizard",
-      "label": "Волшебник"
-    },
-    {
-      "value": "druid",
-      "label": "Друид"
-    },
-    {
-      "value": "cleric",
-      "label": "Жрец"
-    },
-    {
-      "value": "artificier",
-      "label": "Изобретатель"
-    },
-    {
-      "value": "blood-hunter",
-      "label": "Кровавый охотник"
-    },
-    {
-      "value": "warlock",
-      "label": "Колдун"
-    },
-    {
-      "value": "monk",
-      "label": "Монах"
-    },
-    {
-      "value": "paladin",
-      "label": "Паладин"
-    },
-    {
-      "value": "rogue",
-      "label": "Плут"
-    },
-    {
-      "value": "ranger",
-      "label": "Следопыт"
-    },
-    {
-      "value": "sorcerer",
-      "label": "Чародей"
-    },
-    {
-      "value": "shaman",
-      "label": "Шаман"
-    }
-  ]
+    { "value": "alchemist", "label": "Алхимик" },
+    { "value": "archfey-warlock", "label": "Архифея" },
+    { "value": "bard", "label": "Бард" },
+    { "value": "smith-artificer", "label": "Боевой кузнец" },
+    { "value": "battle-master-fighter", "label": "Боевые искусства" },
+    { "value": "barbarian", "label": "Варвар" },
+    { "value": "spellsword", "label": "Ведьмовской клинок" },
+    { "value": "fighter", "label": "Воин" },
+    { "value": "wizard", "label": "Волшебник" },
+    { "value": "gladiator", "label": "Гладиатор" },
+    { "value": "wild-sorcerer", "label": "Дикая магия" },
+    { "value": "cleric-life", "label": "Домен жизни" },
+    { "value": "cleric-death", "label": "Домен смерти" },
+    { "value": "druid", "label": "Друид" },
+    { "value": "cleric", "label": "Жрец" },
+    { "value": "artificier", "label": "Изобретатель" },
+    { "value": "cavalier-fighter", "label": "Кавалерист" },
+    { "value": "oathbreaker-paladin", "label": "Клятвопреступник" },
+    { "value": "warlock", "label": "Колдун" },
+    { "value": "corsair", "label": "Корсар" },
+    { "value": "blood-hunter", "label": "Кровавый охотник" },
+    { "value": "trickster-rogue", "label": "Мистический ловкач" },
+    { "value": "monk", "label": "Монах" },
+    { "value": "necromancy-wizard", "label": "Некромант" },
+    { "value": "ninja", "label": "Ниндзя" },
+    { "value": "paladin", "label": "Паладин" },
+    { "value": "rogue", "label": "Плут" },
+    { "value": "beast-ranger", "label": "Повелитель зверей" },
+    { "value": "conjuration-wizard", "label": "Призыватель" },
+    { "value": "drunken-monk", "label": "Пьяный мастер" },
+    { "value": "samurai-fighter", "label": "Самурай" },
+    { "value": "ranger", "label": "Следопыт" },
+    { "value": "gloom-ranger", "label": "Сумрачный охотник" },
+    { "value": "chronurgy-wizard", "label": "Хронургия" },
+    { "value": "sorcerer", "label": "Чародей" },
+    { "value": "shaman", "label": "Шаман" },
+    { "value": "evocation-wizard", "label": "Школа стихий" },
+    { "value": "storm-sorcery", "label": "Штормовой чародей" }
+  ]  
 }

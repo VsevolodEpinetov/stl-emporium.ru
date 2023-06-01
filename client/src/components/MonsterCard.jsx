@@ -3,7 +3,7 @@ import { Card, Text, Group, Center, createStyles, Modal, Image, Badge } from '@m
 import { useDisclosure } from '@mantine/hooks';
 import { Button, ActionIcon } from '@mantine/core';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
-const FILTERS = require("../../data/filters.json")
+const FILTERS = require("../../data/filtersMonsters.json")
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const image = getRef('image');
@@ -69,24 +69,10 @@ function getStringForClassesAndRaces(creature) {
   let arr = [];
 
   creature.classes.forEach(cl => {
-    FILTERS.classes.forEach(clData => {
+    FILTERS.monsterType.forEach(clData => {
       if (clData.value == cl) arr.push(clData.label)
     })
   })
-
-
-  creature.races.forEach(cl => {
-    FILTERS.races.forEach(clData => {
-      if (clData.value == cl) arr.push(clData.label)
-    })
-  })
-
-  /*for (let i = 0; i < FILTERS.races.length; i++) {
-    if (FILTERS.races[i].value == creature.race) {
-      str += FILTERS.races[i].label + ', ';
-      break;
-    }
-  }*/
 
   switch (creature.sex) {
     case 'f':
@@ -105,7 +91,7 @@ function getStringForClassesAndRaces(creature) {
   return str;
 }
 
-export const CreatureCard = ({ item, addToACart, removeItem, chosenMode, amountInCart }) => {
+export const MonsterCard = ({ item, addToACart, removeItem, chosenMode, amountInCart }) => {
   const { classes, theme } = useStyles();
   const [opened, handlers] = useDisclosure(false);
 

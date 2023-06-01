@@ -6,14 +6,15 @@ import { SimpleGrid, Image, Group, AppShell, Skeleton, Title, Pagination, Center
 import CustomAppShell from '@/components/CustomAppShell';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
-const FILTERS = require("../../data/filters.json")
+import { MonsterCard } from '@/components/MonsterCard';
+const FILTERS = require("../../data/filtersMonsters.json")
 
 const API_URL = 'https://api.stl-emporium.ru/api'
 const STL_ENDPOINT = 'creatures';
 const DEFAULT_SORT = 'sort=createdAt:desc';
 const FILL_WITH_DATA = 'populate=*'
 const NOT_ONLY_PHYSICAL = "filters[onlyPhysical][$ne]=true"
-const IS_NOT_A_MONSTER = "filters[races][$notContains]=monster"
+const IS_A_MONSTER = "filters[races][$contains]=monster"
 const SELECTED_FIELDS = [
   "races",
   'sex',
@@ -31,7 +32,7 @@ const FIELDS = (selectedFields) => {
   })
   return string;
 }
-const REQUEST_URL = `${API_URL}/${STL_ENDPOINT}?${FIELDS(SELECTED_FIELDS)}&${FILL_WITH_DATA}&${DEFAULT_SORT}&${IS_NOT_A_MONSTER}`
+const REQUEST_URL = `${API_URL}/${STL_ENDPOINT}?${FIELDS(SELECTED_FIELDS)}&${FILL_WITH_DATA}&${DEFAULT_SORT}&${IS_A_MONSTER}`
 
 
 async function fetchDataFromURI(URI) {
@@ -50,16 +51,13 @@ export default function Home() {
 
   const [scroll, scrollTo] = useWindowScroll();
 
-  const races = FILTERS.races;
-  const classes = FILTERS.classes;
+  const possibleMonsterTypes = FILTERS.monsterType;
 
   const params = useSearchParams();
   const router = useRouter();
 
   const [atLeast1Visible, handleAtLeast1Visible] = useDisclosure(true);
-  const [selectedRaces, setSelectedRaces] = useState([]);
-  const [selectedClasses, setSelectedClasses] = useState([]);
-  const [selectedSexes, setSelectedSexes] = useState([]);
+  const [selectedMonsterTypes, setSelectedMonsterTypes] = useState([]);
   const [miniatures, setMiniatures] = useState();
   const [loading, setLoading] = useDisclosure(true);
   const [totalFound, setTotalFound] = useState(0);
@@ -84,7 +82,7 @@ export default function Home() {
     if (params.has('type')) {
       if (params.get('type').length > 0) {
         setChosenMode(params.get('type'))
-        router.push('/');
+        router.push('/monsters');
       }
     }
   })
@@ -99,21 +97,9 @@ export default function Home() {
     scrollTo({ y: 0 })
     let options = '';
 
-    if (selectedRaces.length > 0) {
-      selectedRaces.forEach(r => {
-        options += `&filters[races][$contains]=${r}`
-      })
-    }
-
-    if (selectedClasses.length > 0) {
-      selectedClasses.forEach(c => {
+    if (selectedMonsterTypes.length > 0) {
+      selectedMonsterTypes.forEach(c => {
         options += `&filters[classes][$contains]=${c}`
-      })
-    }
-
-    if (selectedSexes.length > 0) {
-      selectedSexes.forEach(s => {
-        options += `&filters[sex][$contains]=${s}`
       })
     }
 
@@ -139,21 +125,9 @@ export default function Home() {
     scrollTo({ y: 0 })
     let options = '';
 
-    if (selectedRaces.length > 0) {
-      selectedRaces.forEach(r => {
-        options += `&filters[races][$contains]=${r}`
-      })
-    }
-
-    if (selectedClasses.length > 0) {
-      selectedClasses.forEach(c => {
+    if (selectedMonsterTypes.length > 0) {
+      selectedMonsterTypes.forEach(c => {
         options += `&filters[classes][$contains]=${c}`
-      })
-    }
-
-    if (selectedSexes.length > 0) {
-      selectedSexes.forEach(s => {
-        options += `&filters[sex][$contains]=${s}`
       })
     }
 
@@ -252,9 +226,7 @@ export default function Home() {
 
   function nullFilters() {
     setLoading.open();
-    setSelectedClasses([]);
-    setSelectedRaces([]);
-    setSelectedSexes([]);
+    setSelectedMonsterTypes([]);
     setCurrentPage(1);
     scrollTo({ y: 0 })
 
@@ -275,25 +247,13 @@ export default function Home() {
   }
 
   const filters = {
-    races: {
-      getter: selectedRaces,
-      setter: setSelectedRaces,
-      data: races,
-      placeholder: "Показываются все расы",
-      nothingFound: "Таких рас нет :(",
-      label: "Фильтр по расам"
-    },
-    classes: {
-      getter: selectedClasses,
-      setter: setSelectedClasses,
-      data: classes,
-      placeholder: "Показываются все классы",
-      nothingFound: "Не знаем таких классов :(",
-      label: "Фильтр по классам"
-    },
-    sex: {
-      getter: selectedSexes,
-      setter: setSelectedSexes,
+    monsterType: {
+      getter: selectedMonsterTypes,
+      setter: setSelectedMonsterTypes,
+      data: possibleMonsterTypes,
+      placeholder: "Показываются все монстры",
+      nothingFound: "Не знаем таких видов :(",
+      label: "Фильтр по видам"
     }
   }
 
@@ -312,7 +272,7 @@ export default function Home() {
       <CustomAppShell
         setLoading={setLoading}
         getSelectedHeroes={getSelectedHeroes}
-        heroFilters
+        monstersFilters
         filters={filters}
         loading={loading}
         nullFilters={nullFilters}
@@ -335,7 +295,7 @@ export default function Home() {
               loading ?
                 Array(25).fill('1').map((skeleton, id) => <Skeleton height={380} mb="xl" key={`skeleton-${id}`} />)
                 : miniatures?.length > 0 ?
-                  miniatures.map(creature => <CreatureCard
+                  miniatures.map(creature => <MonsterCard
                     item={creature}
                     key={`card-${creature.id}`}
                     amountInCart={getAmountInCart(creature.attributes.code)}
