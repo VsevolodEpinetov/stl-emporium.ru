@@ -13,7 +13,7 @@ const STL_ENDPOINT = 'creatures';
 const DEFAULT_SORT = 'sort=createdAt:desc';
 const FILL_WITH_DATA = 'populate=*'
 const NOT_ONLY_PHYSICAL = "filters[onlyPhysical][$ne]=true"
-const IS_NOT_A_MONSTER = "filters[races][$notContains]=monster"
+const IS_NOT_A_MONSTER = "filters[races][$contains]=not-monster"
 const SELECTED_FIELDS = [
   "races",
   'sex',
