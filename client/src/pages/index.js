@@ -13,7 +13,7 @@ const STL_ENDPOINT = 'creatures';
 const DEFAULT_SORT = 'sort=createdAt:desc';
 const FILL_WITH_DATA = 'populate=*'
 const NOT_ONLY_PHYSICAL = "filters[onlyPhysical][$ne]=true"
-const IS_NOT_A_MONSTER = "filters[races][$contains]=not-monster"
+const IS_A_HERO = "filters[isHero][$eq]=true"
 const SELECTED_FIELDS = [
   "races",
   'sex',
@@ -31,7 +31,7 @@ const FIELDS = (selectedFields) => {
   })
   return string;
 }
-const REQUEST_URL = `${API_URL}/${STL_ENDPOINT}?${FIELDS(SELECTED_FIELDS)}&${FILL_WITH_DATA}&${DEFAULT_SORT}&${IS_NOT_A_MONSTER}`
+const REQUEST_URL = `${API_URL}/${STL_ENDPOINT}?${FIELDS(SELECTED_FIELDS)}&${FILL_WITH_DATA}&${DEFAULT_SORT}&${IS_A_HERO}`
 
 
 async function fetchDataFromURI(URI) {

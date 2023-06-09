@@ -492,7 +492,7 @@ export default function CartPage() {
 
   useEffect(() => {
     const total = getTotalByType('physical');
-    if (total >= 1200 || total == 0) {
+    if (total >= 1300 || total == 0) {
       setTooLowTotal(false)
     } else {
       setTooLowTotal(true)
@@ -556,12 +556,15 @@ export default function CartPage() {
                   <Text size='md'>STL ({getAmountByType('stl')})</Text>
                   <Text size='md'>{getTotalByType('stl')}₽ </Text>
                 </Group>
+                {getAmountByType('stl') > 0 && <div style={{border: '2px solid #7a53ed', borderRadius: '10px', padding: '10px', margin: '5px'}}>
+                <Text size='sm'>Вы приобретаете электронный товар! STL файл предназначен для 3д печати, без принтера вы не сможете напечатать фигурку.</Text>
+                </div>}
                 <Group position="apart" style={{ margin: '5px 10px 0' }}>
                   <Text size='md' style={{ color: tooLowTotal && 'rgb(227, 69, 69)', fontWeight: tooLowTotal && 'bold' }}>Фигурки ({getAmountByType('physical')})</Text>
                   <Text size='md' style={{ color: tooLowTotal && 'rgb(227, 69, 69)', fontWeight: tooLowTotal && 'bold' }}>{getTotalByType('physical')}₽ </Text>
                 </Group>
                 {
-                  tooLowTotal && <Text size='sm' style={{ color: 'rgb(227, 69, 69)', margin: '0px 10px 10px' }}>Мы отправляем фигурки только при заказах больше 1200 рублей.</Text>
+                  tooLowTotal && <Text size='sm' style={{ color: 'rgb(227, 69, 69)', margin: '0px 10px 10px' }}>Мы отправляем фигурки только при заказах больше 1300 рублей.</Text>
                 }
                 <Group position="apart" style={{ margin: '5px 10px 0' }}>
                   <Text size='md'>Доставка</Text>
