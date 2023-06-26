@@ -1,11 +1,10 @@
 import Head from 'next/head'
 import { useDisclosure, useLocalStorage, useWindowScroll } from '@mantine/hooks';
 import { useState, useEffect } from 'react'
-import { SimpleGrid, Image, Group, Skeleton, Title, Pagination, Center } from '@mantine/core'
 import CustomAppShell from '@/components/CustomAppShell';
-import { TerrainCard } from '@/components/TerrainCard';
 import { useRouter } from 'next/router';
 import { useSearchParams } from 'next/navigation';
+import STLGallery from '@/components/STLGallery';
 const FILTERS = require("../../data/filtersTerrain.json")
 
 const API_URL = 'https://api.stl-emporium.ru/api'
@@ -117,81 +116,6 @@ export default function Home() {
     setLoading.close();
   }, [miniatures])
 
-  function addToACart(itemCode) {
-    const itemObject = {
-      code: itemCode,
-      type: chosenMode,
-      amount: 1
-    }
-
-    let index = -1;
-    for (let i = 0; i < shoppingCart.length; i++) {
-      if (shoppingCart[i].code === itemCode && shoppingCart[i].type === chosenMode) {
-        index = i
-      }
-    }
-
-    if (index > -1) {
-      if (chosenMode === 'stl') { return; }
-      else {
-        let newAmount = shoppingCart[index].amount + 1;
-        setShoppingCart(shoppingCart.map((item, id) => {
-          if (id !== index) {
-            // This isn't the item we care about - keep it as-is
-            return item
-          }
-
-          // Otherwise, this is the one we want - return an updated value
-          return {
-            ...item,
-            amount: newAmount
-          }
-        }))
-      }
-    } else {
-      setShoppingCart([
-        ...shoppingCart,
-        itemObject
-      ])
-    }
-  }
-
-  function getAmountInCart(itemCode) {
-    let index = -1;
-    for (let i = 0; i < shoppingCart.length; i++) {
-      if (shoppingCart[i].code === itemCode && shoppingCart[i].type === chosenMode) {
-        index = i;
-        break;
-      }
-    }
-    if (index > -1) { return shoppingCart[index].amount; }
-    else { return 0; }
-  }
-
-  function removeItem(itemCode) {
-    for (let i = 0; i < shoppingCart.length; i++) {
-      if (shoppingCart[i].code === itemCode && shoppingCart[i].type === chosenMode) {
-        if (shoppingCart[i].amount > 1) {
-          let newAmount = shoppingCart[i].amount - 1;
-          setShoppingCart(shoppingCart.map((item, id) => {
-            if (id !== i) {
-              // This isn't the item we care about - keep it as-is
-              return item
-            }
-
-            // Otherwise, this is the one we want - return an updated value
-            return {
-              ...item,
-              amount: newAmount
-            }
-          }))
-        } else {
-          setShoppingCart([...shoppingCart.slice(0, i), ...shoppingCart.slice(i + 1)])
-        }
-      }
-    }
-  }
-
   function nullFilters() {
     setLoading.open();
     setSelectedTags([]);
@@ -221,15 +145,6 @@ export default function Home() {
     },
   }
 
-  const getWord = (amount) => {
-    let lastDigit = amount % 10;
-    if (lastDigit == 1) return 'база'
-    if (lastDigit > 1 && lastDigit <= 4) return 'базы'
-    if (lastDigit == 0 || lastDigit > 4) return 'баз'
-
-    return ('баз')
-  }
-
   return (
     <>
       <Head />
@@ -243,47 +158,18 @@ export default function Home() {
         chosenMode={chosenMode}
         setChosenMode={setChosenMode}
       >
-      <main>
-        <Title order={1} style={{ marginBottom: '15px' }}>Найдено <Skeleton visible={loading} style={{ display: 'inline' }}>{loading ? 22 : totalFound}</Skeleton> {getWord(totalFound)}</Title>
-        <SimpleGrid
-          cols={4}
-          spacing="lg"
-          breakpoints={[
-            { maxWidth: 'lg', cols: 4, spacing: 'md' },
-            { maxWidth: 'md', cols: 3, spacing: 'md' },
-            { maxWidth: 'sm', cols: 3, spacing: 'sm' },
-            { maxWidth: 'xs', cols: 2, spacing: 'sm' },
-          ]}
-        >
-          {
-            loading ?
-              Array(25).fill('1').map((skeleton, id) => <Skeleton height={380} mb="xl" key={`skeleton-${id}`} />)
-              : miniatures?.length > 0 ?
-                miniatures.map(creature => <TerrainCard
-                  item={creature}
-                  key={`card-${creature.id}`}
-                  amountInCart={getAmountInCart(creature.attributes.code)}
-                  addToACart={addToACart}
-                  removeItem={removeItem}
-                  chosenMode={chosenMode}
-                />)
-                :
-                <Group>
-                  Нет фигурок по таким фильтрам!
-                  <Image
-                    src="dude.svg"
-                    alt="Shrug dude"
-                    style={{ filter: "invert(95%) sepia(1%) saturate(0%) hue-rotate(139deg) brightness(82%) contrast(90%)" }}
-                  />
-                </Group>
-          }
-        </SimpleGrid>
-        <div style={{ marginTop: '25px' }}>
-          <Center>
-            <Pagination total={totalPages} siblings={1} value={currentPage} onChange={setCurrentPage} disabled={loading} />
-          </Center>
-        </div>
-      </main>
+        <STLGallery
+          loading={loading}
+          totalFound={totalFound}
+          addToACart={addToACart}
+          chosenMode={chosenMode}
+          totalPages={totalPages}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          miniatures={miniatures}
+          filters={FILTERS}
+          type='terrain'
+        />
     </CustomAppShell>
     </>
   )

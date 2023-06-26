@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStyles, Header, MediaQuery, Burger, Text, Container, rem, Menu, Center, Group, Image, Title, ActionIcon, Button } from "@mantine/core"
+import { createStyles, Header, MediaQuery, Burger, Container, Menu, Center, Group, Title, ActionIcon, Button } from "@mantine/core"
 import { IconChevronDown, IconFilter, IconFilterEdit, IconShoppingCart, } from '@tabler/icons-react';
 const LINKS = require("../../data/links.json")
 
@@ -58,7 +58,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export const CustomHeader = ({ filtersOpened, cartSize, setFiltersOpened, menuOpened, setMenuOpened, heroFilters = false, basesFilters = false, monstersFilters = false }) => {
+export const CustomHeader = ({ filtersOpened, cartSize, setFiltersOpened, menuOpened, setMenuOpened, withFilters }) => {
   const { classes } = useStyles();
 
   const items = LINKS.map((link) => {
@@ -96,9 +96,6 @@ export const CustomHeader = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
     );
   });
 
-  //items.push(<Button key='cart-button-for-menu' component='a' href='/cart' color="teal" leftIcon={<IconShoppingCart />}>Корзина ({cartSize})</Button>)
-
-
   return (
     <Header height={{ base: 70, md: 70 }} p="md" style={{ borderBottom: 'none', boxShadow: '0px 1px 16px 1px rgba(45, 45, 45, 0.25)', zIndex: '99' }}>
       <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
@@ -113,9 +110,9 @@ export const CustomHeader = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
             opened={menuOpened}
           />
           <Title order={3} component='a' href='/'>STLEmporium</Title>
-          <ActionIcon size="xl" variant="transparent" style={{ opacity: heroFilters || monstersFilters || basesFilters ? '100' : '0', cursor: heroFilters || basesFilters || monstersFilters ? 'pointer' : 'default' }}
+          <ActionIcon size="xl" variant="transparent" style={{ opacity: withFilters ? '100' : '0', cursor: withFilters ? 'pointer' : 'default' }}
             onClick={(e) => {
-              if (heroFilters || basesFilters || monstersFilters) {
+              if (withFilters) {
                 setFiltersOpened((o) => !o)
                 setMenuOpened(false)
               } else {

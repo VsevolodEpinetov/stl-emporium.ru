@@ -3,7 +3,7 @@ import { Card, Text, Group, Center, createStyles, Modal, Image, Badge } from '@m
 import { useDisclosure } from '@mantine/hooks';
 import { Button, ActionIcon } from '@mantine/core';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
-const FILTERS = require("../../data/filters.json")
+import { generateDescriptionString } from '@/utils/helpers';
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const image = getRef('image');
@@ -64,48 +64,15 @@ const useStyles = createStyles((theme, _params, getRef) => {
   };
 });
 
-function getStringForClassesAndRaces(creature) {
-  let str = '';
-  let arr = [];
-
-  creature.classes.forEach(cl => {
-    FILTERS.classes.forEach(clData => {
-      if (clData.value == cl) arr.push(clData.label)
-    })
-  })
-
-
-  creature.races.forEach(cl => {
-    FILTERS.races.forEach(clData => {
-      if (clData.value == cl) arr.push(clData.label)
-    })
-  })
-
-  /*for (let i = 0; i < FILTERS.races.length; i++) {
-    if (FILTERS.races[i].value == creature.race) {
-      str += FILTERS.races[i].label + ', ';
-      break;
-    }
-  }*/
-
-  switch (creature.sex) {
-    case 'f':
-      str += 'Женщина, '
-      break;
-    case 'm':
-      str += 'Мужчина, '
-      break;
-    default:
-      str += 'Бесполый, '
-      break;
-  }
-
-  str += arr.join(', ')
-
-  return str;
-}
-
-export const CreatureCard = ({ item, addToACart, removeItem, chosenMode, amountInCart }) => {
+export const STLCard = ({ 
+  item, 
+  addToACart, 
+  removeItem, 
+  chosenMode, 
+  amountInCart,
+  type,
+  filters
+}) => {
   const { classes, theme } = useStyles();
   const [opened, handlers] = useDisclosure(false);
 
@@ -139,7 +106,7 @@ export const CreatureCard = ({ item, addToACart, removeItem, chosenMode, amountI
 
           <Group position="apart" spacing="xs">
             <Text size="sm" className={classes.author} style={{ maxWidth: '70%' }}>
-              {getStringForClassesAndRaces(item.attributes)}
+              {generateDescriptionString(item.attributes, type, filters)}
             </Text>
 
             <Group>
