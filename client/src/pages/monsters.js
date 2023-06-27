@@ -5,7 +5,8 @@ import CustomAppShell from '@/components/CustomAppShell';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import STLGallery from '@/components/STLGallery';
-const FILTERS = require("../../data/filtersMonsters.json")
+import { generateOptionsString, getFilters } from '@/utils/api';
+import { fetchDataFromURI } from '@/utils/api';
 
 const API_URL = 'https://api.stl-emporium.ru/api'
 const STL_ENDPOINT = 'creatures';
@@ -32,30 +33,17 @@ const FIELDS = (selectedFields) => {
 }
 const REQUEST_URL = `${API_URL}/${STL_ENDPOINT}?${FIELDS(SELECTED_FIELDS)}&${FILL_WITH_DATA}&${DEFAULT_SORT}&${IS_A_MONSTER}`
 
-
-async function fetchDataFromURI(URI) {
-  const rawData = await fetch(URI)
-  const data = await rawData.json();
-
-  return {
-    miniatures: data?.data,
-    meta: data?.meta
-  };
-}
-
 export default function Home() {
   const [chosenMode, setChosenMode] = useLocalStorage({ key: 'user-setting-mode', defaultValue: 'stl' })
-  const [shoppingCart, setShoppingCart] = useLocalStorage({ key: 'shopping-cart', defaultValue: [] })
 
   const [scroll, scrollTo] = useWindowScroll();
-
-  const possibleMonsterTypes = FILTERS.monsterType;
 
   const params = useSearchParams();
   const router = useRouter();
 
-  const [atLeast1Visible, handleAtLeast1Visible] = useDisclosure(true);
-  const [selectedMonsterTypes, setSelectedMonsterTypes] = useState([]);
+  const [selectedClasses, setSelectedClasses] = useState([]);
+  const [selectedRaces, setSelectedRaces] = useState([]);
+  const [selectedSexes, setSelectedSexes] = useState([]);
   const [miniatures, setMiniatures] = useState();
   const [loading, setLoading] = useDisclosure(true);
   const [totalFound, setTotalFound] = useState(0);
@@ -63,18 +51,54 @@ export default function Home() {
   const [pageSize, setPageSize] = useState(20);
   const [totalPages, setTotalPages] = useState(0);
 
+  const [races, setRaces] = useState([]);
+  const [classes, setClasses] = useState([]);
+  const [filters, setFilters] = useState({});
+
   useEffect(() => {
-    let requestString;
-    if (chosenMode === 'physical') requestString = `${REQUEST_URL}&pagination[pageSize]=20`
-    else requestString = `${REQUEST_URL}&${NOT_ONLY_PHYSICAL}&pagination[pageSize]=20`
+    const requestString = `${REQUEST_URL}&${chosenMode === 'physical' ? '' : NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}`;
+
     fetchDataFromURI(requestString).then(data => {
-      const minis = data?.miniatures;
-      setMiniatures(minis);
+      setMiniatures(data.data);
       setTotalFound(data.meta.pagination.total);
       setTotalPages(data.meta.pagination.pageCount);
       setCurrentPage(1);
     })
   }, [])
+
+  useEffect(() => {
+    getFilters('monster-types').then(data => {
+      setClasses(data);
+    })
+    getFilters('races').then(data => {
+      setRaces(data)
+    })
+  }, [])
+
+  useEffect(() => {
+    setFilters({
+      races: {
+        getter: selectedRaces,
+        setter: setSelectedRaces,
+        data: races,
+        placeholder: "Показываются все расы",
+        nothingFound: "Таких рас нет :(",
+        label: "Фильтр по расам"
+      },
+      monsterType: {
+        getter: selectedClasses,
+        setter: setSelectedClasses,
+        data: classes,
+        placeholder: "Показываются все монстры",
+        nothingFound: "Не знаем таких видов :(",
+        label: "Фильтр по видам"
+      },
+      sex: {
+        getter: selectedSexes,
+        setter: setSelectedSexes,
+      }
+    })
+  }, [classes, races, selectedRaces, selectedClasses, selectedSexes])
 
   useEffect(() => {
     if (params.has('type')) {
@@ -93,53 +117,32 @@ export default function Home() {
     setLoading.open();
     setCurrentPage(1);
     scrollTo({ y: 0 })
-    let options = '';
 
-    if (selectedMonsterTypes.length > 0) {
-      selectedMonsterTypes.forEach(c => {
-        options += `&filters[classes][$contains]=${c}`
-      })
-    }
+    const options = generateOptionsString(filters);
+    const requestString = `${REQUEST_URL}&${chosenMode === 'physical' ? '' : NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}${options}`;
 
-    let requestString;
-    if (chosenMode === 'physical') requestString = `${REQUEST_URL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}${options}`
-    else requestString = `${REQUEST_URL}&${NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}${options}`
-    fetchDataFromURI(requestString).then(data => {
-      let minis = data.miniatures.map(cr => {
-        return {
-          ...cr,
-          opacity: 100
-        }
-      })
-      setMiniatures(minis);
+    try {
+      const data = await fetchDataFromURI(requestString);
+      setMiniatures(data.data);
       setTotalFound(data.meta.pagination.total);
       setTotalPages(data.meta.pagination.pageCount);
       setCurrentPage(1);
-    })
+    } catch (error) {
+      //console.log(error)
+    } finally {
+      setLoading.close();
+    }
   }
 
   useEffect(() => {
     setLoading.open();
-    scrollTo({ y: 0 })
-    let options = '';
 
-    if (selectedMonsterTypes.length > 0) {
-      selectedMonsterTypes.forEach(c => {
-        options += `&filters[classes][$contains]=${c}`
-      })
-    }
+    const options = generateOptionsString(filters);
+    const requestString = `${REQUEST_URL}&${chosenMode === 'physical' ? '' : NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}&${options}`;
 
-    let requestString
-    if (chosenMode === 'physical') requestString = `${REQUEST_URL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}${options}`
-    else requestString = `${REQUEST_URL}&${NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}${options}`
     fetchDataFromURI(requestString).then(data => {
-      let minis = data.miniatures.map(cr => {
-        return {
-          ...cr,
-          opacity: 100
-        }
-      })
-      setMiniatures(minis);
+      setMiniatures(data.data);
+      scrollTo({ y: 0 })
     })
   }, [currentPage])
 
@@ -147,36 +150,25 @@ export default function Home() {
     setLoading.close();
   }, [miniatures])
 
-  function nullFilters() {
+  async function nullFilters() {
     setLoading.open();
-    setSelectedMonsterTypes([]);
-    setCurrentPage(1);
-    scrollTo({ y: 0 })
 
-    let requestString;
-    if (chosenMode === 'physical') requestString = `${REQUEST_URL}&pagination[pageSize]=${pageSize}`
-    else requestString = `${REQUEST_URL}&${NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}`
-    fetchDataFromURI(requestString).then(data => {
-      let minis = data.miniatures.map(cr => {
-        return {
-          ...cr,
-          opacity: 100
-        }
-      })
-      setMiniatures(minis);
+    const requestString = `${REQUEST_URL}&${chosenMode === 'physical' ? '' : NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}`;
+
+    try {
+      const data = await fetchDataFromURI(requestString);
+      setMiniatures(data.data);
       setTotalFound(data.meta.pagination.total);
       setTotalPages(data.meta.pagination.pageCount);
-    })
-  }
-
-  const filters = {
-    monsterType: {
-      getter: selectedMonsterTypes,
-      setter: setSelectedMonsterTypes,
-      data: possibleMonsterTypes,
-      placeholder: "Показываются все монстры",
-      nothingFound: "Не знаем таких видов :(",
-      label: "Фильтр по видам"
+      setSelectedRaces([]);
+      setSelectedClasses([]);
+      setSelectedSexes([]);
+      setCurrentPage(1);
+      scrollTo({ y: 0 })
+    } catch (error) {
+      //console.log(error)
+    } finally {
+      setLoading.close();
     }
   }
 
@@ -201,7 +193,7 @@ export default function Home() {
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           miniatures={miniatures}
-          filters={FILTERS}
+          filters={filters}
           type='monster'
         />
       </CustomAppShell>

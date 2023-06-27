@@ -5,34 +5,20 @@ import CustomAppShell from '@/components/CustomAppShell';
 import { useRouter } from 'next/router';
 import { useSearchParams } from 'next/navigation';
 import STLGallery from '@/components/STLGallery';
-const FILTERS = require("../../data/filtersTerrain.json")
+import { fetchDataFromURI, generateOptionsString, getFilters } from '@/utils/api';
 
 const API_URL = 'https://api.stl-emporium.ru/api'
 const STL_ENDPOINT = 'terrains';
 const DEFAULT_SORT = 'sort=createdAt:desc';
 const FILL_WITH_DATA = 'populate=*'
+const NOT_ONLY_PHYSICAL = "filters[onlyPhysical][$ne]=true"
 const REQUEST_URL = `${API_URL}/${STL_ENDPOINT}?${FILL_WITH_DATA}&${DEFAULT_SORT}`
-
-
-async function fetchDataFromURI(URI) {
-  const rawData = await fetch(URI)
-  const data = await rawData.json();
-
-  return {
-    miniatures: data?.data,
-    meta: data?.meta
-  };
-}
 
 export default function Home() {
   const [chosenMode, setChosenMode] = useLocalStorage({ key: 'user-setting-mode', defaultValue: 'stl' })
-  const [shoppingCart, setShoppingCart] = useLocalStorage({ key: 'shopping-cart', defaultValue: [] })
 
   const [scroll, scrollTo] = useWindowScroll();
 
-  const tags = FILTERS.tags;
-  
-  const [atLeast1Visible, handleAtLeast1Visible] = useDisclosure(true);
   const [selectedTags, setSelectedTags] = useState([]);
 
   const params = useSearchParams();
@@ -55,6 +41,28 @@ export default function Home() {
     })
   }, [])
 
+  const [tags, setTags] = useState([]);
+  const [filters, setFilters] = useState({});
+
+  useEffect(() => {
+    getFilters('terrain-tags').then(data => {
+      setTags(data);
+    })
+  }, [])
+
+  useEffect(() => {
+    setFilters({
+      tags: {
+        getter: selectedTags,
+        setter: setSelectedTags,
+        data: tags,
+        placeholder: "Показываются все базы",
+        nothingFound: "Такого не знаем :(",
+        label: "Теги"
+      }
+    })
+  }, [tags, selectedTags])
+
   useEffect(() => {
     if (params.has('type')) {
       if (params.get('type').length > 0) {
@@ -62,53 +70,42 @@ export default function Home() {
         router.push('/bases');
       }
     }
-  })
+  })  
+
+  useEffect(() => {
+    getSelectedHeroes();
+  }, [chosenMode])
 
   const getSelectedHeroes = async () => {
     setLoading.open();
     setCurrentPage(1);
     scrollTo({ y: 0 })
-    let options = '';
 
-    if (selectedTags.length > 0) {
-      selectedTags.forEach(t => {
-        options += `&filters[tags][$contains]=${t}`
-      })
-    }
+    const options = generateOptionsString(filters);
+    const requestString = `${REQUEST_URL}&${chosenMode === 'physical' ? '' : NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}${options}`;
 
-    fetchDataFromURI(`${REQUEST_URL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}${options}`).then(data => {
-      let minis = data.miniatures.map(cr => {
-        return {
-          ...cr,
-          opacity: 100
-        }
-      })
-      setMiniatures(minis);
+    try {
+      const data = await fetchDataFromURI(requestString);
+      setMiniatures(data.data);
       setTotalFound(data.meta.pagination.total);
       setTotalPages(data.meta.pagination.pageCount);
       setCurrentPage(1);
-    })
+    } catch (error) {
+      //console.log(error)
+    } finally {
+      setLoading.close();
+    }
   }
 
   useEffect(() => {
     setLoading.open();
-    scrollTo({ y: 0 })
-    let options = '';
 
-    if (selectedTags.length > 0) {
-      selectedTags.forEach(t => {
-        options += `&filters[classes][$contains]=${t}`
-      })
-    }
+    const options = generateOptionsString(filters);
+    const requestString = `${REQUEST_URL}&${chosenMode === 'physical' ? '' : NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}&${options}`;
 
-    fetchDataFromURI(`${REQUEST_URL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}${options}`).then(data => {
-      let minis = data.miniatures.map(cr => {
-        return {
-          ...cr,
-          opacity: 100
-        }
-      })
-      setMiniatures(minis);
+    fetchDataFromURI(requestString).then(data => {
+      setMiniatures(data.data);
+      scrollTo({ y: 0 })
     })
   }, [currentPage])
 
@@ -116,33 +113,24 @@ export default function Home() {
     setLoading.close();
   }, [miniatures])
 
-  function nullFilters() {
+  async function nullFilters() {
     setLoading.open();
-    setSelectedTags([]);
-    setCurrentPage(1);
-    scrollTo({ y: 0 })
-    fetchDataFromURI(`${REQUEST_URL}&pagination[pageSize]=${pageSize}`).then(data => {
-      let minis = data.miniatures.map(cr => {
-        return {
-          ...cr,
-          opacity: 100
-        }
-      })
-      setMiniatures(minis);
+
+    const requestString = `${REQUEST_URL}&${chosenMode === 'physical' ? '' : NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}`;
+
+    try {
+      const data = await fetchDataFromURI(requestString);
+      setMiniatures(data.data);
       setTotalFound(data.meta.pagination.total);
       setTotalPages(data.meta.pagination.pageCount);
-    })
-  }
-
-  const filters = {
-    tags: {
-      getter: selectedTags,
-      setter: setSelectedTags,
-      data: tags,
-      placeholder: "Показываются все базы",
-      nothingFound: "Такого не знаем :(",
-      label: "Теги"
-    },
+      setSelectedTags([]);
+      setCurrentPage(1);
+      scrollTo({ y: 0 })
+    } catch (error) {
+      //console.log(error)
+    } finally {
+      setLoading.close();
+    }
   }
 
   return (
@@ -161,13 +149,12 @@ export default function Home() {
         <STLGallery
           loading={loading}
           totalFound={totalFound}
-          addToACart={addToACart}
           chosenMode={chosenMode}
           totalPages={totalPages}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           miniatures={miniatures}
-          filters={FILTERS}
+          filters={filters}
           type='terrain'
         />
     </CustomAppShell>

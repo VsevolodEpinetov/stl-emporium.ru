@@ -34,7 +34,7 @@ export const generateDescriptionString = (stl, type, filters) => {
   const getMatchingLabels = (values, data) => {
     return values
       .map(value => {
-        const matchingData = data.find(item => item.value === value);
+        const matchingData = data.data.find(item => item.value === value);
         return matchingData ? matchingData.label : null;
       })
       .filter(label => label !== null);
