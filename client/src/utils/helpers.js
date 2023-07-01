@@ -45,7 +45,8 @@ export const generateDescriptionString = (stl, type, filters) => {
       case 'hero':
         const heroClasses = getMatchingLabels(stl.classes, filters.classes);
         const heroRaces = getMatchingLabels(stl.races, filters.races);
-        return [...heroClasses, ...heroRaces, getGenderString(stl.sex)];
+        const heroWeapons = stl.weapons ? getMatchingLabels(stl.weapons, filters.weapons) : [];
+        return [...heroClasses, ...heroRaces, getGenderString(stl.sex), ...heroWeapons];
       case 'monster':
         const monsterTypes = getMatchingLabels(stl.classes, filters.monsterType);
         return [...monsterTypes, getGenderString(stl.sex)];

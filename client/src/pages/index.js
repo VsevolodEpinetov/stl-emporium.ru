@@ -21,7 +21,8 @@ const SELECTED_FIELDS = [
   'code',
   'priceSTL',
   'pricePhysical',
-  'onlyPhysical'
+  'onlyPhysical',
+  'weapons'
 ]
 const FIELDS = (selectedFields) => {
   let string = '';
@@ -46,6 +47,7 @@ export default function Home() {
   const [selectedRaces, setSelectedRaces] = useState([]);
   const [selectedClasses, setSelectedClasses] = useState([]);
   const [selectedSexes, setSelectedSexes] = useState([]);
+  const [selectedWeapons, setSelectedWeapons] = useState([]);
   const [miniatures, setMiniatures] = useState();
   const [loading, setLoading] = useDisclosure(true);
   const [totalFound, setTotalFound] = useState(0);
@@ -55,6 +57,7 @@ export default function Home() {
 
   const [races, setRaces] = useState([]);
   const [classes, setClasses] = useState([]);
+  const [weapons, setWeapons] = useState([]);
   const [filters, setFilters] = useState({});
 
   useEffect(() => {
@@ -74,6 +77,9 @@ export default function Home() {
     })
     getFilters('races').then(data => {
       setRaces(data)
+    })
+    getFilters('weapons').then(data => {
+      setWeapons(data)
     })
   }, [])
 
@@ -95,12 +101,20 @@ export default function Home() {
         nothingFound: "Не знаем таких классов :(",
         label: "Фильтр по классам"
       },
+      weapons: {
+        getter: selectedWeapons,
+        setter: setSelectedWeapons,
+        data: weapons,
+        placeholder: "Показываются всё оружие",
+        nothingFound: "Не знаем такого оружия :(",
+        label: "Фильтр по оружию"
+      },
       sex: {
         getter: selectedSexes,
         setter: setSelectedSexes,
       }
     })
-  }, [classes, races, selectedRaces, selectedClasses, selectedSexes])
+  }, [classes, races, weapons, selectedWeapons, selectedRaces, selectedClasses, selectedSexes])
 
   useEffect(() => {
     if (params.has('type')) {
@@ -164,6 +178,7 @@ export default function Home() {
       setTotalPages(data.meta.pagination.pageCount);
       setSelectedRaces([]);
       setSelectedClasses([]);
+      setSelectedWeapons([]);
       setSelectedSexes([]);
       setCurrentPage(1);
       scrollTo({ y: 0 })
