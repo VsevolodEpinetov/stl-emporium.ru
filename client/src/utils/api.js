@@ -47,7 +47,7 @@ export const generateOptionsString = (filters) => {
 
       if (getter.length > 0) {
         getter.forEach((value) => {
-          options += `&filters[${key === 'monsterType' ? 'classes' : key}][$contains]=${value}`;
+          options += `&filters[${key === 'monsterType' ? 'classes' : key}][$contains]=${key === 'sex' ? '' : '"'}${value}${key === 'sex' ? '' : '"'}`;
         });
       }
     }
