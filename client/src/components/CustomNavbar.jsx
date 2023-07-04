@@ -66,7 +66,7 @@ export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
           backgroundColor: '#141517',
           border: 'none',
           zIndex: '98',
-          padding: !filters ? '0px' : ''
+          padding: !filters ? '0px' : 'f'
         }}>
         <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
           <Navbar.Section>

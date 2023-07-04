@@ -5,8 +5,7 @@ import CustomAppShell from '@/components/CustomAppShell';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import STLGallery from '@/components/STLGallery';
-import { generateOptionsString, getFilters } from '@/utils/api';
-import { fetchDataFromURI } from '@/utils/api';
+import { fetchDataFromURI, fetchDataFromURINew, generateOptionsString, getFilters } from '@/utils/api';
 
 const API_URL = 'https://api.stl-emporium.ru/api'
 const STL_ENDPOINT = 'creatures';
@@ -24,6 +23,7 @@ const SELECTED_FIELDS = [
   'onlyPhysical',
   'weapons'
 ]
+const FIELDS_SIZE = SELECTED_FIELDS.length;
 const FIELDS = (selectedFields) => {
   let string = '';
   selectedFields.forEach((field, id) => {
@@ -36,6 +36,7 @@ const REQUEST_URL = `${API_URL}/${STL_ENDPOINT}?${FIELDS(SELECTED_FIELDS)}&${FIL
 
 export default function Home() {
   const [chosenMode, setChosenMode] = useLocalStorage({ key: 'user-setting-mode', defaultValue: 'stl' })
+  const [userID, setUserID] = useLocalStorage({ key: 'user-unique-id', defaultValue: '0' })
 
   const [scroll, scrollTo] = useWindowScroll();
 
@@ -43,7 +44,9 @@ export default function Home() {
   const params = useSearchParams();
   const router = useRouter();
 
-  const [atLeast1Visible, handleAtLeast1Visible] = useDisclosure(true);
+  const [baseRequestString, setBaseRequestString] = useState(REQUEST_URL);
+  const [gotRacesAndClasses, setGotRacesAndClasses] = useState(false)
+
   const [selectedRaces, setSelectedRaces] = useState([]);
   const [selectedClasses, setSelectedClasses] = useState([]);
   const [selectedSexes, setSelectedSexes] = useState([]);
@@ -60,16 +63,28 @@ export default function Home() {
   const [weapons, setWeapons] = useState([]);
   const [filters, setFilters] = useState({});
 
-  useEffect(() => {
-    const requestString = `${REQUEST_URL}&${chosenMode === 'physical' ? '' : NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}`;
 
-    fetchDataFromURI(requestString).then(data => {
+  useEffect(() => {
+    if (userID != '0') {
+      if (baseRequestString.indexOf('studioName') < 0 || baseRequestString.indexOf('releaseName') < 0) {
+        const fieldIDFirst = FIELDS_SIZE;
+        const fieldIDSecond = FIELDS_SIZE + 1;
+        setBaseRequestString(baseRequestString + `&fields[${fieldIDFirst}]=studioName&fields[${fieldIDSecond}]=releaseName`)
+        setGotRacesAndClasses(true);
+      }
+    }
+  }, [userID])
+
+  useEffect(() => {
+    const requestString = `${baseRequestString}&${chosenMode === 'physical' ? '' : NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}`;
+
+    fetchDataFromURINew(requestString).then(data => {
       setMiniatures(data.data);
       setTotalFound(data.meta.pagination.total);
       setTotalPages(data.meta.pagination.pageCount);
       setCurrentPage(1);
     })
-  }, [])
+  }, [baseRequestString])
 
   useEffect(() => {
     getFilters('classes').then(data => {
@@ -135,10 +150,10 @@ export default function Home() {
     scrollTo({ y: 0 })
 
     const options = generateOptionsString(filters);
-    const requestString = `${REQUEST_URL}&${chosenMode === 'physical' ? '' : NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}${options}`;
+    const requestString = `${baseRequestString}&${chosenMode === 'physical' ? '' : NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}${options}`;
 
     try {
-      const data = await fetchDataFromURI(requestString);
+      const data = await fetchDataFromURINew(requestString);
       setMiniatures(data.data);
       setTotalFound(data.meta.pagination.total);
       setTotalPages(data.meta.pagination.pageCount);
@@ -154,9 +169,9 @@ export default function Home() {
     setLoading.open();
 
     const options = generateOptionsString(filters);
-    const requestString = `${REQUEST_URL}&${chosenMode === 'physical' ? '' : NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}&${options}`;
+    const requestString = `${baseRequestString}&${chosenMode === 'physical' ? '' : NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}&${options}`;
 
-    fetchDataFromURI(requestString).then(data => {
+    fetchDataFromURINew(requestString).then(data => {
       setMiniatures(data.data);
       scrollTo({ y: 0 })
     })
@@ -169,10 +184,10 @@ export default function Home() {
   async function nullFilters() {
     setLoading.open();
 
-    const requestString = `${REQUEST_URL}&${chosenMode === 'physical' ? '' : NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}`;
+    const requestString = `${baseRequestString}&${chosenMode === 'physical' ? '' : NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}`;
 
     try {
-      const data = await fetchDataFromURI(requestString);
+      const data = await fetchDataFromURINew(requestString);
       setMiniatures(data.data);
       setTotalFound(data.meta.pagination.total);
       setTotalPages(data.meta.pagination.pageCount);
@@ -212,6 +227,7 @@ export default function Home() {
           miniatures={miniatures}
           filters={filters}
           type='hero'
+          gotRacesAndClasses={gotRacesAndClasses}
         />
       </CustomAppShell>
     </>

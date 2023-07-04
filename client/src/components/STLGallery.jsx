@@ -12,7 +12,8 @@ const STLGallery = ( {
   setCurrentPage,
   miniatures,
   filters,
-  type
+  type,
+  gotRacesAndClasses
 } ) => {
 
   return (
@@ -26,6 +27,7 @@ const STLGallery = ( {
         addToACart={addToACart}
         filters={filters}
         type={type}
+        gotRacesAndClasses={gotRacesAndClasses}
       />
       <div style={{ marginTop: '25px' }}>
         <Center>

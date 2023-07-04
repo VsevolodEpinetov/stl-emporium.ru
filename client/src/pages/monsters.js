@@ -5,8 +5,7 @@ import CustomAppShell from '@/components/CustomAppShell';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import STLGallery from '@/components/STLGallery';
-import { generateOptionsString, getFilters } from '@/utils/api';
-import { fetchDataFromURI } from '@/utils/api';
+import { fetchDataFromURI, generateOptionsString, getFilters } from '@/utils/api';
 
 const API_URL = 'https://api.stl-emporium.ru/api'
 const STL_ENDPOINT = 'creatures';

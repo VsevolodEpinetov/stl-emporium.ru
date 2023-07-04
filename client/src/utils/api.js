@@ -20,6 +20,18 @@ export const fetchDataFromURI = async (URI) => {
     throw new Error('Failed to fetch data from URI.');
   }
 };
+export const fetchDataFromURINew = async (URI) => {
+  try {
+    const response = await fetch(`/api/emporium?URI=${URI}`, {})
+    const jsonData = await response.json();
+    return {
+      data: jsonData.data,
+      meta: jsonData.meta,
+    };
+  } catch (error) {
+    //throw new Error('Failed to fetch data from URI.');
+  }
+};
 
 export default api;
 

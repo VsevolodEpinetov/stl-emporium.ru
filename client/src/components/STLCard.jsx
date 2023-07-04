@@ -71,7 +71,8 @@ export const STLCard = ({
   chosenMode, 
   amountInCart,
   type,
-  filters
+  filters,
+  gotRacesAndClasses
 }) => {
   const { classes, theme } = useStyles();
   const [opened, handlers] = useDisclosure(false);
@@ -84,7 +85,7 @@ export const STLCard = ({
       radius="md"
       target="_blank"
       style={{ cursor: 'pointer' }}
-      onClick={(e) => { if (e.target.tagName == 'DIV') handlers.open(); }}
+      onClick={(e) => { console.log(item.attributes); if (e.target.tagName == 'DIV') handlers.open(); }}
     >
       <div className={classes.image} style={{ backgroundImage: `url(https://api.epinetov.com${item.attributes.mainPicture.data.attributes.url})`, backgroundPosition: 'center' }} />
       <div className={classes.overlay} />
@@ -133,7 +134,7 @@ export const STLCard = ({
         </div>
       </div>
 
-      <Modal opened={opened} onClose={() => handlers.close()} title={item.attributes.code} centered >
+      <Modal opened={opened} onClose={() => handlers.close()} title={gotRacesAndClasses ? `${item.attributes.studioName}, ${item.attributes.releaseName}`: item.attributes.code} centered >
         <Image mx="auto" radius="md" src={`https://api.epinetov.com${item.attributes.mainPicture.data.attributes.url}`} alt={`Превьюшка миньки ${item.attributes.code}`} style={{ marginBottom: '15px' }} />
         <Center>
           {amountInCart == 0 ?

@@ -3,7 +3,7 @@ import React from 'react';
 import { useLocalStorage } from '@mantine/hooks';
 import { STLCard } from './STLCard';
 
-const STLList = ( {loading, miniatures, type, filters} ) => {
+const STLList = ( {loading, miniatures, type, filters, gotRacesAndClasses} ) => {
   const [chosenMode, setChosenMode] = useLocalStorage({ key: 'user-setting-mode', defaultValue: 'stl' })
   const [shoppingCart, setShoppingCart] = useLocalStorage({ key: 'shopping-cart', defaultValue: [] })
 
@@ -146,6 +146,7 @@ const STLList = ( {loading, miniatures, type, filters} ) => {
               chosenMode={chosenMode}
               filters={filters}
               type={type}
+              gotRacesAndClasses={gotRacesAndClasses}
             />)
             :
             <Group>
