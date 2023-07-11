@@ -3,7 +3,7 @@ import React from 'react';
 import { useLocalStorage } from '@mantine/hooks';
 import { STLCard } from './STLCard';
 
-const STLList = ( {loading, miniatures, type, filters, gotRacesAndClasses} ) => {
+const STLList = ( {loading, miniatures, type, newFilters, filtersLoading} ) => {
   const [chosenMode, setChosenMode] = useLocalStorage({ key: 'user-setting-mode', defaultValue: 'stl' })
   const [shoppingCart, setShoppingCart] = useLocalStorage({ key: 'shopping-cart', defaultValue: [] })
 
@@ -81,45 +81,6 @@ const STLList = ( {loading, miniatures, type, filters, gotRacesAndClasses} ) => 
       ])
     }
   }
-
-  function addToACart(itemCode) {
-    const itemObject = {
-      code: itemCode,
-      type: chosenMode,
-      amount: 1
-    }
-
-    let index = -1;
-    for (let i = 0; i < shoppingCart.length; i++) {
-      if (shoppingCart[i].code === itemCode && shoppingCart[i].type === chosenMode) {
-        index = i
-      }
-    }
-
-    if (index > -1) {
-      if (chosenMode === 'stl') { return; }
-      else {
-        let newAmount = shoppingCart[index].amount + 1;
-        setShoppingCart(shoppingCart.map((item, id) => {
-          if (id !== index) {
-            // This isn't the item we care about - keep it as-is
-            return item
-          }
-
-          // Otherwise, this is the one we want - return an updated value
-          return {
-            ...item,
-            amount: newAmount
-          }
-        }))
-      }
-    } else {
-      setShoppingCart([
-        ...shoppingCart,
-        itemObject
-      ])
-    }
-  }
   
   return (
     <SimpleGrid
@@ -144,9 +105,9 @@ const STLList = ( {loading, miniatures, type, filters, gotRacesAndClasses} ) => 
               addToACart={addToACart}
               removeItem={removeItem}
               chosenMode={chosenMode}
-              filters={filters}
+              newFilters={newFilters}
+              filtersLoading={filtersLoading}
               type={type}
-              gotRacesAndClasses={gotRacesAndClasses}
             />)
             :
             <Group>

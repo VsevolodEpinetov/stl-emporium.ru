@@ -1,39 +1,49 @@
 [
   {
     "link": "#",
-    "label": "STL",
+    "label": "⚔️ Фентези Герои",
     "links": [
       {
         "link": "/?type=stl",
-        "label": "Фентези Герои"
+        "label": "STL"
       },
       {
-        "link": "/bases?type=stl",
-        "label": "Базы"
-      },
-      {
-        "link": "/monsters?type=stl",
-        "label": "Монстры"
+        "link": "/?type=physical",
+        "label": "Физические"
       }
     ]
   },
   {
     "link": "#",
-    "label": "Фигурки",
+    "label": "☠️ Монстры",
     "links": [
       {
-        "link": "/?type=physical",
-        "label": "Фентези Герои"
+        "link": "monsters/?type=stl",
+        "label": "STL"
       },
       {
-        "link": "/bases?type=physical",
-        "label": "Базы"
-      },
-      {
-        "link": "/monsters?type=physical",
-        "label": "Монстры"
+        "link": "monsters/?type=physical",
+        "label": "Физические"
       }
     ]
+  },
+  {
+    "link": "#",
+    "label": "🏗 Базы",
+    "links": [
+      {
+        "link": "bases/?type=stl",
+        "label": "STL"
+      },
+      {
+        "link": "bases/?type=physical",
+        "label": "Физические"
+      }
+    ]
+  },
+  {
+    "link": "/tome-of-understanding",
+    "label": "📖 Том Понимания"
   },
   {
     "link": "/faq",

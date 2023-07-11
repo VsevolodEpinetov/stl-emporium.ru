@@ -29,16 +29,23 @@ const useStyles = createStyles((theme) => ({
     borderRadius: theme.radius.sm,
     textDecoration: 'none',
     color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
-    fontSize: theme.fontSizes.md,
+    fontSize: '16px',
     fontWeight: 500,
 
     '&:hover': {
       backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
     },
+    '@media (max-width: 1440px)': {
+      fontSize: '14px'
+    }
   },
 
   linkLabel: {
     marginRight: '0.5rem',
+    fontSize: '16px',
+    '@media (max-width: 1440px)': {
+      fontSize: '14px'
+    }
   },
 
   wrapper: {
@@ -47,15 +54,32 @@ const useStyles = createStyles((theme) => ({
     marginLeft: '280px',
     '@media (max-width: 1200px)': {
       marginLeft: '200px'
-    }
+    },
   },
 
   buttonCart: {
     display: 'block',
     '@media (max-width: 767px)': {
       display: 'none'
-    }
+    },
   },
+
+  menuWrapper: {
+    borderBottom: 'none',
+    boxShadow: '0px 1px 16px 1px rgba(45, 45, 45, 0.25)',
+    zIndex: '99',
+    fontSize: '14px',
+    height: '70px',
+    '@media (max-width: 1340px)': {
+      height: '120px'
+    },
+    '@media (max-width: 1110px)': {
+      height: '170px'
+    },
+    '@media (max-width: 768px)': {
+      height: '70px'
+    },
+  }
 }));
 
 export const CustomHeader = ({ filtersOpened, cartSize, setFiltersOpened, menuOpened, setMenuOpened, withFilters }) => {
@@ -97,7 +121,7 @@ export const CustomHeader = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
   });
 
   return (
-    <Header height={{ base: 70, md: 70 }} p="md" style={{ borderBottom: 'none', boxShadow: '0px 1px 16px 1px rgba(45, 45, 45, 0.25)', zIndex: '99' }}>
+    <Header p="md" className={classes.menuWrapper}>
       <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
         <Group position="apart">
           <Burger
@@ -125,13 +149,21 @@ export const CustomHeader = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
       </MediaQuery>
 
       <Container className={classes.wrapper}>
-        <Group position='apart' style={{width:'100%'}}>
-        <div className={classes.inner}>
-          <Group spacing={5} className={classes.links}>
-            {items}
-          </Group>
-        </div>
-        <Button className={classes.buttonCart} key='cart-button-for-menu' component='a' size="md" href='/cart' color="teal" leftIcon={<IconShoppingCart />}>Корзина ({cartSize})</Button>
+        <Group position='apart' style={{ width: '100%' }}>
+          <div className={classes.inner}>
+            <Group spacing={5} className={classes.links}>
+              {items}
+            </Group>
+          </div>
+          <Button
+            className={classes.buttonCart}
+            key='cart-button-for-menu'
+            component='a'
+            href='/cart'
+            color="teal"
+            leftIcon={<IconShoppingCart />}>
+            <span className={classes.buttonText}>Корзина ({cartSize})</span>
+          </Button>
         </Group>
       </Container>
     </Header>

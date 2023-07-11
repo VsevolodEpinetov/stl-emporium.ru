@@ -1,67 +1,51 @@
 import Head from 'next/head'
-import { useDisclosure, useLocalStorage, useWindowScroll } from '@mantine/hooks';
+import { useLocalStorage } from '@mantine/hooks';
 import { useState, useEffect } from 'react'
 import CustomAppShell from '@/components/CustomAppShell';
 import { useRouter } from 'next/router';
 import { useSearchParams } from 'next/navigation';
 import STLGallery from '@/components/STLGallery';
-import { fetchDataFromURI, generateOptionsString, getFilters } from '@/utils/api';
+import { fetchDataFromURINew, generateOptionsObject } from '@/utils/api';
+import useFilters from '@/hooks/useFilters';
 
-const API_URL = 'https://api.stl-emporium.ru/api'
-const STL_ENDPOINT = 'terrains';
-const DEFAULT_SORT = 'sort=createdAt:desc';
-const FILL_WITH_DATA = 'populate=*'
-const NOT_ONLY_PHYSICAL = "filters[onlyPhysical][$ne]=true"
-const REQUEST_URL = `${API_URL}/${STL_ENDPOINT}?${FILL_WITH_DATA}&${DEFAULT_SORT}`
+const filters = {
+  tags: {
+    ui: {
+      placeholder: "Показываются все теги",
+      nothingFound: "Таких тегов нет :(",
+      label: "Фильтр по тегам"
+    }
+  },
+  size: {
+    ui: {
+      placeholder: "Показываются все размеры",
+      nothingFound: "Таких размеров нет :(",
+      label: "Фильтр по размеру"
+    }
+  },
+  form: {
+    ui: {
+      placeholder: "Показываются все формы",
+      nothingFound: "Таких форм нет :(",
+      label: "Фильтр по форме"
+    }
+  }
+}
+
 
 export default function Home() {
   const [chosenMode, setChosenMode] = useLocalStorage({ key: 'user-setting-mode', defaultValue: 'stl' })
 
-  const [scroll, scrollTo] = useWindowScroll();
-
-  const [selectedTags, setSelectedTags] = useState([]);
-
   const params = useSearchParams();
   const router = useRouter();
-  
+
   const [miniatures, setMiniatures] = useState();
-  const [loading, setLoading] = useDisclosure(true);
+  const [loading, setLoading] = useState(true);
   const [totalFound, setTotalFound] = useState(0);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [pageSize, setPageSize] = useState(20);
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
-  useEffect(async () => {
-    fetchDataFromURI(`${REQUEST_URL}&pagination[pageSize]=20`).then(data => {
-      const minis = data?.miniatures;
-      setMiniatures(minis);
-      setTotalFound(data.meta.pagination.total);
-      setTotalPages(data.meta.pagination.pageCount);
-      setCurrentPage(1);
-    })
-  }, [])
-
-  const [tags, setTags] = useState([]);
-  const [filters, setFilters] = useState({});
-
-  useEffect(() => {
-    getFilters('terrain-tags').then(data => {
-      setTags(data);
-    })
-  }, [])
-
-  useEffect(() => {
-    setFilters({
-      tags: {
-        getter: selectedTags,
-        setter: setSelectedTags,
-        data: tags,
-        placeholder: "Показываются все базы",
-        nothingFound: "Такого не знаем :(",
-        label: "Теги"
-      }
-    })
-  }, [tags, selectedTags])
+  const [filtersLoading, allFilters, selectedFilters] = useFilters(filters)
 
   useEffect(() => {
     if (params.has('type')) {
@@ -70,66 +54,62 @@ export default function Home() {
         router.push('/bases');
       }
     }
-  })  
+  })
 
   useEffect(() => {
     getSelectedHeroes();
   }, [chosenMode])
 
   const getSelectedHeroes = async () => {
-    setLoading.open();
-    setCurrentPage(1);
-    scrollTo({ y: 0 })
-
-    const options = generateOptionsString(filters);
-    const requestString = `${REQUEST_URL}&${chosenMode === 'physical' ? '' : NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}${options}`;
+    setLoading(true);
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
 
     try {
-      const data = await fetchDataFromURI(requestString);
+      const data = await fetchDataFromURINew('terrains', { page: currentPage, ...selectedFilters });
       setMiniatures(data.data);
       setTotalFound(data.meta.pagination.total);
       setTotalPages(data.meta.pagination.pageCount);
       setCurrentPage(1);
+      setLoading(false);
     } catch (error) {
       //console.log(error)
-    } finally {
-      setLoading.close();
     }
   }
 
   useEffect(() => {
-    setLoading.open();
+    setLoading(true);
 
-    const options = generateOptionsString(filters);
-    const requestString = `${REQUEST_URL}&${chosenMode === 'physical' ? '' : NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}&pagination[page]=${currentPage}&${options}`;
+    const options = generateOptionsObject(selectedFilters);
 
-    fetchDataFromURI(requestString).then(data => {
+    fetchDataFromURINew('terrains', { page: currentPage, ...options }).then(data => {
       setMiniatures(data.data);
-      scrollTo({ y: 0 })
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+      setLoading(false);
     })
   }, [currentPage])
-
-  useEffect(() => {
-    setLoading.close();
-  }, [miniatures])
 
   async function nullFilters() {
     setLoading.open();
 
-    const requestString = `${REQUEST_URL}&${chosenMode === 'physical' ? '' : NOT_ONLY_PHYSICAL}&pagination[pageSize]=${pageSize}`;
-
     try {
-      const data = await fetchDataFromURI(requestString);
+      const data = await fetchDataFromURINew('terrains', {});
       setMiniatures(data.data);
       setTotalFound(data.meta.pagination.total);
       setTotalPages(data.meta.pagination.pageCount);
-      setSelectedTags([]);
       setCurrentPage(1);
-      scrollTo({ y: 0 })
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+      setLoading(false);
     } catch (error) {
       //console.log(error)
-    } finally {
-      setLoading.close();
     }
   }
 
@@ -140,11 +120,12 @@ export default function Home() {
         setLoading={setLoading}
         getSelectedHeroes={getSelectedHeroes}
         basesFilters
-        filters={filters}
+        newFilters={allFilters}
         loading={loading}
         nullFilters={nullFilters}
         chosenMode={chosenMode}
         setChosenMode={setChosenMode}
+        filtersLoading={filtersLoading}
       >
         <STLGallery
           loading={loading}
@@ -154,10 +135,11 @@ export default function Home() {
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           miniatures={miniatures}
-          filters={filters}
+          newFilters={allFilters}
+          filtersLoading={filtersLoading}
           type='terrain'
         />
-    </CustomAppShell>
+      </CustomAppShell>
     </>
   )
 }

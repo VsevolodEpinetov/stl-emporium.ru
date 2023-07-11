@@ -1,31 +1,25 @@
 //import { Card, Col, Row, Button, Text } from "@nextui-org/react";
-import { Card, Text, Group, Center, createStyles, Modal, Image, Badge } from '@mantine/core';
+import { Card, Text, Group, Center, createStyles, Modal, Image, Badge, getStylesRef, rem } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Button, ActionIcon } from '@mantine/core';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
 import { generateDescriptionString } from '@/utils/helpers';
 
-const useStyles = createStyles((theme, _params, getRef) => {
-  const image = getRef('image');
-
+const useStyles = createStyles((theme) => {
   return {
     card: {
       position: 'relative',
-      height: 400,
+      height: rem(380),
       backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
 
-      [`&:hover .${image}`]: {
+      [`&:hover .${getStylesRef('image')}`]: {
         transform: 'scale(1.03)',
       },
     },
 
     image: {
-      ref: image,
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
+      ...theme.fn.cover(),
+      ref: getStylesRef('image'),
       backgroundSize: 'cover',
       transition: 'transform 500ms ease',
     },
@@ -50,12 +44,12 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
     title: {
       color: theme.white,
-      marginBottom: 5,
+      marginBottom: rem(5),
     },
 
     bodyText: {
       color: theme.colors.dark[2],
-      marginLeft: 7,
+      marginLeft: rem(7),
     },
 
     author: {
@@ -64,15 +58,15 @@ const useStyles = createStyles((theme, _params, getRef) => {
   };
 });
 
-export const STLCard = ({ 
-  item, 
-  addToACart, 
-  removeItem, 
-  chosenMode, 
+export const STLCard = ({
+  item,
+  addToACart,
+  removeItem,
+  chosenMode,
   amountInCart,
   type,
-  filters,
-  gotRacesAndClasses
+  newFilters,
+  filtersLoading
 }) => {
   const { classes, theme } = useStyles();
   const [opened, handlers] = useDisclosure(false);
@@ -85,7 +79,7 @@ export const STLCard = ({
       radius="md"
       target="_blank"
       style={{ cursor: 'pointer' }}
-      onClick={(e) => { console.log(item.attributes); if (e.target.tagName == 'DIV') handlers.open(); }}
+      onClick={(e) => { if (e.target.tagName == 'DIV') handlers.open(); }}
     >
       <div className={classes.image} style={{ backgroundImage: `url(https://api.epinetov.com${item.attributes.mainPicture.data.attributes.url})`, backgroundPosition: 'center' }} />
       <div className={classes.overlay} />
@@ -107,7 +101,7 @@ export const STLCard = ({
 
           <Group position="apart" spacing="xs">
             <Text size="sm" className={classes.author} style={{ maxWidth: '70%' }}>
-              {generateDescriptionString(item.attributes, type, filters)}
+              {newFilters && generateDescriptionString(item.attributes, type, newFilters)}
             </Text>
 
             <Group>
@@ -134,7 +128,7 @@ export const STLCard = ({
         </div>
       </div>
 
-      <Modal opened={opened} onClose={() => handlers.close()} title={gotRacesAndClasses ? `${item.attributes.studioName}, ${item.attributes.releaseName}`: item.attributes.code} centered >
+      <Modal opened={opened} onClose={() => handlers.close()} title={item.attributes.code} centered size='xl'>
         <Image mx="auto" radius="md" src={`https://api.epinetov.com${item.attributes.mainPicture.data.attributes.url}`} alt={`Превьюшка миньки ${item.attributes.code}`} style={{ marginBottom: '15px' }} />
         <Center>
           {amountInCart == 0 ?

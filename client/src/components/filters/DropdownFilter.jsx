@@ -1,5 +1,5 @@
 import { MultiSelect, createStyles } from '@mantine/core';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 const useStyles = createStyles((theme) => ({
   label: {
@@ -11,14 +11,17 @@ const useStyles = createStyles((theme) => ({
 
 const DropdownFilter = (
   {
-    data
+    data,
+    filterName
   }
 ) => {
   const { classes } = useStyles();
+  const [value, setValue] = useState();
+
   return (
     <MultiSelect
       value={data.getter}
-      onChange={data.setter}
+      onChange={(e) => { data.setter(filterName, e); }}
       data={data.data}
       placeholder={data.placeholder}
       searchable

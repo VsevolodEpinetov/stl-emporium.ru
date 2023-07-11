@@ -10,13 +10,13 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const SexFilter = (
-  {sexFilter}
+  {data}
 ) => {
   const { classes } = useStyles();
   return (
     <Checkbox.Group
-      value={sexFilter.getter}
-      onChange={sexFilter.setter}
+      value={data.getter}
+      onChange={(e) => { data.setter('sex', e); }}
       label="Пол (предположительный)"
       classNames={{
         label: classes.label

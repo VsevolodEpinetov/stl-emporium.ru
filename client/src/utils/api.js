@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { createQueryString } from './helpers';
 
 const API_URL = 'https://api.stl-emporium.ru/api';
 
@@ -20,9 +21,11 @@ export const fetchDataFromURI = async (URI) => {
     throw new Error('Failed to fetch data from URI.');
   }
 };
-export const fetchDataFromURINew = async (URI) => {
+
+export const fetchDataFromURINew = async (type, params) => {
   try {
-    const response = await fetch(`/api/emporium?URI=${URI}`, {})
+    const query = createQueryString(params)
+    const response = await fetch(`/api/${type}?${query}`, {})
     const jsonData = await response.json();
     return {
       data: jsonData.data,
@@ -37,16 +40,34 @@ export default api;
 
 export async function getFilters (type) {
 
-  try {
-    const reqUrl = `${API_URL}/${type}?fields[1]=value&fields[2]=label&pagination[pageSize]=100`
-    const response = await fetchDataFromURI(reqUrl);
+  if (type === 'sex') {
+    return [
+      {
+        label: 'Мужской',
+        value: 'm'
+      },
+      {
+        label: 'Женский',
+        value: 'f'
+      },
+      {
+        label: 'Неизвестно',
+        value: 'x'
+      }
+    ]
+  }
 
-    return response.data.map(r => {
+  try {
+    const response = await fetch(`/api/filters?type=${type}`, {})
+    const jsonData = await response.json();
+
+    return jsonData.data.map(r => {
       return {label: r.attributes.label, value: r.attributes.value}
     });
   } catch (error) {
     throw new Error('Failed to fetch filters from URI.');
   }
+
 }
 
 export const generateOptionsString = (filters) => {
@@ -60,6 +81,32 @@ export const generateOptionsString = (filters) => {
       if (getter.length > 0) {
         getter.forEach((value) => {
           options += `&filters[${key === 'monsterType' ? 'classes' : key}][$contains]=${key === 'sex' ? '' : '"'}${value}${key === 'sex' ? '' : '"'}`;
+        });
+      }
+    }
+  }
+
+  return options;
+};
+
+export const generateOptionsObject = (filters) => {
+  const options = {};
+
+  for (const key in filters) {
+    if (filters.hasOwnProperty(key)) {
+      const filter = filters[key];
+      const { getter } = filter;
+
+      if (getter?.length > 0) {
+        getter.forEach((value) => {
+          const optionKey = `filters[${key === 'monsterType' ? 'classes' : key}][$contains]`;
+          const optionValue = `${key === 'sex' ? '' : '"'}${value}${key === 'sex' ? '' : '"'}`;
+
+          if (!options[optionKey]) {
+            options[optionKey] = [];
+          }
+
+          options[optionKey].push(optionValue);
         });
       }
     }

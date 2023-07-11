@@ -15,6 +15,18 @@ const useStyles = createStyles((theme) => ({
   },
   linkStyle: {
     fontSize: '1rem'
+  },
+  navbarWrapper: {
+    top: '70px',
+    '@media (max-width: 1340px)': {
+      top: '120px'
+    },
+    '@media (max-width: 1110px)': {
+      top: '170px'
+    },
+    '@media (max-width: 768px)': {
+      top: '70px'
+    },
   }
 }));
 
@@ -25,7 +37,7 @@ function getRandomInt(min, max) {
 }
 
 
-export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOpened, filters = undefined, getSelectedHeroes, loading, nullFilters, chosenMode, setChosenMode }) => {
+export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOpened, getSelectedHeroes, loading, nullFilters, filtersLoading, newFilters }) => {
   const { classes } = useStyles();
   const [chosenImage, setChosenImage] = useState('');
 
@@ -61,12 +73,12 @@ export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
 
   return (
     <>
-      <Navbar p="md" hiddenBreakpoint="sm" hidden={!filtersOpened} width={{ sm: 200, lg: 300 }}
+      <Navbar className={classes.navbarWrapper} p="md" hiddenBreakpoint="sm" hidden={!filtersOpened} width={{ sm: 200, lg: 300 }}
         style={{
           backgroundColor: '#141517',
           border: 'none',
           zIndex: '98',
-          padding: !filters ? '0px' : 'f'
+          padding: !newFilters ? '0px' : 'f'
         }}>
         <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
           <Navbar.Section>
@@ -77,10 +89,11 @@ export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
         </MediaQuery>
         <Navbar.Section grow mt="md" component={ScrollArea}>
           {
-            filters ?
+            newFilters ?
               <STLFilters
-                filters={filters}
+                newFilters={newFilters}
                 loading={loading}
+                filtersLoading={filtersLoading}
                 setFiltersOpened={setFiltersOpened}
                 getSelectedHeroes={getSelectedHeroes}
                 nullFilters={nullFilters}

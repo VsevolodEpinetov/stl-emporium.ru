@@ -5,9 +5,7 @@ import { useState } from 'react';
 import { IconTrash } from '@tabler/icons-react';
 
 
-const ItemRow = ({ itemCartInfo, removeAllInstances }) => {
-    const [loading, setLoading] = useState(false);
-
+const ItemRow = ({ itemCartInfo, removeAllInstances, loading }) => {
     return (
         <>
             {loading ?

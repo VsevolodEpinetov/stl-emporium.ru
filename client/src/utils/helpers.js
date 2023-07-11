@@ -34,7 +34,7 @@ export const generateDescriptionString = (stl, type, filters) => {
   const getMatchingLabels = (values, data) => {
     return values
       .map(value => {
-        const matchingData = data.data.find(item => item.value === value);
+        const matchingData = data?.data.find(item => item.value === value);
         return matchingData ? matchingData.label : null;
       })
       .filter(label => label !== null);
@@ -48,10 +48,14 @@ export const generateDescriptionString = (stl, type, filters) => {
         const heroWeapons = stl.weapons ? getMatchingLabels(stl.weapons, filters.weapons) : [];
         return [...heroClasses, ...heroRaces, getGenderString(stl.sex), ...heroWeapons];
       case 'monster':
+        const monsterRaces = getMatchingLabels(stl.races, filters.races);
         const monsterTypes = getMatchingLabels(stl.classes, filters.monsterType);
-        return [...monsterTypes, getGenderString(stl.sex)];
+        return [...monsterTypes, ...monsterRaces, getGenderString(stl.sex)];
       case 'terrain':
-        return getMatchingLabels(stl.tags, filters.tags);
+        const terrainTags = getMatchingLabels(stl.tags, filters.tags);
+        const terrainForm = getMatchingLabels(stl.form, filters.form);
+        const terrainSize = getMatchingLabels(stl.size, filters.size);
+        return [...terrainTags, ...terrainForm, ...terrainSize];
       default:
         return [];
     }
@@ -73,3 +77,43 @@ export const generateDescriptionString = (stl, type, filters) => {
 
   return str;
 };
+
+export const buildFieldsQuery = (selectedFields) => {
+  let string = '';
+  selectedFields.forEach((field, id) => {
+    if (id > 0) string += `&`;
+    string += `fields[${id}]=${field}`
+  })
+  return string;
+}
+
+
+export function createQueryString(obj) {
+  const queryString = Object.entries(obj)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .join('&');
+
+  return queryString;
+}
+
+export function generateFiltersQueryString(obj) {
+  let queryString = '';
+
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const values = Array.isArray(obj[key]) ? obj[key] : [obj[key]];
+      values.forEach((value) => {
+        queryString += `filters[${key}][$contains]=${key === 'sex' ? '' : '"'}${encodeURIComponent(value)}${key === 'sex' ? '' : '"'}&`;
+      });
+    }
+  }
+
+  // Remove the trailing '&' character
+  queryString = queryString.slice(0, -1);
+
+  return queryString;
+}
+
+export function hasAtLeastOneKey(obj) {
+  return Object.keys(obj).length > 0;
+}

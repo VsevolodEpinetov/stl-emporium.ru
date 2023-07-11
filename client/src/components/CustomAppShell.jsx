@@ -1,14 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import { CustomHeader } from './CustomHeader';
-import { AppShell } from '@mantine/core';
+import { AppShell, createStyles } from '@mantine/core';
 import { CustomNavbar } from './CustomNavbar';
 import { useLocalStorage } from '@mantine/hooks';
 
-const CustomAppShell = ( {setLoading, getSelectedHeroes, filters = undefined, loading, nullFilters, chosenMode, setChosenMode, children} ) => {
+  
+const useStyles = createStyles((theme) => ({
+  label: {
+    fontSize: '0.875rem',
+    marginBottom: '5px',
+    fontWeight: '700'
+  },
+  logo: {
+    maxWidth: '200px'
+  },
+  linkStyle: {
+    fontSize: '1rem'
+  },
+  mainWrapper: {
+    paddingTop: '50px',
+    '@media (max-width: 1340px)': {
+      paddingTop: '100px'
+    },
+    '@media (max-width: 1110px)': {
+      paddingTop: '150px'
+    },
+    '@media (max-width: 768px)': {
+      paddingTop: '50px'
+    },
+  }
+}));
+
+const CustomAppShell = ({ getSelectedHeroes, loading, nullFilters, chosenMode, setChosenMode, children, newFilters = undefined, filtersLoading }) => {
   const [filtersOpened, setFiltersOpened] = useState(false);
   const [menuOpened, setMenuOpened] = useState(false);
   const [shoppingCart, setShoppingCart] = useLocalStorage({ key: 'shopping-cart', defaultValue: [] })
   const [cartSize, setCartSize] = useState(0);
+  const { classes } = useStyles();
 
   useEffect(() => {
     setCartSize(shoppingCart.reduce((partial, item) => partial + item.amount, 0));
@@ -22,25 +50,27 @@ const CustomAppShell = ( {setLoading, getSelectedHeroes, filters = undefined, lo
         setMenuOpened={setMenuOpened}
         filtersOpened={filtersOpened}
         setFiltersOpened={setFiltersOpened}
-        setLoading={setLoading}
         getSelectedHeroes={getSelectedHeroes}
-        filters={filters}
         cartSize={cartSize}
         loading={loading}
         nullFilters={nullFilters}
         chosenMode={chosenMode}
         setChosenMode={setChosenMode}
+        newFilters={newFilters}
+        filtersLoading={filtersLoading}
       />}
       header={<CustomHeader
         menuOpened={menuOpened}
         setMenuOpened={setMenuOpened}
         filtersOpened={filtersOpened}
         setFiltersOpened={setFiltersOpened}
-        withFilters={filters ? true : false}
+        withFilters={newFilters ? true : false}
         cartSize={cartSize}
       />}
     >
-      {children}
+      <div className={classes.mainWrapper}>
+        {children}
+      </div>
     </AppShell>
   );
 };

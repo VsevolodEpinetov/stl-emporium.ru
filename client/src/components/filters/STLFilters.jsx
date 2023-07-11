@@ -1,4 +1,4 @@
-import { Divider, Title } from '@mantine/core';
+import { Divider, Loader, Title } from '@mantine/core';
 import React from 'react';
 import PhysicalAndSTLSwitch from './PhysicalAndSTLSwitch';
 import FiltersButtonsGroup from './FiltersButtonsGroup';
@@ -6,16 +6,17 @@ import DropdownFilter from './DropdownFilter';
 import SexFilter from './SexFilter';
 
 const STLFilters = ({
-  filters,
   loading,
   setFiltersOpened,
   getSelectedHeroes,
   nullFilters,
+  newFilters,
+  filtersLoading
 }) => {
 
   function areFiltersEmpty(filters) {
     for (const key in filters) {
-      if (filters.hasOwnProperty(key) && filters[key].getter.length > 0) {
+      if (filters.hasOwnProperty(key) && filters[key].getter?.length > 0) {
         return false;
       }
     }
@@ -28,21 +29,25 @@ const STLFilters = ({
       <PhysicalAndSTLSwitch />
       <Divider />
 
-      {Object.entries(filters).map(([key, value]) => {
+      {filtersLoading &&
+        <Loader />
+      }
+
+      {newFilters && !filtersLoading && Object.entries(newFilters).map(([key, value]) => {
         if (key !== 'sex') {
-          return <DropdownFilter key={key} data={value} />;
+          return <DropdownFilter key={key} data={value} filterName={key}/>;
         }
         return null;
       })}
 
-      {filters.sex ? <SexFilter sexFilter={filters.sex} /> : null }
+      {(newFilters.sex && !filtersLoading) ? <SexFilter data={newFilters.sex} /> : null }
 
       <FiltersButtonsGroup
         loading={loading}
         setFiltersOpened={setFiltersOpened}
         getSelectedHeroes={getSelectedHeroes}
         nullFilters={nullFilters}
-        isResetButtonDisabled={areFiltersEmpty(filters)}
+        isResetButtonDisabled={/*areFiltersEmpty(newFilters)*/true}
       />
     </div>
   );

@@ -4,6 +4,7 @@ import {
 } from '@mantine/core';
 import Head from 'next/head';
 import { YMInitializer } from 'react-yandex-metrika';
+import { Notifications } from '@mantine/notifications';
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
   return (
@@ -27,6 +28,7 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
         withGlobalStyles
         withNormalizeCSS
       >
+        <Notifications />
         <YMInitializer accounts={[93679439]} />
         <Component {...pageProps} />
       </MantineProvider>

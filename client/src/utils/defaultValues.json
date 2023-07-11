@@ -1,0 +1,11 @@
+{
+  "apiSort": "sort=createdAt:desc",
+  "apiFields": [
+    "priceSTL",
+    "pricePhysical",
+    "code"
+  ],
+  "maxPageSize": "pagination[pageSize]=100",
+  "defaultPageSize": "pagination[pageSize]=20",
+  "getImagesAsWell": "populate=*"
+}

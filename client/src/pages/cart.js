@@ -1,11 +1,12 @@
 import Head from 'next/head'
 import { useLocalStorage, useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useState, useEffect, useCallback } from 'react'
-import { Group, Text, Table, Title, Button, Modal, List, ScrollArea, Anchor, Grid, Paper, Divider, Stack, Input, Select, TextInput } from '@mantine/core'
+import { Group, Text, Table, Title, Button, Modal, List, ScrollArea, Anchor, Grid, Paper, Divider, Stack, Input, Select, TextInput, Loader } from '@mantine/core'
 import { IconAt, IconBrandTelegram, IconBrandVk } from '@tabler/icons-react'
 import ItemRow from '@/components/ItemRow';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import CustomAppShell from '@/components/CustomAppShell';
+import { fetchDataFromURINew } from '@/utils/api';
 
 const token = '8721eb0fe7756b16ad0abb03650965113f4e26d8a0958a70c15b932124d39157eb132156e1676d9efb42fc2afed5cc7b20390edf19dd755a7e3914f43358e3f4c8e5d5368d5efe72d778d4f23d0158c6a239f48709a60a9771f87dac5c6bc9a3245314a673ba8e9c4bb7dccb0c3f76eea14717501474ebfa02583d81251c1bca'
 
@@ -280,8 +281,10 @@ function generateToken() {
 
 export default function CartPage() {
   const [shoppingCart, setShoppingCart] = useLocalStorage({ key: 'shopping-cart', defaultValue: [] })
+
   const [shoppingCartWithData, setShoppingCartWithData] = useState([]);
   const [modalOpened, modalHandlers] = useDisclosure(false);
+  const [cartIsLoading, setCartIsLoading] = useState(true);
 
   const [discount, setDiscount] = useState(0);
   const [identificator, setIdentificator] = useState('')
@@ -297,19 +300,10 @@ export default function CartPage() {
   const [optionsContacts, setOptionsContacts] = useState([]);
   const [chosenPreferredContact, setChosenPreferredContact] = useState('');
   const [payButtonIsDisabled, setPayButtonIsDisabled] = useState(true);
+
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
-  const createQueryString = useCallback(
-    (name, value) => {
-      const params = new URLSearchParams(searchParams);
-      params.set(name, value);
-
-      return params.toString();
-    },
-    [searchParams],
-  );
 
   function redirectToSuccess(identificator, total, preferredMethod) {
     const params = new URLSearchParams(searchParams);
@@ -360,18 +354,10 @@ export default function CartPage() {
     if (!response.ok) {
       //console.log(response.statusText);
     } else {
-      //console.log(response.statusText);
       sendInfoToTelegram(totalCost, vk, tg, mail, chosenPreferredContact, identificator)
       setShoppingCart([]);
       redirectToSuccess(identificator, totalCost, chosenPreferredContact);
     }
-  }
-
-  async function fetchDataFromURI(URI) {
-    const rawData = await fetch(URI)
-    const data = await rawData.json();
-
-    return data?.data;
   }
 
   useEffect(() => {
@@ -397,51 +383,47 @@ export default function CartPage() {
   }, [chosenPreferredContact])
 
   useEffect(() => {
-    const allIds = shoppingCart.map(i => i.code);
-    let reqString = '';
-    reqString += allIds.join('&filters[code][$eq]=');
-    reqString = '&filters[code][$eq]=' + reqString;
-    let cartWithData = shoppingCart.slice();
-    const SELECTED_FIELDS = [
-      "races",
-      'sex',
-      'classes',
-      'code',
-      'priceSTL',
-      'pricePhysical',
-      'onlyPhysical'
-    ]
-    const FIELDS = (selectedFields) => {
-      let string = '';
-      selectedFields.forEach((field, id) => {
-        if (id > 0) string += `&`;
-        string += `fields[${id}]=${field}`
-      })
-      return string;
+    if (shoppingCartWithData.length > 0) {
+      return;
     }
-    fetchDataFromURI(`https://api.stl-emporium.ru/api/creatures?${FIELDS(SELECTED_FIELDS)}&populate=*${reqString}`).then(data => {
-      cartWithData.forEach(item => {
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].attributes.code === item.code) {
-            item.info = data[i].attributes;
-            break;
-          }
-        }
-      })
-      fetchDataFromURI(`https://api.stl-emporium.ru/api/terrains?populate=*${reqString}`).then(dataTerrain => {
-        cartWithData.forEach(item => {
-          for (let i = 0; i < dataTerrain.length; i++) {
-            if (dataTerrain[i].attributes.code === item.code) {
-              item.info = dataTerrain[i].attributes;
-              break;
-            }
-          }
-        })
 
-        setShoppingCartWithData(cartWithData);
-      })
-    })
-  }, [shoppingCart])
+    if (shoppingCart.length === 0) {
+      return;
+    }
+
+    const fetchData = async () => {
+      try {
+        const allIds = shoppingCart.map(i => i.code);
+        const [creaturesData, terrainsData] = await Promise.all([
+          fetchDataFromURINew('creatures', { codes: allIds }),
+          fetchDataFromURINew('terrains', { codes: allIds })
+        ]);
+
+        const newObject = shoppingCart.map(item => {
+          const data = creaturesData.data.find(d => d.attributes.code === item.code) ||
+            terrainsData.data.find(d => d.attributes.code === item.code);
+
+          if (data) {
+            return {
+              ...item,
+              info: data.attributes
+            };
+          }
+
+          return item;
+        });
+
+        setCartIsLoading(false);
+        setShoppingCartWithData(newObject);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setCartIsLoading(false);
+      }
+    };
+
+    fetchData()
+      .catch(console.error);  
+  }, [shoppingCart]);
 
   const getTotal = () => {
     let total = 0;
@@ -455,9 +437,14 @@ export default function CartPage() {
   }
 
   function removeAllInstances(itemCode, type) {
-    let copy = shoppingCart.slice();
-    copy = copy.filter(item => item.code != itemCode || item.type != type)
-    setShoppingCart(copy);
+    setShoppingCartWithData(prevCart => {
+      const copy = prevCart.filter(item => item.code !== itemCode || item.type !== type);
+      return copy;
+    });
+    setShoppingCart(prevCart => {
+      const copy = prevCart.filter(item => item.code !== itemCode || item.type !== type);
+      return copy;
+    });
   }
 
   function getTotalByType(type) {
@@ -509,35 +496,43 @@ export default function CartPage() {
             <Grid.Col md={8} sm={12}>
               <Paper shadow="xs" p="md">
                 {
-                  shoppingCartWithData.length > 0
-                    ?
-                    <>
-                      <ScrollArea w={'100%'}>
-                        <Table fontSize="md" highlightOnHover>
-                          <thead>
-                            <tr>
-                              <th>Изображение</th>
-                              <th>Тип</th>
-                              <th>Код</th>
-                              <th>Количество</th>
-                              <th>Цена</th>
-                              <th>Итого</th>
-                              <th>Действия</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {shoppingCartWithData.length > 0 && shoppingCartWithData.map((item, id) => {
-                              return (<ItemRow itemCartInfo={item} key={`item-row-${item.info.code}-${id}`} removeAllInstances={removeAllInstances} />)
-                            })}
-                          </tbody>
-                        </Table>
-                      </ScrollArea>
-                    </>
-                    :
-                    <>
-                      <Text>Корзина пока что пустая!</Text>
-                      Самое время выбрать себе несколько <Anchor href='/'>героев</Anchor> ;)
-                    </>
+                  shoppingCartWithData.length > 0 &&
+                  <>
+                    <ScrollArea w={'100%'}>
+                      <Table fontSize="md" highlightOnHover>
+                        <thead>
+                          <tr>
+                            <th>Изображение</th>
+                            <th>Тип</th>
+                            <th>Код</th>
+                            <th>Количество</th>
+                            <th>Цена</th>
+                            <th>Итого</th>
+                            <th>Действия</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {shoppingCartWithData.length > 0 && shoppingCartWithData.map((item, id) => {
+                            return (<ItemRow loading={cartIsLoading} itemCartInfo={item} key={`item-row-${item.info.code}-${id}`} removeAllInstances={removeAllInstances} />)
+                          })}
+                        </tbody>
+                      </Table>
+                    </ScrollArea>
+                  </>
+                }
+                {
+                  shoppingCartWithData.length == 0 && shoppingCart.length == 0 && !cartIsLoading &&
+                  <>
+                    <Text>Корзина пока что пустая!</Text>
+                    Самое время выбрать себе несколько <Anchor href='/'>героев</Anchor> ;)
+                  </>
+                }
+                {
+                  shoppingCartWithData.length == 0 && shoppingCart.length > 0 && !cartIsLoading &&
+                  <>
+                    <Text>Ой-ёй...</Text>
+                    Что-то пошло не так. Попробуй обновить страницу!
+                  </>
                 }
               </Paper>
             </Grid.Col>
@@ -556,8 +551,8 @@ export default function CartPage() {
                   <Text size='md'>STL ({getAmountByType('stl')})</Text>
                   <Text size='md'>{getTotalByType('stl')}₽ </Text>
                 </Group>
-                {getAmountByType('stl') > 0 && <div style={{border: '2px solid #7a53ed', borderRadius: '10px', padding: '10px', margin: '5px'}}>
-                <Text size='sm'>Вы приобретаете электронный товар! STL файл предназначен для 3д печати, без принтера вы не сможете напечатать фигурку.</Text>
+                {getAmountByType('stl') > 0 && <div style={{ border: '2px solid #7a53ed', borderRadius: '10px', padding: '10px', margin: '5px' }}>
+                  <Text size='sm'>Вы приобретаете электронный товар! STL файл предназначен для 3д печати, без принтера вы не сможете напечатать фигурку.</Text>
                 </div>}
                 <Group position="apart" style={{ margin: '5px 10px 0' }}>
                   <Text size='md' style={{ color: tooLowTotal && 'rgb(227, 69, 69)', fontWeight: tooLowTotal && 'bold' }}>Фигурки ({getAmountByType('physical')})</Text>
