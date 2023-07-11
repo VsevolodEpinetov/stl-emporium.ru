@@ -118,7 +118,7 @@ export default function TomeOfUnderstanding(props) {
     <>
       <Head />
       <CustomAppShell >
-        <main style={{ padding: '25px', maxHeight: 'calc(100vh - 75px) !important' }}>
+        <main style={{ padding: '25px' }}>
           <Grid>
             <Grid.Col xl={4} lg={5} md={6} sm={12}>
               <Title order={1} style={{ marginBottom: '35px' }}>Том понимания <span style={{ cursor: 'help' }} onClick={open}><IconHelpHexagonFilled /></span></Title>

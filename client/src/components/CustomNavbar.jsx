@@ -111,7 +111,7 @@ export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
       </Navbar>
 
       <MediaQuery largerThan='sm' styles={{ display: 'none' }}>
-        <Navbar p="md" hiddenBreakpoint="sm" hidden={!menuOpened} width={{ sm: 200, lg: 300 }} style={{ backgroundColor: '#141517', border: 'none', zIndex: '98' }}>
+        <Navbar className={classes.navbarWrapper} p="md" hiddenBreakpoint="sm" hidden={!menuOpened} width={{ sm: 200, lg: 300 }} style={{ backgroundColor: '#141517', border: 'none', zIndex: '98' }}>
           <MediaQuery smallerThan="md" styles={{ display: 'none' }}>
             <Navbar.Section>
               <Center>

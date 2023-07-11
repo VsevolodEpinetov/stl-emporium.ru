@@ -79,7 +79,12 @@ export const STLCard = ({
       radius="md"
       target="_blank"
       style={{ cursor: 'pointer' }}
-      onClick={(e) => { if (e.target.tagName == 'DIV') handlers.open(); }}
+      onClick={(e) => {
+        if (e.target.tagName == 'DIV') {
+          if (e.target.className.indexOf('Modal-overlay') > -1) return;
+          handlers.open()
+        }
+      }}
     >
       <div className={classes.image} style={{ backgroundImage: `url(https://api.epinetov.com${item.attributes.mainPicture.data.attributes.url})`, backgroundPosition: 'center' }} />
       <div className={classes.overlay} />
@@ -128,7 +133,15 @@ export const STLCard = ({
         </div>
       </div>
 
-      <Modal opened={opened} onClose={() => handlers.close()} title={item.attributes.code} centered size='xl'>
+      <Modal
+        closeOnEscape
+        closeOnClickOutside
+        opened={opened}
+        onClose={() => handlers.close()}
+        title={item.attributes.code}
+        centered
+        size='lg'
+      >
         <Image mx="auto" radius="md" src={`https://api.epinetov.com${item.attributes.mainPicture.data.attributes.url}`} alt={`Превьюшка миньки ${item.attributes.code}`} style={{ marginBottom: '15px' }} />
         <Center>
           {amountInCart == 0 ?
