@@ -2,10 +2,14 @@ import axios from 'axios';
 const defaultValues = require('@/utils/defaultValues.json');
 const customEndpoints = require('@/utils/endpoints.json');
 import { buildFieldsQuery } from '@/utils/helpers'
+import { NextRequest } from 'next/server'
+const requestIp = require('request-ip');
 
 export default async function handler(req, res) {
   try {
+    const clientIp = requestIp.getClientIp(req); 
     const API_URL = process.env.API_URL;
+    console.log(clientIp)
 
     const { type } = req.query;
     const ENDPOINT = customEndpoints[type] ? customEndpoints[type] : type;
