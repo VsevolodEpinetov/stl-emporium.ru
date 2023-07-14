@@ -8,9 +8,15 @@ const requestIp = require('request-ip');
 export default async function handler(req, res) {
   try {
     const clientIp = requestIp.getClientIp(req); 
-    const API_URL = process.env.API_URL;
-    console.log(clientIp)
+    const iPIsGood = clientIp == '127.0.0.1' || clientIp == '::1' || clientIp == '::ffff:127.0.0.1';
 
+    if (!iPIsGood) {
+      res.status(404);
+      console.log('Wrong IP have tried to access the api! ' + clientIp)
+      return;
+    }
+
+    const API_URL = process.env.API_URL;
     const { type } = req.query;
     const ENDPOINT = customEndpoints[type] ? customEndpoints[type] : type;
 
