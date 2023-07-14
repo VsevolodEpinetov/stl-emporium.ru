@@ -49,8 +49,9 @@ export const generateDescriptionString = (stl, type, filters) => {
         return [...heroClasses, ...heroRaces, getGenderString(stl.sex), ...heroWeapons];
       case 'monster':
         const monsterRaces = getMatchingLabels(stl.races, filters.races);
-        const monsterTypes = getMatchingLabels(stl.classes, filters.monsterType);
-        return [...monsterTypes, ...monsterRaces, getGenderString(stl.sex)];
+        const monsterTypes = getMatchingLabels(stl.classes, filters.monsterTypes);
+        const monsterWeapons = stl.weapons ? getMatchingLabels(stl.weapons, filters.weapons) : [];
+        return [...monsterRaces, ...monsterTypes, getGenderString(stl.sex), ...monsterWeapons];
       case 'terrain':
         const terrainTags = getMatchingLabels(stl.tags, filters.tags);
         const terrainForm = getMatchingLabels(stl.form, filters.form);
