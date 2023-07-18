@@ -82,9 +82,7 @@ export default function Home() {
   useEffect(() => {
     setLoading(true);
 
-    const options = generateOptionsObject(selectedFilters);
-
-    fetchDataFromURINew('terrains', { page: currentPage, ...options }).then(data => {
+    fetchDataFromURINew('terrains', { page: currentPage, ...selectedFilters }).then(data => {
       setMiniatures(data.data);
       window.scrollTo({
         top: 0,

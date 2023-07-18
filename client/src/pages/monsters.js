@@ -88,9 +88,7 @@ export default function Home() {
   useEffect(() => {
     setLoading(true);
 
-    const options = generateOptionsObject(selectedFilters);
-
-    fetchDataFromURINew('creatures', { page: currentPage, ...options, monster: true }).then(data => {
+    fetchDataFromURINew('creatures', { page: currentPage, ...selectedFilters, monster: true }).then(data => {
       setMiniatures(data.data);
       window.scrollTo({
         top: 0,

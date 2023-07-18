@@ -71,6 +71,7 @@ export default function Home() {
     setCurrentPage(1);
 
     try {
+      console.log({ page: currentPage, ...selectedFilters, hero: true })
       const data = await fetchDataFromURINew('creatures', { page: currentPage, ...selectedFilters, hero: true });
       setMiniatures(data.data);
       setTotalFound(data.meta.pagination.total);
@@ -88,9 +89,7 @@ export default function Home() {
   useEffect(() => {
     setLoading(true)
 
-    const options = generateOptionsObject(selectedFilters);
-
-    fetchDataFromURINew('creatures', { page: currentPage, ...options, hero: true }).then(data => {
+    fetchDataFromURINew('creatures', { page: currentPage, ...selectedFilters, hero: true }).then(data => {
       setMiniatures(data.data);
       window.scrollTo({
         top: 0,
