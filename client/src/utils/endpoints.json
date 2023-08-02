@@ -2,5 +2,7 @@
   "monsterTypes": "monster-types",
   "tags": "terrain-tags",
   "size": "sizes",
-  "form": "forms"
+  "form": "forms",
+  "whFactions": "wh-factions",
+  "whTypes": "wh-types"
 }

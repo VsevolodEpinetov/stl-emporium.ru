@@ -9,32 +9,18 @@ import { fetchDataFromURINew, generateOptionsObject } from '@/utils/api';
 import useFilters from '@/hooks/useFilters';
 
 const filters = {
-  races: {
+  whFactions: {
     ui: {
-      placeholder: "Показываются все расы",
-      nothingFound: "Таких рас нет :(",
-      label: "Фильтр по расам"
+      placeholder: "Показываются все фракции",
+      nothingFound: "Таких фракций нет :(",
+      label: "Фильтр по фракциям"
     }
   },
-  classes: {
+  whTypes: {
     ui: {
-      placeholder: "Показываются все классы",
-      nothingFound: "Не знаем таких классов :(",
+      placeholder: "Показываются все типы",
+      nothingFound: "Не знаем таких типов :(",
       label: "Фильтр по классам"
-    }
-  },
-  weapons: {
-    ui: {
-      placeholder: "Показываются всё оружие",
-      nothingFound: "Такого оружия не знаем :(",
-      label: "Фильтр по оружию"
-    }
-  },
-  sex: {
-    ui: {
-      placeholder: "-",
-      nothingFound: "-",
-      label: "Предполагаемый пол"
     }
   }
 }
@@ -71,7 +57,7 @@ export default function Home() {
     setCurrentPage(1);
 
     try {
-      const data = await fetchDataFromURINew('creatures', { page: currentPage, ...selectedFilters, hero: true });
+      const data = await fetchDataFromURINew('creatures', { page: currentPage, ...selectedFilters, wh: true });
       setMiniatures(data.data);
       setTotalFound(data.meta.pagination.total);
       setTotalPages(data.meta.pagination.pageCount);
@@ -88,7 +74,7 @@ export default function Home() {
   useEffect(() => {
     setLoading(true)
 
-    fetchDataFromURINew('creatures', { page: currentPage, ...selectedFilters, hero: true }).then(data => {
+    fetchDataFromURINew('creatures', { page: currentPage, ...selectedFilters, wh: true }).then(data => {
       setMiniatures(data.data);
       window.scrollTo({
         top: 0,
@@ -103,7 +89,7 @@ export default function Home() {
     setCurrentPage(1);
 
     try {
-      const data = await fetchDataFromURINew('creatures', { hero: true });
+      const data = await fetchDataFromURINew('creatures', { wh: true });
       setMiniatures(data.data);
       setTotalFound(data.meta.pagination.total);
       setTotalPages(data.meta.pagination.pageCount);
@@ -141,7 +127,7 @@ export default function Home() {
           miniatures={miniatures}
           newFilters={allFilters}
           filtersLoading={filtersLoading}
-          type='hero'
+          type='wh'
         />
       </CustomAppShell>
     </>

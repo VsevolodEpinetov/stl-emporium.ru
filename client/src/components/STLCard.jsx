@@ -4,6 +4,9 @@ import { useDisclosure } from '@mantine/hooks';
 import { Button, ActionIcon } from '@mantine/core';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
 import { generateDescriptionString } from '@/utils/helpers';
+import { Carousel, useAnimationOffsetEffect } from '@mantine/carousel';
+import STLCarouselItems from './STLCarouselItems';
+import { useState } from 'react';
 
 const useStyles = createStyles((theme) => {
   return {
@@ -68,8 +71,12 @@ export const STLCard = ({
   newFilters,
   filtersLoading
 }) => {
+  const TRANSITION_DURATION = 200;
   const { classes, theme } = useStyles();
   const [opened, handlers] = useDisclosure(false);
+  const [embla, setEmbla] = useState(null);
+
+  useAnimationOffsetEffect(embla, TRANSITION_DURATION);
 
   return (
     <Card
@@ -142,18 +149,34 @@ export const STLCard = ({
         centered
         size='lg'
       >
-        <Image mx="auto" radius="md" src={`https://api.epinetov.com${item.attributes.mainPicture.data.attributes.url}`} alt={`Превьюшка миньки ${item.attributes.code}`} style={{ marginBottom: '15px' }} />
+        {item.attributes.gallery ?
+          <Carousel
+            mx="auto"
+            withIndicators
+            slideSize="80%"
+            slideGap="md"
+            getEmblaApi={setEmbla}
+          >
+            {item.attributes.gallery.data.map((imageData) => <STLCarouselItems imageUrl={imageData.attributes.url} id={`carousel-item-${item.attributes.code}-${imageData.id}`} miniCode={item.attributes.code} />)}
+          </Carousel>
+          :
+          <Image
+            mx="auto"
+            radius="md"
+            src={`https://api.epinetov.com${item.attributes.mainPicture.data.attributes.url}`}
+            alt={`Превьюшка миньки ${item.attributes.code}`} />
+        }
         <Center>
           {amountInCart == 0 ?
-            <Button onClick={() => addToACart(item.attributes.code, chosenMode)}>Добавить в корзину</Button>
+            <Button onClick={() => addToACart(item.attributes.code, chosenMode)} style={{ margin: '15px' }}>Добавить в корзину</Button>
             :
             chosenMode == 'stl' ?
-              <Button onClick={() => removeItem(item.attributes.code, chosenMode)} color="red">Удалить из корзины</Button>
+              <Button onClick={() => removeItem(item.attributes.code, chosenMode)} color="red" style={{ margin: '15px' }}>Удалить из корзины</Button>
               :
               <Group>
-                <Button onClick={() => removeItem(item.attributes.code, chosenMode)} variant='outline' color='red'>-1</Button>
-                <Text size='lg'>{amountInCart}</Text>
-                <Button onClick={() => addToACart(item.attributes.code, chosenMode)} variant='outline' color='green'>+1</Button>
+                <Button onClick={() => removeItem(item.attributes.code, chosenMode)} variant='outline' color='red' style={{ margin: '15px' }}>-1</Button>
+                <Text size='lg' style={{ margin: '15px' }}>{amountInCart}</Text>
+                <Button onClick={() => addToACart(item.attributes.code, chosenMode)} variant='outline' color='green' style={{ margin: '15px' }}>+1</Button>
               </Group>
           }
         </Center>

@@ -14,13 +14,14 @@ export default async function handler(req, res) {
       return;
     }
 
+    const { tomeId, tomeUses, races, classes, sex, weapons, page, hero, monster, monsterTypes, codes, whFactions, whTypes, wh } = req.query;
+
     const API_URL = process.env.API_URL;
     const TOKEN = process.env.TOKEN_GET_CREATURES;
     const DEFAULT_SORT = defaultValues.apiSort;
 
-    const ENDPOINT = 'creatures';
+    const ENDPOINT = wh ? 'wh-creatures' : 'creatures';
 
-    const { tomeId, tomeUses, races, classes, sex, weapons, page, hero, monster, monsterTypes, codes } = req.query;
     let tomeIsFine = false;
 
     const FIELDS = [
@@ -28,7 +29,11 @@ export default async function handler(req, res) {
       "pricePhysical",
       "code"
     ];
-    FIELDS.push('races', 'sex', 'classes', 'weapons');
+    if (wh) { 
+      FIELDS.push('factions', 'type');
+    } else {
+      FIELDS.push('races', 'sex', 'classes', 'weapons');
+    }
     if (tomeUses > 0) FIELDS.push('releaseName', 'studioName')
     const uniqueFields = [...new Set(FIELDS)]
     const IS_HERO = 'filters[isHero][$eq]=true'
@@ -40,6 +45,8 @@ export default async function handler(req, res) {
       ...(monsterTypes && { classes: monsterTypes.split(',') }), //yes it should be this way
       ...(sex && { sex: sex }),
       ...(weapons && { weapons: weapons.split(',') }),
+      ...(whFactions && { whFactions: whFactions.split(',') }),
+      ...(whTypes && { whTypes: whTypes.split(',') }),
     }
 
     const api = axios.create({

@@ -6,6 +6,7 @@ export const getWord = (amount, type) => {
     hero: ['герой', 'героя', 'героев'],
     monster: ['монстр', 'монстра', 'монстров'],
     terrain: ['база', 'базы', 'баз'],
+    wh: ['модель', 'модели', 'моделей']
   };
 
   const typeForms = wordForms[type];
@@ -57,6 +58,10 @@ export const generateDescriptionString = (stl, type, filters) => {
         const terrainForm = getMatchingLabels(stl.form, filters.form);
         const terrainSize = getMatchingLabels(stl.size, filters.size);
         return [...terrainTags, ...terrainForm, ...terrainSize];
+      case 'wh':
+        const whFactions = getMatchingLabels(stl.factions, filters.whFactions);
+        const whTypes = getMatchingLabels(stl.type, filters.whTypes);
+      return [...whFactions, ...whTypes];
       default:
         return [];
     }

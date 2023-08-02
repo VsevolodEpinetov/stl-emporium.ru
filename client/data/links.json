@@ -1,42 +1,44 @@
 [
   {
     "link": "#",
-    "label": "⚔️ Фентези Герои",
+    "label": "🐲 Фентези",
     "links": [
       {
         "link": "/?type=stl",
-        "label": "STL"
+        "label": "⚔️ Герои STL"
       },
       {
         "link": "/?type=physical",
-        "label": "Физические"
-      }
-    ]
-  },
-  {
-    "link": "#",
-    "label": "☠️ Монстры",
-    "links": [
-      {
-        "link": "monsters/?type=stl",
-        "label": "STL"
+        "label": "⚔️ Герои Физические"
       },
       {
-        "link": "monsters/?type=physical",
-        "label": "Физические"
-      }
-    ]
-  },
-  {
-    "link": "#",
-    "label": "🏗 Базы",
-    "links": [
+        "link": "/monsters?type=stl",
+        "label": "☠️ Монстры STL"
+      },
+      {
+        "link": "/monsters?type=physical",
+        "label": "☠️ Монстры Физические"
+      },
       {
         "link": "bases/?type=stl",
-        "label": "STL"
+        "label": "🏗 Базы STL"
       },
       {
         "link": "bases/?type=physical",
+        "label": "🏗 Базы Физические"
+      }
+    ]
+  },
+  {
+    "link": "#",
+    "label": "☠️ WH",
+    "links": [
+      {
+        "link": "wh/?type=stl",
+        "label": "STL"
+      },
+      {
+        "link": "wh/?type=physical",
         "label": "Физические"
       }
     ]
@@ -46,15 +48,21 @@
     "label": "📖 Том Понимания"
   },
   {
-    "link": "/faq",
-    "label": "FAQ"
-  },
-  {
-    "link": "contacts",
-    "label": "Контакты"
-  },
-  {
-    "link": "my-order",
-    "label": "Отследить"
+    "link": "#",
+    "label": "Информация",
+    "links": [
+      {
+        "link": "/faq",
+        "label": "❓ FAQ"
+      },
+      {
+        "link": "contacts",
+        "label": "📞 Контакты"
+      },
+      {
+        "link": "my-order",
+        "label": "📄 Отследить заказ"
+      }
+    ]
   }
 ]
