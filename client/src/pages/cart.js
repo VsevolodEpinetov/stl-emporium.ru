@@ -394,14 +394,22 @@ export default function CartPage() {
     const fetchData = async () => {
       try {
         const allIds = shoppingCart.map(i => i.code);
-        const [creaturesData, terrainsData] = await Promise.all([
+        const [creaturesData, terrainsData, whCreaturesData] = await Promise.all([
           fetchDataFromURINew('creatures', { codes: allIds }),
-          fetchDataFromURINew('terrains', { codes: allIds })
+          fetchDataFromURINew('terrains', { codes: allIds }),
+          fetchDataFromURINew('creatures', { codes: allIds, wh: true })
         ]);
+
+        console.log({
+          creaturesData: creaturesData,
+          terrainsData: terrainsData,
+          whCreaturesData: whCreaturesData
+        })
 
         const newObject = shoppingCart.map(item => {
           const data = creaturesData.data.find(d => d.attributes.code === item.code) ||
-            terrainsData.data.find(d => d.attributes.code === item.code);
+            terrainsData.data.find(d => d.attributes.code === item.code) || 
+            whCreaturesData.data.find(d => d.attributes.code === item.code)
 
           if (data) {
             return {

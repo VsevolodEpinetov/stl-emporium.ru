@@ -149,7 +149,7 @@ export const STLCard = ({
         centered
         size='lg'
       >
-        {item.attributes.gallery ?
+        {item.attributes.gallery?.data?.length > 0 ?
           <Carousel
             mx="auto"
             withIndicators
