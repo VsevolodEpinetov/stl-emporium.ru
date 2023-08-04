@@ -1,4 +1,4 @@
-import { Divider, Loader, Title } from '@mantine/core';
+import { Divider, Loader, Skeleton, Title } from '@mantine/core';
 import React from 'react';
 import PhysicalAndSTLSwitch from './PhysicalAndSTLSwitch';
 import FiltersButtonsGroup from './FiltersButtonsGroup';
@@ -30,17 +30,24 @@ const STLFilters = ({
       <Divider />
 
       {filtersLoading &&
-        <Loader />
+        <>
+          <Skeleton height={20} width='50%' mb='md' mt='md' />
+          <Skeleton height={50} width='100%' />
+          <Skeleton height={20} width='50%' mb='md' mt='md' />
+          <Skeleton height={50} width='100%' />
+          <Skeleton height={20} width='50%' mb='md' mt='md' />
+          <Skeleton height={50} width='100%' />
+        </>
       }
 
       {newFilters && !filtersLoading && Object.entries(newFilters).map(([key, value]) => {
         if (key !== 'sex') {
-          return <DropdownFilter key={key} data={value} filterName={key}/>;
+          return <DropdownFilter key={key} data={value} filterName={key} />;
         }
         return null;
       })}
 
-      {(newFilters.sex && !filtersLoading) ? <SexFilter data={newFilters.sex} /> : null }
+      {(newFilters.sex && !filtersLoading) ? <SexFilter data={newFilters.sex} /> : null}
 
       <FiltersButtonsGroup
         loading={loading}

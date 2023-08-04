@@ -1,5 +1,5 @@
 //import { Card, Col, Row, Button, Text } from "@nextui-org/react";
-import { Card, Text, Group, Center, createStyles, Modal, Image, Badge, getStylesRef, rem } from '@mantine/core';
+import { Card, Text, Group, Center, createStyles, Modal, Image, Badge, getStylesRef, rem, Skeleton } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Button, ActionIcon } from '@mantine/core';
 import { IconMinus, IconPlus } from '@tabler/icons-react';
@@ -113,7 +113,8 @@ export const STLCard = ({
 
           <Group position="apart" spacing="xs">
             <Text size="sm" className={classes.author} style={{ maxWidth: '70%' }}>
-              {newFilters && generateDescriptionString(item.attributes, type, newFilters)}
+              {!filtersLoading && newFilters && generateDescriptionString(item.attributes, type, newFilters)}
+              {filtersLoading && <>...</>}
             </Text>
 
             <Group>
