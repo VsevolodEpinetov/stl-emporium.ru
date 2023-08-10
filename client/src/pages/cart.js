@@ -400,12 +400,6 @@ export default function CartPage() {
           fetchDataFromURINew('creatures', { codes: allIds, wh: true })
         ]);
 
-        console.log({
-          creaturesData: creaturesData,
-          terrainsData: terrainsData,
-          whCreaturesData: whCreaturesData
-        })
-
         const newObject = shoppingCart.map(item => {
           const data = creaturesData.data.find(d => d.attributes.code === item.code) ||
             terrainsData.data.find(d => d.attributes.code === item.code) || 

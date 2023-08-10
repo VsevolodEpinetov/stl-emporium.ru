@@ -45,8 +45,8 @@ export default async function handler(req, res) {
       ...(monsterTypes && { classes: monsterTypes.split(',') }), //yes it should be this way
       ...(sex && { sex: sex }),
       ...(weapons && { weapons: weapons.split(',') }),
-      ...(whFactions && { whFactions: whFactions.split(',') }),
-      ...(whTypes && { whTypes: whTypes.split(',') }),
+      ...(whFactions && { factions: whFactions.split(',') }),
+      ...(whTypes && { type: whTypes.split(',') }),
     }
 
     const api = axios.create({
