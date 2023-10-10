@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { useLocalStorage } from '@mantine/hooks';
+import { useDisclosure, useLocalStorage } from '@mantine/hooks';
 import { useState, useEffect, useMemo } from 'react'
 import CustomAppShell from '@/components/CustomAppShell';
 import { useSearchParams } from 'next/navigation';
@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import STLGallery from '@/components/STLGallery';
 import { fetchDataFromURINew, generateOptionsObject } from '@/utils/api';
 import useFilters from '@/hooks/useFilters';
+import { Modal, useMantineTheme } from '@mantine/core';
 
 const filters = {
   races: {
@@ -41,6 +42,7 @@ const filters = {
 
 export default function Home() {
   const [chosenMode, setChosenMode] = useLocalStorage({ key: 'user-setting-mode', defaultValue: 'stl' })
+
 
   const params = useSearchParams();
   const router = useRouter();
