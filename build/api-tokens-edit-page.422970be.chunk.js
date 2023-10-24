@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkstl_emporium=self.webpackChunkstl_emporium||[]).push([[92],{50955:(r,e,t)=>{t.r(e),t.d(e,{default:()=>l});var s=t(67294),E=t(51435),_=t(86706),n=t(36364),P=t(92458);const l=()=>{const o=(0,_.v9)(n._);return s.createElement(E.O4,{permissions:o.settings["api-tokens"].read},s.createElement(P.Z,null))}}}]);
