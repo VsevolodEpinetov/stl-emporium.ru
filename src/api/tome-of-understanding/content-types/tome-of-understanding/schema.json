@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "tomes_of_understanding",
+  "info": {
+    "singularName": "tome-of-understanding",
+    "pluralName": "tomes-of-understanding",
+    "displayName": "tomes-of-understanding",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "usesLeft": {
+      "type": "integer",
+      "required": true,
+      "default": 0
+    }
+  }
+}

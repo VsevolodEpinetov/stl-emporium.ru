@@ -1,0 +1,22 @@
+{
+  "kind": "collectionType",
+  "collectionName": "wh_factions",
+  "info": {
+    "singularName": "wh-faction",
+    "pluralName": "wh-factions",
+    "displayName": "WhFaction",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "label": {
+      "type": "string"
+    },
+    "value": {
+      "type": "string"
+    }
+  }
+}

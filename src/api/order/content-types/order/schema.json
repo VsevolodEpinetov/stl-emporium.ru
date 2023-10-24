@@ -1,0 +1,59 @@
+{
+  "kind": "collectionType",
+  "collectionName": "orders",
+  "info": {
+    "singularName": "order",
+    "pluralName": "orders",
+    "displayName": "order",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "telegram": {
+      "type": "string"
+    },
+    "vk": {
+      "type": "string"
+    },
+    "items": {
+      "type": "json",
+      "required": true
+    },
+    "total": {
+      "type": "integer",
+      "required": true,
+      "default": 999999,
+      "min": 1,
+      "private": true
+    },
+    "paid": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "delivered": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "identificator": {
+      "type": "string",
+      "required": true
+    },
+    "preferredMethod": {
+      "type": "string",
+      "required": true
+    },
+    "mail": {
+      "type": "string"
+    },
+    "processing": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    }
+  }
+}

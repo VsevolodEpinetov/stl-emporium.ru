@@ -1,0 +1,22 @@
+{
+  "kind": "collectionType",
+  "collectionName": "wh_types",
+  "info": {
+    "singularName": "wh-type",
+    "pluralName": "wh-types",
+    "displayName": "WhType",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "label": {
+      "type": "string"
+    },
+    "value": {
+      "type": "string"
+    }
+  }
+}
