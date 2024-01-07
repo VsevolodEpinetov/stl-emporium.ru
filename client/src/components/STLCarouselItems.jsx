@@ -8,7 +8,7 @@ const STLCarouselItems = ({imageUrl, miniCode}) => {
       <Image
         mx="auto"
         radius="md"
-        src={`https://api.epinetov.com${imageUrl}`}
+        src={`https://api.stl-emporium.ru${imageUrl}`}
         alt={`Превьюшка миньки ${miniCode}`}
       />
     </Carousel.Slide>

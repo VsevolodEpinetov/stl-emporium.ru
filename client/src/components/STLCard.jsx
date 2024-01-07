@@ -93,7 +93,7 @@ export const STLCard = ({
         }
       }}
     >
-      <div className={classes.image} style={{ backgroundImage: `url(https://api.epinetov.com${item.attributes.mainPicture.data.attributes.url})`, backgroundPosition: 'center' }} />
+      <div className={classes.image} style={{ backgroundImage: `url(https://api.stl-emporium.ru${item.attributes.mainPicture.data.attributes.url})`, backgroundPosition: 'center' }} />
       <div className={classes.overlay} />
 
       <div className={classes.content}>
@@ -164,7 +164,7 @@ export const STLCard = ({
           <Image
             mx="auto"
             radius="md"
-            src={`https://api.epinetov.com${item.attributes.mainPicture.data.attributes.url}`}
+            src={`https://api.stl-emporium.ru${item.attributes.mainPicture.data.attributes.url}`}
             alt={`Превьюшка миньки ${item.attributes.code}`} />
         }
         <Center>
