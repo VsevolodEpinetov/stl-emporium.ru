@@ -26,7 +26,6 @@ export const fetchDataFromURINew = async (type, params) => {
   try {
     const query = createQueryString(params)
     const response = await fetch(`/api/${type}?${query}`, {})
-    console.log(response)
     const jsonData = await response.json();
     return {
       data: jsonData.data,
