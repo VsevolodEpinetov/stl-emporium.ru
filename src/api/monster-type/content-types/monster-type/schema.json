@@ -1,0 +1,22 @@
+{
+  "kind": "collectionType",
+  "collectionName": "monster_types",
+  "info": {
+    "singularName": "monster-type",
+    "pluralName": "monster-types",
+    "displayName": "monsterTypes"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "value": {
+      "type": "string"
+    }
+  }
+}

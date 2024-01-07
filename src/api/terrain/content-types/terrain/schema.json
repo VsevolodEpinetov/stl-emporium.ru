@@ -1,0 +1,62 @@
+{
+  "kind": "collectionType",
+  "collectionName": "terrains",
+  "info": {
+    "singularName": "terrain",
+    "pluralName": "terrains",
+    "displayName": "terrain",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "mainPicture": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "type": {
+      "type": "string",
+      "required": true
+    },
+    "code": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "priceSTL": {
+      "type": "integer",
+      "required": true,
+      "default": 20
+    },
+    "pricePhysical": {
+      "type": "integer",
+      "default": 50,
+      "required": true
+    },
+    "onlyPhysical": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "comment": {
+      "type": "text"
+    },
+    "form": {
+      "type": "json",
+      "required": true
+    },
+    "tags": {
+      "type": "json"
+    },
+    "size": {
+      "type": "json",
+      "required": true
+    }
+  }
+}

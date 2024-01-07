@@ -8,7 +8,7 @@
     "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
@@ -23,11 +23,6 @@
         "images"
       ]
     },
-    "race": {
-      "type": "string",
-      "default": "orc",
-      "required": true
-    },
     "sex": {
       "type": "string",
       "required": true,
@@ -35,19 +30,59 @@
       "maxLength": 1,
       "minLength": 1
     },
+    "code": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "priceSTL": {
+      "type": "integer",
+      "default": 106,
+      "required": true,
+      "min": 1
+    },
+    "pricePhysical": {
+      "type": "integer",
+      "required": true,
+      "default": 318,
+      "min": 1
+    },
+    "onlyPhysical": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "studioName": {
+      "type": "string",
+      "required": true
+    },
+    "releaseName": {
+      "type": "string",
+      "required": true
+    },
+    "priceCyprus": {
+      "type": "integer",
+      "required": true,
+      "default": 4
+    },
+    "isMonster": {
+      "type": "boolean",
+      "required": true
+    },
+    "isHero": {
+      "type": "boolean",
+      "required": true
+    },
+    "races": {
+      "type": "json",
+      "required": true
+    },
     "classes": {
       "type": "json",
       "required": true
     },
-    "code": {
-      "type": "string",
-      "required": true
-    },
-    "price": {
-      "type": "integer",
-      "default": 100,
-      "required": true,
-      "min": 1
+    "weapons": {
+      "type": "json"
     }
   }
 }

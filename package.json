@@ -1,23 +1,23 @@
 {
-  "name": "strapi-project",
+  "name": "stl-emporium",
   "private": true,
-  "version": "0.1.0",
-  "description": "A Strapi application",
+  "version": "1.0.0",
+  "description": "STL Emporium",
   "scripts": {
     "develop": "strapi develop",
     "start": "strapi start",
     "build": "strapi build",
     "strapi": "strapi"
   },
-  "devDependencies": {},
   "dependencies": {
-    "@strapi/strapi": "4.7.1",
-    "@strapi/plugin-users-permissions": "4.7.1",
-    "@strapi/plugin-i18n": "4.7.1",
-    "better-sqlite3": "8.0.1"
+    "@strapi/plugin-i18n": "4.14.5",
+    "@strapi/plugin-users-permissions": "4.14.5",
+    "@strapi/strapi": "4.14.5",
+    "better-sqlite3": "8.0.1",
+    "strapi-plugin-multi-select": "^1.1.0"
   },
   "author": {
-    "name": "A Strapi developer"
+    "name": "Vsevolod Epinetov"
   },
   "strapi": {
     "uuid": "67f7fc8c-57d9-4690-8da5-3cff8e8ffcf3"

@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "races",
+  "info": {
+    "singularName": "race",
+    "pluralName": "races",
+    "displayName": "races",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "value": {
+      "type": "string",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

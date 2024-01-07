@@ -1,0 +1,65 @@
+{
+  "kind": "collectionType",
+  "collectionName": "wh_creatures",
+  "info": {
+    "singularName": "wh-creature",
+    "pluralName": "wh-creatures",
+    "displayName": "WhCreature",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "mainPicture": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "code": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "priceSTL": {
+      "type": "integer",
+      "required": true,
+      "default": 106
+    },
+    "pricePhysical": {
+      "type": "integer",
+      "default": 312,
+      "required": true
+    },
+    "studioName": {
+      "type": "string",
+      "required": true
+    },
+    "releaseName": {
+      "type": "string",
+      "required": true
+    },
+    "factions": {
+      "type": "json",
+      "required": true
+    },
+    "type": {
+      "type": "json",
+      "required": true
+    },
+    "gallery": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": true
+    }
+  }
+}
