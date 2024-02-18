@@ -2,11 +2,12 @@
 import { Card, Text, Group, Center, createStyles, Modal, Image, Badge, getStylesRef, rem, Skeleton } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Button, ActionIcon } from '@mantine/core';
-import { IconMinus, IconPlus } from '@tabler/icons-react';
+import { IconInfoHexagon, IconMinus, IconPlus } from '@tabler/icons-react';
 import { generateDescriptionString } from '@/utils/helpers';
 import { Carousel, useAnimationOffsetEffect } from '@mantine/carousel';
 import STLCarouselItems from './STLCarouselItems';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import STLInfoHoverCard from './STLInfoHoverCard';
 
 const useStyles = createStyles((theme) => {
   return {
@@ -76,6 +77,13 @@ export const STLCard = ({
   const [opened, handlers] = useDisclosure(false);
   const [embla, setEmbla] = useState(null);
 
+  const [cardWidth, setCardWidth] = useState(0)
+  const refCard = useRef(null)
+
+  useEffect(() => {
+    setCardWidth(refCard.current.clientWidth)
+  }, [])
+
   useAnimationOffsetEffect(embla, TRANSITION_DURATION);
 
   return (
@@ -92,6 +100,7 @@ export const STLCard = ({
           handlers.open()
         }
       }}
+      ref={refCard}
     >
       <div className={classes.image} style={{ backgroundImage: `url(https://api.stl-emporium.ru${item.attributes.mainPicture.data.attributes.url})`, backgroundPosition: 'center' }} />
       <div className={classes.overlay} />
@@ -113,7 +122,7 @@ export const STLCard = ({
 
           <Group position="apart" spacing="xs">
             <Text size="sm" className={classes.author} style={{ maxWidth: '70%' }}>
-              {!filtersLoading && newFilters && generateDescriptionString(item.attributes, type, newFilters)}
+              {!filtersLoading && newFilters && <STLInfoHoverCard info={item.attributes} type={type} newFilters={newFilters} cardWidth={cardWidth}/>}
               {filtersLoading && <>...</>}
             </Text>
 

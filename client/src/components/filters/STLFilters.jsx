@@ -1,5 +1,5 @@
-import { Divider, Loader, Skeleton, Title } from '@mantine/core';
-import React from 'react';
+import { Divider, Loader, ScrollArea, Skeleton, Title } from '@mantine/core';
+import React, { useState } from 'react';
 import PhysicalAndSTLSwitch from './PhysicalAndSTLSwitch';
 import FiltersButtonsGroup from './FiltersButtonsGroup';
 import DropdownFilter from './DropdownFilter';
@@ -11,7 +11,9 @@ const STLFilters = ({
   getSelectedHeroes,
   nullFilters,
   newFilters,
-  filtersLoading
+  filtersLoading,
+  filtersHeight,
+  headerHeight
 }) => {
 
   function areFiltersEmpty(filters) {
@@ -23,39 +25,52 @@ const STLFilters = ({
     return true;
   }
 
+  const [titleHeight, setTitleHeight] = React.useState(0)
+  const refTitle = React.useRef(null)
+
+  React.useEffect(() => {
+    setTitleHeight(refTitle.current.clientHeight)
+  }, [])
+
+
   return (
     <div>
-      <Title order={3} style={{ marginTop: '15px' }}>Фильтры</Title>
-      <PhysicalAndSTLSwitch />
-      <Divider />
+      <Title ref={refTitle} order={3} style={{ marginTop: '15px' }}>Фильтры</Title>
+      <ScrollArea.Autosize type='always' h={filtersHeight - titleHeight - 16 - 15 - 20} offsetScrollbars scrollbarSize={6}>
+        <PhysicalAndSTLSwitch />
+        <Divider />
 
-      {filtersLoading &&
-        <>
-          <Skeleton height={20} width='50%' mb='md' mt='md' />
-          <Skeleton height={50} width='100%' />
-          <Skeleton height={20} width='50%' mb='md' mt='md' />
-          <Skeleton height={50} width='100%' />
-          <Skeleton height={20} width='50%' mb='md' mt='md' />
-          <Skeleton height={50} width='100%' />
-        </>
-      }
+        <div>
+          {filtersLoading &&
+            <>
+              <Skeleton height={20} width='50%' mb='md' mt='md' />
+              <Skeleton height={50} width='100%' />
+              <Skeleton height={20} width='50%' mb='md' mt='md' />
+              <Skeleton height={50} width='100%' />
+              <Skeleton height={20} width='50%' mb='md' mt='md' />
+              <Skeleton height={50} width='100%' />
+            </>
+          }
 
-      {newFilters && !filtersLoading && Object.entries(newFilters).map(([key, value]) => {
-        if (key !== 'sex') {
-          return <DropdownFilter key={key} data={value} filterName={key} />;
-        }
-        return null;
-      })}
 
-      {(newFilters.sex && !filtersLoading) ? <SexFilter data={newFilters.sex} /> : null}
+          {newFilters && !filtersLoading && Object.entries(newFilters).map(([key, value]) => {
+            if (key !== 'sex') {
+              return <DropdownFilter key={key} data={value} filterName={key} />;
+            }
+            return null;
+          })}
 
-      <FiltersButtonsGroup
-        loading={loading}
-        setFiltersOpened={setFiltersOpened}
-        getSelectedHeroes={getSelectedHeroes}
-        nullFilters={nullFilters}
-        isResetButtonDisabled={/*areFiltersEmpty(newFilters)*/true}
-      />
+          {(newFilters.sex && !filtersLoading) ? <SexFilter data={newFilters.sex} /> : null}
+
+          <FiltersButtonsGroup
+            loading={loading}
+            setFiltersOpened={setFiltersOpened}
+            getSelectedHeroes={getSelectedHeroes}
+            nullFilters={nullFilters}
+            isResetButtonDisabled={/*areFiltersEmpty(newFilters)*/true}
+          />
+        </div>
+      </ScrollArea.Autosize>
     </div>
   );
 };

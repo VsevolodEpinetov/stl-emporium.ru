@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CustomHeader } from './CustomHeader';
 import { AppShell, Button, Divider, Flex, Group, Modal, Text, ThemeIcon, createStyles, useMantineTheme } from '@mantine/core';
 import { CustomNavbar } from './CustomNavbar';
@@ -42,6 +42,8 @@ const CustomAppShell = ({ getSelectedHeroes, loading, nullFilters, chosenMode, s
   const [adultModalOpened, setAdultModalOpened] = useLocalStorage({ key: 'adult-modal', defaultValue: false })
   const theme = useMantineTheme();
 
+  const [headerHeight, setHeaderHeight] = useState(0);
+
   useEffect(() => {
     setCartSize(shoppingCart.reduce((partial, item) => partial + item.amount, 0));
   }, [shoppingCart])
@@ -62,6 +64,7 @@ const CustomAppShell = ({ getSelectedHeroes, loading, nullFilters, chosenMode, s
         setChosenMode={setChosenMode}
         newFilters={newFilters}
         filtersLoading={filtersLoading}
+        headerHeight={headerHeight}
       />}
       header={<CustomHeader
         menuOpened={menuOpened}
@@ -70,6 +73,7 @@ const CustomAppShell = ({ getSelectedHeroes, loading, nullFilters, chosenMode, s
         setFiltersOpened={setFiltersOpened}
         withFilters={newFilters ? true : false}
         cartSize={cartSize}
+        onHeightChange={setHeaderHeight}
       />}
     >
       <div className={classes.mainWrapper}>

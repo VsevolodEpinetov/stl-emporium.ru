@@ -1,5 +1,9 @@
 {
   "monsterTypes": "monster-types",
+  "monsterKinds": "monster-kinds",
+  "monsterIntelligences": "monster-intelligences",
+  "monsterSizes": "monster-sizes",
+  "monsterEnvironments": "monster-environments",
   "tags": "terrain-tags",
   "size": "sizes",
   "form": "forms",

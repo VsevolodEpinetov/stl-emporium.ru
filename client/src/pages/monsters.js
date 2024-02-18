@@ -16,11 +16,39 @@ const filters = {
       label: "Фильтр по расам"
     }
   },
+  monsterEnvironments: {
+    ui: {
+      placeholder: "Показываются все районы обитания",
+      nothingFound: "Таких районов нет :(",
+      label: "Фильтр по району обитания"
+    }
+  },
+  monsterSizes: {
+    ui: {
+      placeholder: "Показываются все размеры",
+      nothingFound: "Таких размеров нет :(",
+      label: "Фильтр по размеру"
+    }
+  },
+  monsterIntelligences: {
+    ui: {
+      placeholder: "Показываются все разумы",
+      nothingFound: "Таких разумов нет :(",
+      label: "Фильтр по разумности"
+    }
+  },
   monsterTypes: {
     ui: {
       placeholder: "Показываются все типы монстров",
       nothingFound: "Не знаем таких типов :(",
       label: "Фильтр по типам"
+    }
+  },
+  monsterKinds: {
+    ui: {
+      placeholder: "Показываются все виды",
+      nothingFound: "Таких видов нет :(",
+      label: "Фильтр по виду"
     }
   },
   weapons: {
@@ -70,7 +98,7 @@ export default function Home() {
     setLoading(true);
 
     try {
-      const data = await fetchDataFromURINew('creatures', { page: currentPage, ...selectedFilters, monster: true });
+      const data = await fetchDataFromURINew('monsters', { page: currentPage, ...selectedFilters });
       setMiniatures(data.data);
       setTotalFound(data.meta.pagination.total);
       setTotalPages(data.meta.pagination.pageCount);
@@ -88,7 +116,7 @@ export default function Home() {
   useEffect(() => {
     setLoading(true);
 
-    fetchDataFromURINew('creatures', { page: currentPage, ...selectedFilters, monster: true }).then(data => {
+    fetchDataFromURINew('monsters', { page: currentPage, ...selectedFilters }).then(data => {
       setMiniatures(data.data);
       window.scrollTo({
         top: 0,
@@ -102,7 +130,7 @@ export default function Home() {
     setLoading(true);
 
     try {
-      const data = await fetchDataFromURINew('creatures', { monster: true });
+      const data = await fetchDataFromURINew('monsters', { });
       setMiniatures(data.data);
       setTotalFound(data.meta.pagination.total);
       setTotalPages(data.meta.pagination.pageCount);

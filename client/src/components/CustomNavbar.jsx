@@ -37,12 +37,18 @@ function getRandomInt(min, max) {
 }
 
 
-export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOpened, getSelectedHeroes, loading, nullFilters, filtersLoading, newFilters }) => {
+export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOpened, getSelectedHeroes, loading, nullFilters, filtersLoading, newFilters, headerHeight }) => {
   const { classes } = useStyles();
   const [chosenImage, setChosenImage] = useState('');
+  const [navbarHeight, setNavbarHeight] = useState(0)
+  const [logoHeight, setLogoHeight] = useState(0)
+  const refNavbar = React.useRef(null)
+  const refLogo = React.useRef(null)
 
   useEffect(() => {
     setChosenImage(getRandomInt(1, 17))
+    setNavbarHeight(refNavbar.current.clientHeight)
+    setLogoHeight(refLogo.current.clientHeight)
   }, [])
 
   const items = LINKS.map((link) => {
@@ -79,30 +85,36 @@ export const CustomNavbar = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
           border: 'none',
           zIndex: '98',
           padding: !newFilters ? '0px' : 'f'
-        }}>
+        }}
+        ref={refNavbar}
+        >
         <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
-          <Navbar.Section>
+          <Navbar.Section ref={refLogo}>
             <Center>
               <Image src="/logo.png" alt='logo' style={{ maxWidth: '200px' }} classNames={classes.logo} component='a' href='/' />
             </Center>
           </Navbar.Section>
         </MediaQuery>
-        <Navbar.Section grow mt="md" component={ScrollArea}>
+        <Navbar.Section grow mt="md">
           {
             newFilters ?
               <STLFilters
+                filtersHeight={navbarHeight - logoHeight - headerHeight}
                 newFilters={newFilters}
                 loading={loading}
                 filtersLoading={filtersLoading}
                 setFiltersOpened={setFiltersOpened}
                 getSelectedHeroes={getSelectedHeroes}
                 nullFilters={nullFilters}
+                headerHeight={headerHeight}
               />
               :
               <Overlay color='#141517' style={{
                 backgroundImage: `url(/bg-${chosenImage}.png)`,
                 opacity: '10%',
-                backgroundSize: 'cover'
+                backgroundSize: 'cover',
+                height: navbarHeight - logoHeight - headerHeight,
+                marginTop: logoHeight + headerHeight
               }}>
               </Overlay>
           }

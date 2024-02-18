@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createStyles, Header, MediaQuery, Burger, Container, Menu, Center, Group, Title, ActionIcon, Button } from "@mantine/core"
 import { IconChevronDown, IconFilter, IconFilterEdit, IconShoppingCart, } from '@tabler/icons-react';
 const LINKS = require("../../data/links.json")
@@ -82,8 +82,21 @@ const useStyles = createStyles((theme) => ({
   }
 }));
 
-export const CustomHeader = ({ filtersOpened, cartSize, setFiltersOpened, menuOpened, setMenuOpened, withFilters }) => {
+export const CustomHeader = ({ filtersOpened, cartSize, setFiltersOpened, menuOpened, setMenuOpened, withFilters, onHeightChange }) => {
   const { classes } = useStyles();
+
+  const [headerHeight, setHeaderHeight] = useState(0);
+
+  useEffect(() => {
+    const headerElement = document.getElementById('custom-header');
+    if (headerElement) {
+      const height = headerElement.offsetHeight;
+      setHeaderHeight(height);
+      if (typeof onHeightChange === 'function') {
+        onHeightChange(height);
+      }
+    }
+  }, [onHeightChange]);
 
   const items = LINKS.map((link) => {
     const menuItems = link.links?.map((item) => (
@@ -121,7 +134,7 @@ export const CustomHeader = ({ filtersOpened, cartSize, setFiltersOpened, menuOp
   });
 
   return (
-    <Header p="md" className={classes.menuWrapper}>
+    <Header p="md" className={classes.menuWrapper} id="custom-header">
       <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
         <Group position="apart">
           <Burger

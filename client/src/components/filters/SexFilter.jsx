@@ -22,8 +22,8 @@ const SexFilter = (
         label: classes.label
       }}
     >
-      <Checkbox value="m" label="Мужской" />
-      <Checkbox value="f" label="Женский" />
+      <Checkbox value="m" label="Мужской" style={{marginBottom: '10px'}} />
+      <Checkbox value="f" label="Женский" style={{marginBottom: '10px'}} />
       <Checkbox value="x" label="???" />
     </Checkbox.Group>
   );
