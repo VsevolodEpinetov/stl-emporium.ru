@@ -14,7 +14,7 @@ export default async function handler(req, res) {
       return;
     }
 
-    const { tomeId, tomeUses, races, classes, sex, weapons, page, hero, monster, monsterTypes, codes, whFactions, whTypes, wh } = req.query;
+    const { tomeId, tomeUses, races, classes, sex, weapons, page, codes, whFactions, whTypes, wh } = req.query;
 
     const API_URL = process.env.API_URL;
     const TOKEN = process.env.TOKEN_GET_CREATURES;
@@ -36,13 +36,10 @@ export default async function handler(req, res) {
     }
     if (tomeUses > 0) FIELDS.push('releaseName', 'studioName')
     const uniqueFields = [...new Set(FIELDS)]
-    const IS_HERO = 'filters[isHero][$eq]=true'
-    const IS_A_MONSTER = "filters[isMonster][$eq]=true"
 
     const FILTERS = {
       ...(races && { races: races.split(',') }),
       ...(classes && { classes: classes.split(',') }),
-      ...(monsterTypes && { classes: monsterTypes.split(',') }), //yes it should be this way
       ...(sex && { sex: sex }),
       ...(weapons && { weapons: weapons.split(',') }),
       ...(whFactions && { factions: whFactions.split(',') }),
@@ -88,7 +85,7 @@ export default async function handler(req, res) {
       }
     }
 
-    const response = await api.get(`${API_URL}/${ENDPOINT}?${DEFAULT_SORT}&${defaultValues.defaultPageSize}&${defaultValues.getImagesAsWell}&${buildFieldsQuery(uniqueFields)}${monster ? `&${IS_A_MONSTER}` : ''}${hero ? `&${IS_HERO}` : ''}${hasAtLeastOneKey(FILTERS) ? '&' + generateFiltersQueryString(FILTERS) : ''}${PAGE}${codes ? codesQuery : ''}`);
+    const response = await api.get(`${API_URL}/${ENDPOINT}?${DEFAULT_SORT}&${defaultValues.defaultPageSize}&${defaultValues.getImagesAsWell}&${buildFieldsQuery(uniqueFields)}${hasAtLeastOneKey(FILTERS) ? '&' + generateFiltersQueryString(FILTERS) : ''}${PAGE}${codes ? codesQuery : ''}`);
 
     if (response.error) {
       res.status(200).json({ status: 'Error' });
