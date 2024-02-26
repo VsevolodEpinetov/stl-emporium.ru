@@ -1,14 +1,12 @@
 import Head from 'next/head'
 import { useLocalStorage, useDisclosure, useMediaQuery } from '@mantine/hooks';
-import { useState, useEffect, useCallback } from 'react'
-import { Group, Text, Table, Title, Button, Modal, List, ScrollArea, Anchor, Grid, Paper, Divider, Stack, Input, Select, TextInput, Loader } from '@mantine/core'
+import { useState, useEffect } from 'react'
+import { Group, Text, Table, Title, Button, Modal, List, ScrollArea, Anchor, Grid, Paper, Divider, Stack, Select, TextInput } from '@mantine/core'
 import { IconAt, IconBrandTelegram, IconBrandVk } from '@tabler/icons-react'
 import ItemRow from '@/components/ItemRow';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import CustomAppShell from '@/components/CustomAppShell';
+import CustomAppShell from '@/components/CustomAppShell/CustomAppShell';
 import { fetchDataFromURINew } from '@/utils/api';
-
-const token = '8721eb0fe7756b16ad0abb03650965113f4e26d8a0958a70c15b932124d39157eb132156e1676d9efb42fc2afed5cc7b20390edf19dd755a7e3914f43358e3f4c8e5d5368d5efe72d778d4f23d0158c6a239f48709a60a9771f87dac5c6bc9a3245314a673ba8e9c4bb7dccb0c3f76eea14717501474ebfa02583d81251c1bca'
 
 function generateToken() {
   const firstPart = [
@@ -333,25 +331,18 @@ export default function CartPage() {
       return newObj;
     })
     const totalCost = getTotal();
-    const response = await fetch(`https://api.stl-emporium.ru/api/orders`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        data: {
-          total: totalCost,
-          items: newCart,
-          vk: vk,
-          telegram: tg,
-          mail: mail,
-          preferredMethod: chosenPreferredContact,
-          delivered: false,
-          paid: false,
-          identificator: identificator
-        }
-      })
+    const response = await fetchDataFromURINew('place-order', { 
+      totalCost: totalCost, 
+      cartItems: JSON.stringify(newCart),
+      vk: vk, 
+      tg: tg, 
+      mail: mail,
+      chosenPreferredContact: chosenPreferredContact, 
+      identificator: identificator
     });
 
-    if (!response.ok) {
+
+    if (!response.data.created) {
       // TODO: log errors
     } else {
       sendInfoToTelegram(totalCost, vk, tg, mail, chosenPreferredContact, identificator)
@@ -497,7 +488,7 @@ export default function CartPage() {
         <main style={{ padding: '25px' }}>
           <Title order={1}>Твоя корзина</Title>
           <Grid>
-            <Grid.Col md={8} sm={12}>
+            <Grid.Col span={{ sm: 12, md: 8 }}>
               <Paper shadow="xs" p="md">
                 {
                   shoppingCartWithData.length > 0 &&
@@ -540,7 +531,7 @@ export default function CartPage() {
                 }
               </Paper>
             </Grid.Col>
-            <Grid.Col md={4} sm={12}>
+            <Grid.Col span={{ sm: 12, md: 4 }}>
               <Paper shadow="xs" p="md" style={{ position: 'sticky', top: '15px' }}>
                 <Button fullWidth size='lg' color='green' radius='md' onClick={() => { modalHandlers.open() }} disabled={tooLowTotal && true}>
                   Оформить заказ

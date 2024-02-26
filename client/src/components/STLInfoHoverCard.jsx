@@ -5,9 +5,9 @@ import { generateDescriptionString } from '@/utils/helpers';
 
 const STLInfoHoverCard = ( {info, type, newFilters, cardWidth} ) => {
   return (
-    <Group position="center">
+    <Group justify="center">
       <HoverCard width={cardWidth - 10} shadow="md" withArrow openDelay={200} closeDelay={400} >
-        <HoverCard.Target>
+        <HoverCard.Target style={{zIndex: 2}}>
           <IconInfoHexagon size={36}/>
         </HoverCard.Target>
         <HoverCard.Dropdown>

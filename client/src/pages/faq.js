@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { Accordion, Title, Anchor, Text } from '@mantine/core'
-import CustomAppShell from '@/components/CustomAppShell'
+import CustomAppShell from '@/components/CustomAppShell/CustomAppShell'
+import classes from './faq.module.css'
 
 
 export default function FAQPage () {
@@ -10,7 +11,7 @@ export default function FAQPage () {
       <CustomAppShell >
         <main style={{padding: '25px'}}>
           <Title order={1} style={{ marginBottom: '15px' }}>Часто задаваемые вопросы</Title>
-          <Accordion defaultValue="what">
+          <Accordion defaultValue="what" variant="contained" classNames={classes}>
 
             <Accordion.Item value="what">
               <Accordion.Control>Чем мы занимаемся?</Accordion.Control>
@@ -39,7 +40,7 @@ export default function FAQPage () {
 
             <Accordion.Item value="bases">
               <Accordion.Control>В файлах моей миньки не было базы! Что делать?</Accordion.Control>
-              <Accordion.Panel>Это значит только одно - миниатюрка предоставляется без специальной базы. Уверяю, что все файлы досконально проверяются перед тем, как будут отправлены приобретателю. Ты можешь либо скачать бесплатную базу (<Anchor href='https://www.thingiverse.com/thing:3438699'>28мм</Anchor>, <Anchor href='https://www.thingiverse.com/thing:2589358'>32мм</Anchor>), либо выбрать базу из нашей <Anchor href='/bases'>библиотеки</Anchor>.</Accordion.Panel>
+              <Accordion.Panel>Это значит только одно - миниатюрка предоставляется без специальной базы. Уверяю, что все файлы досконально проверяются перед тем, как будут отправлены приобретателю, поэтому ошибки быть не может. Ты можешь либо скачать бесплатную базу (<Anchor href='https://www.thingiverse.com/thing:3438699'>28мм</Anchor>, <Anchor href='https://www.thingiverse.com/thing:2589358'>32мм</Anchor>), либо выбрать базу из нашей <Anchor href='/bases'>библиотеки</Anchor>.</Accordion.Panel>
             </Accordion.Item>
 
             <Accordion.Item value="return-policy">

@@ -5,13 +5,10 @@ import { useRouter } from 'next/router'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { IconCircleCheckFilled } from '@tabler/icons-react'
 import { useLocalStorage } from '@mantine/hooks'
-import CustomAppShell from '@/components/CustomAppShell'
+import CustomAppShell from '@/components/CustomAppShell/CustomAppShell'
 
 
 export default function FAQPage() {
-  const [opened, setOpened] = useState(false);
-  const router = useRouter();
-  const pathname = usePathname();
   const params = useSearchParams();
   const [identificator, setIdentificator] = useState('');
   const [total, setTotal] = useState('');

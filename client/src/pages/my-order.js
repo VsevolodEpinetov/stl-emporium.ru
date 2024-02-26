@@ -1,25 +1,12 @@
 import Head from 'next/head'
 import { useEffect, useState } from 'react'
-import { Accordion, AppShell, Title, Anchor, Text, TextInput, NumberInput, Select, Button, List, Code, Container, Box, SimpleGrid, Card, ActionIcon, Group } from '@mantine/core'
-import { CustomHeader } from '@/components/CustomHeader'
-import { CustomNavbar } from '@/components/CustomNavbar'
+import { Title, Text, TextInput, NumberInput, Select, Button, List, Code, Box, SimpleGrid, Card, ActionIcon, Group } from '@mantine/core'
 import { useInterval, useLocalStorage } from '@mantine/hooks'
 import { IconTrash } from '@tabler/icons-react'
-import CustomAppShell from '@/components/CustomAppShell'
-
-const token = '25132c43556e68d9898b82ee31c1acdbd949e3b63867a0cc030b2c774bf4b80496db0c38bbca20324e87885dd2d01c76e741e4f49477d255bce23920c66c5ba8d2a73f534b70bd11662d1395d091078594d9d7d5d44cc921da25a1af7f65fa15796ad5c754400ae8f4a0278829e7abffa6a28319782cdf96068e59c3714623b1'
-async function fetchDataFromURI(URI) {
-  const rawData = await fetch(URI, {
-    method: "GET",
-    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }
-  })
-  const data = await rawData.json();
-
-  return data?.data;
-}
+import CustomAppShell from '@/components/CustomAppShell/CustomAppShell'
+import { fetchDataFromURINew } from '@/utils/api'
 
 export default function FAQPage() {
-  const [opened, setOpened] = useState(false);
   const [contactType, setContactType] = useState('');
   const [contact, setContact] = useState('');
   const [identificator, setIdentificator] = useState('');
@@ -77,45 +64,38 @@ export default function FAQPage() {
     if (!thereIsAnError) {
       if (!firstBlood) setFirstBlood(true);
       setLoading(true);
-      const URI = 'https://api.stl-emporium.ru/api/orders?populate=*';
-      const identificatorFilter = `filters[identificator][$eq]=${identificator}`;
-      const totalFilter = `filters[total][$eq]=${total}`;
-      const contactFilter = `filters[${contactType}][$eq]=${contact}`;
-      fetchDataFromURI(`${URI}*&${identificatorFilter}&${totalFilter}&${contactFilter}`).then(data => {
-        setLoading(false);
-        setSeconds(7)
-        interval.start();
-        if (data) {
-          if (data[0]) {
-            setOrderInfo(data[0])
-            let found = false;
-            for (let i = 0; i < possibleOrders.length; i++) {
-              if (possibleOrders[i].identificator === identificator && possibleOrders[i].total == total && possibleOrders[i].preferredContact === contactType) {
-                found = true;
-                break;
-              }
-            }
+      const orderData = await fetchDataFromURINew('order', { identificatorOrder: identificator, totalAmount: total, contact: contactType, contactValue: contact });
+      setLoading(false);
+      setSeconds(7)
+      interval.start();
+      if (orderData.data.length > 0) {
+        setOrderInfo(orderData.data[0])
+        let found = false;
+        for (let i = 0; i < possibleOrders.length; i++) {
+          if (possibleOrders[i].identificator === identificator && possibleOrders[i].total == total && possibleOrders[i].preferredContact === contactType) {
+            found = true;
+            break;
+          }
+        }
 
-            if (!found && identificator !== '' && total !== '' && contactType !== '') {
-              setPossibleOrders([
-                ...possibleOrders,
-                {
-                  identificator: identificator,
-                  total: total,
-                  preferredContact: contactType
-                }
-              ])
+        if (!found && identificator !== '' && total !== '' && contactType !== '') {
+          setPossibleOrders([
+            ...possibleOrders,
+            {
+              identificator: identificator,
+              total: total,
+              preferredContact: contactType
             }
-          }
-          else {
-            setOrderInfo(undefined)
-            setErrorContact('Проверь данные, такого заказа нет')
-            setErrorContactType('Проверь данные, такого заказа нет')
-            setErrorTotal('Проверь данные, такого заказа нет')
-            setErrorIdentificator('Проверь данные, такого заказа нет')
-          }
-        } else { setOrderInfo(undefined) }
-      })
+          ])
+        }
+      }
+      else {
+        setOrderInfo(undefined)
+        setErrorContact('Проверь данные, такого заказа нет')
+        setErrorContactType('Проверь данные, такого заказа нет')
+        setErrorTotal('Проверь данные, такого заказа нет')
+        setErrorIdentificator('Проверь данные, такого заказа нет')
+      }
     }
 
   }

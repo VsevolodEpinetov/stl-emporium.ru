@@ -1,11 +1,11 @@
 import Head from 'next/head'
 import { useLocalStorage } from '@mantine/hooks';
 import { useState, useEffect } from 'react'
-import CustomAppShell from '@/components/CustomAppShell';
+import CustomAppShell from '@/components/CustomAppShell/CustomAppShell';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import STLGallery from '@/components/STLGallery';
-import { fetchDataFromURINew, generateOptionsObject } from '@/utils/api';
+import { fetchDataFromURINew } from '@/utils/api';
 import useFilters from '@/hooks/useFilters';
 
 const filters = {

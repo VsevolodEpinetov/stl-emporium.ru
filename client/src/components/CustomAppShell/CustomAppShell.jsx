@@ -1,44 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { CustomHeader } from './CustomHeader';
-import { AppShell, Button, Divider, Flex, Group, Modal, Text, ThemeIcon, createStyles, useMantineTheme } from '@mantine/core';
-import { CustomNavbar } from './CustomNavbar';
-import { useDisclosure, useLocalStorage } from '@mantine/hooks';
+import React, { useEffect, useState } from 'react';
+import { CustomHeader } from '../CustomHeader/CustomHeader';
+import { AppShell, Button, Divider, Flex, Modal, Text, ThemeIcon, useMantineTheme } from '@mantine/core';
+import { CustomNavbar } from '../CustomNavbar/CustomNavbar';
+import { useLocalStorage } from '@mantine/hooks';
 import { IconExclamationMark } from '@tabler/icons-react';
 
-
-const useStyles = createStyles((theme) => ({
-  label: {
-    fontSize: '0.875rem',
-    marginBottom: '5px',
-    fontWeight: '700'
-  },
-  logo: {
-    maxWidth: '200px'
-  },
-  linkStyle: {
-    fontSize: '1rem'
-  },
-  mainWrapper: {
-    paddingTop: '50px',
-    '@media (max-width: 1340px)': {
-      paddingTop: '100px'
-    },
-    '@media (max-width: 1110px)': {
-      paddingTop: '150px'
-    },
-    '@media (max-width: 768px)': {
-      paddingTop: '50px'
-    },
-  }
-}));
 
 const CustomAppShell = ({ getSelectedHeroes, loading, nullFilters, chosenMode, setChosenMode, children, newFilters = undefined, filtersLoading }) => {
   const [filtersOpened, setFiltersOpened] = useState(false);
   const [menuOpened, setMenuOpened] = useState(false);
   const [shoppingCart, setShoppingCart] = useLocalStorage({ key: 'shopping-cart', defaultValue: [] })
   const [cartSize, setCartSize] = useState(0);
-  const { classes } = useStyles();
-  const [opened, { open, close }] = useDisclosure(false);
   const [adultModalOpened, setAdultModalOpened] = useLocalStorage({ key: 'adult-modal', defaultValue: false })
   const theme = useMantineTheme();
 
@@ -50,35 +22,43 @@ const CustomAppShell = ({ getSelectedHeroes, loading, nullFilters, chosenMode, s
 
   return (
     <AppShell
-      navbarOffsetBreakpoint="sm"
-      navbar={<CustomNavbar
-        menuOpened={menuOpened}
-        setMenuOpened={setMenuOpened}
-        filtersOpened={filtersOpened}
-        setFiltersOpened={setFiltersOpened}
-        getSelectedHeroes={getSelectedHeroes}
-        cartSize={cartSize}
-        loading={loading}
-        nullFilters={nullFilters}
-        chosenMode={chosenMode}
-        setChosenMode={setChosenMode}
-        newFilters={newFilters}
-        filtersLoading={filtersLoading}
-        headerHeight={headerHeight}
-      />}
-      header={<CustomHeader
-        menuOpened={menuOpened}
-        setMenuOpened={setMenuOpened}
-        filtersOpened={filtersOpened}
-        setFiltersOpened={setFiltersOpened}
-        withFilters={newFilters ? true : false}
-        cartSize={cartSize}
-        onHeightChange={setHeaderHeight}
-      />}
+      header={{ height: headerHeight }}
+      navbar={{ width: 300, breakpoint: 'sm', collapsed: { mobile: !menuOpened && !filtersOpened } }}
+      padding="md"
     >
-      <div className={classes.mainWrapper}>
-        {children}
-      </div>
+      <AppShell.Header style={{ border: 'none' }}>
+        <CustomHeader
+          menuOpened={menuOpened}
+          setMenuOpened={setMenuOpened}
+          filtersOpened={filtersOpened}
+          setFiltersOpened={setFiltersOpened}
+          withFilters={newFilters ? true : false}
+          cartSize={cartSize}
+          onHeightChange={setHeaderHeight}
+        />
+      </AppShell.Header>
+      <AppShell.Navbar p="md" style={{ border: 'none' }}>
+        <CustomNavbar
+          menuOpened={menuOpened}
+          setMenuOpened={setMenuOpened}
+          filtersOpened={filtersOpened}
+          setFiltersOpened={setFiltersOpened}
+          getSelectedHeroes={getSelectedHeroes}
+          cartSize={cartSize}
+          loading={loading}
+          nullFilters={nullFilters}
+          chosenMode={chosenMode}
+          setChosenMode={setChosenMode}
+          newFilters={newFilters}
+          filtersLoading={filtersLoading}
+          headerHeight={headerHeight}
+        />
+      </AppShell.Navbar>
+      <AppShell.Main>
+        <div>
+          {children}
+        </div>
+      </AppShell.Main>
       <Modal
         opened={adultModalOpened}
         onClose={() => setAdultModalOpened(false)}
@@ -91,7 +71,7 @@ const CustomAppShell = ({ getSelectedHeroes, loading, nullFilters, chosenMode, s
         centered
       >
         <Text>
-          <ThemeIcon color="red" size="md" style={{marginRight: '5px'}}>
+          <ThemeIcon color="red" size="md" style={{ marginRight: '5px' }}>
             <IconExclamationMark />
           </ThemeIcon>
           На сайте периодически могут встречаться изображения 18+. Если вы закрываете это окно и остаётесь на сайте, то тем самым подтверждаете, что вам есть 18 лет, и вы морально готовы к различному разврату в мире настольно-ролевых игр.

@@ -1,7 +1,7 @@
 import { Group, Image, SimpleGrid, Skeleton } from '@mantine/core';
 import React from 'react';
 import { useLocalStorage } from '@mantine/hooks';
-import { STLCard } from './STLCard';
+import { STLCard } from './STLCard/STLCard';
 
 const STLList = ( {loading, miniatures, type, newFilters, filtersLoading} ) => {
   const [chosenMode, setChosenMode] = useLocalStorage({ key: 'user-setting-mode', defaultValue: 'stl' })
@@ -84,14 +84,8 @@ const STLList = ( {loading, miniatures, type, newFilters, filtersLoading} ) => {
   
   return (
     <SimpleGrid
-      cols={4}
+    cols={{ base: 2, xs: 3, sm: 3, md: 4, lg: 4, xl: 5 }}
       spacing="lg"
-      breakpoints={[
-        { maxWidth: 'lg', cols: 4, spacing: 'md' },
-        { maxWidth: 'md', cols: 3, spacing: 'md' },
-        { maxWidth: 'sm', cols: 3, spacing: 'sm' },
-        { maxWidth: 'xs', cols: 2, spacing: 'sm' },
-      ]}
     >
       {
         loading ?

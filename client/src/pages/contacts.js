@@ -1,31 +1,9 @@
 import Head from 'next/head'
-import { createStyles, Text, Box, Stack, Title, Anchor } from '@mantine/core';
+import { Text, Box, Stack, Title, Anchor } from '@mantine/core';
 import { IconPhone, IconAt, IconFileDescription, IconBrandVk } from '@tabler/icons-react';
-import CustomAppShell from '@/components/CustomAppShell'
+import CustomAppShell from '@/components/CustomAppShell/CustomAppShell'
 
-const useStyles = createStyles((theme) => ({
-  wrapper: {
-    display: 'flex',
-    alignItems: 'center',
-    color: theme.white,
-  },
-
-  icon: {
-    marginRight: theme.spacing.md,
-    backgroundImage: 'none',
-    backgroundColor: 'transparent',
-  },
-
-  title: {
-    color: theme.colors[theme.primaryColor][0],
-  },
-
-  description: {
-    color: theme.white,
-  },
-}));
-
-const MOCKDATA = [
+const contactData = [
   { title: 'Почта', description: "stl-emporium@outlook.com", icon: IconAt },
   { title: 'Телефон', description: '+7 909 918-70-18', icon: IconPhone },
   { title: 'VK', description: <Anchor href='https://vk.com/stlemporium' target='_blank'>https://vk.com/stlemporium</Anchor>, icon: IconBrandVk },
@@ -37,14 +15,13 @@ const MOCKDATA = [
 function ContactIcon({
   icon: Icon,
   title,
-  description,
-  variant = 'gradient',
-  className,
-  ...others
+  description
 }) {
-  const { classes, cx } = useStyles({ variant });
   return (
-    <div className={cx(classes.wrapper, className)} {...others}>
+    <div style={{
+      display: 'flex',
+      alignItems: 'center'
+    }}>
       {Icon ?
         <Box mr="md">
           <Icon size="1.5rem" />
@@ -56,16 +33,16 @@ function ContactIcon({
       }
 
       <div>
-        <Text size="xs" className={classes.title}>
+        <Text size="xs">
           {title}
         </Text>
-        <Text className={classes.description}>{description}</Text>
+        <Text>{description}</Text>
       </div>
     </div>
   );
 }
 
-export function ContactIconsList({ data = MOCKDATA, variant }) {
+export function ContactIconsList({ data = contactData, variant }) {
   const items = data.map((item, index) => <ContactIcon key={index} variant={variant} {...item} />);
   return <Stack>{items}</Stack>;
 }

@@ -1,7 +1,6 @@
 import { ActionIcon, Badge, Code, Skeleton } from '@mantine/core';
 import React from 'react';
 import CreatureImageWithModal from './CreatureImageWithModal';
-import { useState } from 'react';
 import { IconTrash } from '@tabler/icons-react';
 
 
@@ -20,7 +19,7 @@ const ItemRow = ({ itemCartInfo, removeAllInstances, loading }) => {
                 </tr>
                 :
                 <tr>
-                    <td>
+                    <td style={{ textAlign: 'center' }}>
                         <CreatureImageWithModal
                             imageSource={`https://api.stl-emporium.ru${itemCartInfo.info.mainPicture.data.attributes.url}`}
                             miniName={itemCartInfo.info.name}
@@ -28,12 +27,12 @@ const ItemRow = ({ itemCartInfo, removeAllInstances, loading }) => {
                             code={itemCartInfo.info.code}
                         />
                     </td>
-                    <td>{itemCartInfo.type === 'stl' ? <Badge variant="filled">STL</Badge> : <Badge color='green' variant="filled">Фигурка</Badge>}</td>
-                    <td><Code>{itemCartInfo.code}</Code></td>
-                    <td>{itemCartInfo.amount}</td>
-                    <td>{itemCartInfo.type === 'stl' ? itemCartInfo.info.priceSTL : itemCartInfo.info.pricePhysical}</td>
-                    <td>{itemCartInfo.type === 'stl' ? itemCartInfo.info.priceSTL * itemCartInfo.amount : itemCartInfo.info.pricePhysical * itemCartInfo.amount}</td>
-                    <td><ActionIcon size="lg" onClick={() => removeAllInstances(itemCartInfo.code, itemCartInfo.type)}><IconTrash size="1.625rem" /></ActionIcon></td>
+                    <td style={{ textAlign: 'center' }}>{itemCartInfo.type === 'stl' ? <Badge variant="filled">STL</Badge> : <Badge color='green' variant="filled">Фигурка</Badge>}</td>
+                    <td style={{ textAlign: 'center' }}><Code>{itemCartInfo.code}</Code></td>
+                    <td style={{ textAlign: 'center' }}>{itemCartInfo.amount}</td>
+                    <td style={{ textAlign: 'center' }}>{itemCartInfo.type === 'stl' ? itemCartInfo.info.priceSTL : itemCartInfo.info.pricePhysical}</td>
+                    <td style={{ textAlign: 'center' }}>{itemCartInfo.type === 'stl' ? itemCartInfo.info.priceSTL * itemCartInfo.amount : itemCartInfo.info.pricePhysical * itemCartInfo.amount}</td>
+                    <td style={{ textAlign: 'center' }}><ActionIcon variant="transparent" color="white" size="lg" onClick={() => removeAllInstances(itemCartInfo.code, itemCartInfo.type)}><IconTrash size="1.625rem" /></ActionIcon></td>
                 </tr>
             }
         </>

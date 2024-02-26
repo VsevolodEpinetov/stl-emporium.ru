@@ -11,7 +11,8 @@ const PhysicalAndSTLSwitch = () => {
       value={chosenMode}
       onChange={setChosenMode}
       fullWidth
-      style={{ marginTop: '15px', marginBottom: '15px' }}
+      size="sm"
+      style={{ marginTop: '15px', marginBottom: '15px'}}
     />
   );
 };

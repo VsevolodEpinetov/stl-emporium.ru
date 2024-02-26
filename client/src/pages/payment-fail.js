@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { Title } from '@mantine/core'
 import { IconX } from '@tabler/icons-react'
-import CustomAppShell from '@/components/CustomAppShell'
+import CustomAppShell from '@/components/CustomAppShell/CustomAppShell'
 
 
 export default function FAQPage() {

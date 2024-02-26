@@ -12,7 +12,7 @@ const FiltersButtonsGroup = (
   }
 ) => {
   return (
-    <Group spacing="sm" grow style={{ marginTop: '15px' }}>
+    <Group spacing="sm" grow="true" style={{ marginTop: '15px' }}>
       <Button loading={loading} color="green" style={{ maxWidth: '100%' }} onClick={() => {
         setFiltersOpened((o) => !o)
         getSelectedHeroes();

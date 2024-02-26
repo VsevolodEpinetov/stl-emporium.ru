@@ -1,47 +1,19 @@
 [
   {
-    "link": "#",
-    "label": "🐲 Фентези",
-    "links": [
-      {
-        "link": "/?type=stl",
-        "label": "⚔️ Герои STL"
-      },
-      {
-        "link": "/?type=physical",
-        "label": "⚔️ Герои Физические"
-      },
-      {
-        "link": "/monsters?type=stl",
-        "label": "☠️ Монстры STL"
-      },
-      {
-        "link": "/monsters?type=physical",
-        "label": "☠️ Монстры Физические"
-      },
-      {
-        "link": "bases/?type=stl",
-        "label": "🏗 Базы STL"
-      },
-      {
-        "link": "bases/?type=physical",
-        "label": "🏗 Базы Физические"
-      }
-    ]
+    "link": "/",
+    "label": "⚔️ Герои"
   },
   {
-    "link": "#",
-    "label": "☠️ WH",
-    "links": [
-      {
-        "link": "wh/?type=stl",
-        "label": "STL"
-      },
-      {
-        "link": "wh/?type=physical",
-        "label": "Физические"
-      }
-    ]
+    "link": "/monsters?type=stl",
+    "label": "☠️ Монстры"
+  },
+  {
+    "link": "bases?type=stl",
+    "label": "🏗 Базы"
+  },
+  {
+    "link": "wh/?type=stl",
+    "label": "☠️ WH"
   },
   {
     "link": "/tome-of-understanding",

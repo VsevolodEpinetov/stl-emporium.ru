@@ -1,10 +1,17 @@
 import '@/styles/globals.css'
 import {
   MantineProvider,
+  createTheme
 } from '@mantine/core';
 import Head from 'next/head';
 import { YMInitializer } from 'react-yandex-metrika';
 import { Notifications } from '@mantine/notifications';
+import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
+
+const theme = createTheme({
+  /** Put your mantine theme override here */
+});
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
   return (
@@ -23,13 +30,9 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
         <meta property="title" content="STL Emporium | STL файлы и миниатюры" key="meta-title" />
         <meta property="og:image" content="/meta-logo.png" key="meta-image-og" />
       </Head>
-      <MantineProvider
-        theme={{ colorScheme: 'dark' }}
-        withGlobalStyles
-        withNormalizeCSS
-      >
-        <Notifications />
+      <MantineProvider defaultColorScheme="dark">
         <YMInitializer accounts={[93679439]} />
+        <Notifications />
         <Component {...pageProps} />
       </MantineProvider>
     </>

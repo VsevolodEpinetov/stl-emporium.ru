@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { useDisclosure, useLocalStorage } from '@mantine/hooks';
 import { useState, useEffect, useMemo } from 'react'
-import CustomAppShell from '@/components/CustomAppShell';
+import CustomAppShell from '@/components/CustomAppShell/CustomAppShell';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import STLGallery from '@/components/STLGallery';

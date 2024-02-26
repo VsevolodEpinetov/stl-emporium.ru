@@ -1,0 +1,18 @@
+.navbarWrapper {
+  overflow: auto;
+}
+
+.navbarWrapper::-webkit-scrollbar {
+  width: 6px;
+}
+
+.navbarWrapper::-webkit-scrollbar-track {
+  border-radius: 8px;
+  background-color: #363636;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+}
+
+.navbarWrapper::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: #575757;
+}
