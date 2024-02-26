@@ -23,7 +23,7 @@ export default function FAQPage() {
   const [possibleOrders, setPossibleOrders] = useLocalStorage({ key: 'possible-orders', defaultValue: [] })
 
   useEffect(() => {
-    if (contactType.length > 0) setErrorContactType('')
+    if (contactType?.length > 0) setErrorContactType('')
   }, [contactType])
   useEffect(() => {
     if (total.length > 0 || total.length != '0') setErrorTotal('')

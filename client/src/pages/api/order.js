@@ -30,7 +30,6 @@ export default async function handler(req, res) {
       },
     });
 
-    console.log(`${API_URL}/${ENDPOINT}?${DEFAULT_SORT}&${FILL_WITH_DATA}&filters[identificator][$eq]=${identificatorOrder}&filters[total][$eq]=${totalAmount}&filters[${contact}][$eq]=${contactValue}`)
     const response = await api.get(`${API_URL}/${ENDPOINT}?${DEFAULT_SORT}&${FILL_WITH_DATA}&filters[identificator][$eq]=${identificatorOrder}&filters[total][$eq]=${totalAmount}&filters[${contact}][$eq]=${contactValue}`);
 
     if (response.error) {
