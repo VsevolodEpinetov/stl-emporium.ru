@@ -81,11 +81,14 @@ export default function TomeOfUnderstanding(props) {
         const tomeId = tomeData.data[0].id;
 
         if (usesLeft >= 1) {
-          const creaturesData = await fetchDataFromURINew('creatures', { name: tomeName, codes: [stlCode], tomeUses: usesLeft, tomeId: tomeId });
-          if (creaturesData.data.length > 0) {
-            const usedCredit = creaturesData.data.length;
-            const newAmount = tomeUsesLeft - usedCredit;
-            setStlsData(creaturesData.data)
+          const heroesData = await fetchDataFromURINew('creatures', { name: tomeName, codes: [stlCode], tomeUses: usesLeft, tomeId: tomeId });
+          const monstersData = await fetchDataFromURINew('monsters', { name: tomeName, codes: [stlCode], tomeUses: usesLeft, tomeId: tomeId });
+          const terrainData = await fetchDataFromURINew('terrains', { name: tomeName, codes: [stlCode], tomeUses: usesLeft, tomeId: tomeId });
+
+          const overallData = heroesData?.data.concat(monstersData?.data).concat(terrainData?.data);
+          if (overallData.length > 0) {
+            const newAmount = tomeUsesLeft - 1;
+            setStlsData([...stlsData, overallData[0]]) // because the code is unique. Even if it is in several tables it's still the very same item
             setTomeUsesLeft(newAmount)
             showNotification('Израсходован 1 заряд', `Осталось ${newAmount} зарядов тома`)
           } else {

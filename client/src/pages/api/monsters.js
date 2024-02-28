@@ -34,8 +34,6 @@ export default async function handler(req, res) {
 
     if (tomeUses > 0) FIELDS.push('releaseName', 'studioName')
     const uniqueFields = [...new Set(FIELDS)]
-    const IS_HERO = 'filters[isHero][$eq]=true'
-    const IS_A_MONSTER = "filters[isMonster][$eq]=true"
 
     const FILTERS = {
       ...(races && { races: races.split(',') }),

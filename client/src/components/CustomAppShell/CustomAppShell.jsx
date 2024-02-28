@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { CustomHeader } from '../CustomHeader/CustomHeader';
 import { AppShell, Button, Divider, Flex, Modal, Text, ThemeIcon, useMantineTheme } from '@mantine/core';
 import { CustomNavbar } from '../CustomNavbar/CustomNavbar';
@@ -61,7 +61,9 @@ const CustomAppShell = ({ getSelectedHeroes, loading, nullFilters, chosenMode, s
       </AppShell.Main>
       <Modal
         opened={adultModalOpened}
-        onClose={() => setAdultModalOpened(false)}
+        onClose={() => {
+          setAdultModalOpened(false);
+        }}
         title="Честное предупреждение"
         overlayProps={{
           color: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[2],
@@ -83,7 +85,9 @@ const CustomAppShell = ({ getSelectedHeroes, loading, nullFilters, chosenMode, s
         <br />
         <Flex justify="space-between">
           <Button color="pink" fullWidth style={{ marginRight: '10px' }} component='a' href='https://google.com'>Мама, мне страшно</Button>
-          <Button color='green' fullWidth style={{ marginLeft: '10px' }} onClick={() => setAdultModalOpened(false)}>Я ГОТОВ</Button>
+          <Button color='green' fullWidth style={{ marginLeft: '10px' }} onClick={() => {
+            setAdultModalOpened(false);
+          }}>Я ГОТОВ</Button>
         </Flex>
       </Modal>
     </AppShell>
